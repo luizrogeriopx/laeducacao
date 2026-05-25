@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { listCourses, type Course } from "@/lib/courses.functions";
 import logo from "@/assets/laeducacao-logo.png";
 import { categorySlug } from "@/lib/category";
+import { SiteFooter } from "@/components/SiteFooter";
+
 
 export const Route = createFileRoute("/")({
   component: HomePage,
