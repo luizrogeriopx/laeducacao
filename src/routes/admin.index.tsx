@@ -9,7 +9,7 @@ import {
   getLastSync,
   isCurrentUserAdmin,
 } from "@/lib/courses.functions";
-import { getGoogleTagId, updateGoogleTagId, getSeoKeywords, updateSeoKeywords } from "@/lib/settings.functions";
+import { getGoogleTagId, updateGoogleTagId, getSeoKeywords, updateSeoKeywords, getFooterConfig, updateFooterConfig, type FooterConfig } from "@/lib/settings.functions";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -176,6 +176,9 @@ function AdminBody({ userEmail }: { userEmail: string | null }) {
 
         <SeoKeywordsSection />
 
+        <FooterConfigSection />
+
+
 
 
 
@@ -316,3 +319,87 @@ function SeoKeywordsSection() {
     </section>
   );
 }
+
+const FOOTER_FIELDS: { key: keyof FooterConfig; label: string; textarea?: boolean }[] = [
+  { key: "company_name", label: "Nome da empresa" },
+  { key: "cnpj", label: "CNPJ" },
+  { key: "tagline", label: "Frase de apresentação", textarea: true },
+  { key: "whatsapp_display", label: "WhatsApp (exibido)" },
+  { key: "whatsapp_url", label: "WhatsApp (link)" },
+  { key: "email", label: "Email" },
+  { key: "hours", label: "Horário de atendimento", textarea: true },
+  { key: "instagram", label: "Instagram (URL)" },
+  { key: "facebook", label: "Facebook (URL)" },
+  { key: "youtube", label: "YouTube (URL)" },
+  { key: "tiktok", label: "TikTok (URL)" },
+  { key: "copyright", label: "Texto de copyright" },
+];
+
+function FooterConfigSection() {
+  const qc = useQueryClient();
+  const getCfg = useServerFn(getFooterConfig);
+  const updateCfg = useServerFn(updateFooterConfig);
+  const q = useQuery({ queryKey: ["footerConfig"], queryFn: () => getCfg() });
+  const [cfg, setCfg] = useState<FooterConfig | null>(null);
+  useEffect(() => {
+    if (q.data?.config) setCfg(q.data.config);
+  }, [q.data?.config]);
+
+  const mut = useMutation({
+    mutationFn: (c: FooterConfig) => updateCfg({ data: { config: c } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["footerConfig"] }),
+  });
+
+  if (!cfg) {
+    return (
+      <section className="rounded-xl border bg-card p-6 shadow-sm">
+        <h2 className="text-lg font-semibold">Rodapé do site</h2>
+        <p className="mt-2 text-sm text-muted-foreground">Carregando...</p>
+      </section>
+    );
+  }
+
+  return (
+    <section className="rounded-xl border bg-card p-6 shadow-sm">
+      <h2 className="text-lg font-semibold">Rodapé do site</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Edite as informações exibidas no rodapé de todas as páginas públicas. Deixe em branco para ocultar um item.
+      </p>
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        {FOOTER_FIELDS.map((f) => (
+          <div key={f.key} className={f.textarea ? "sm:col-span-2" : ""}>
+            <Label htmlFor={`footer-${f.key}`}>{f.label}</Label>
+            {f.textarea ? (
+              <Textarea
+                id={`footer-${f.key}`}
+                value={cfg[f.key]}
+                onChange={(e) => setCfg({ ...cfg, [f.key]: e.target.value })}
+                rows={2}
+                className="mt-1"
+              />
+            ) : (
+              <Input
+                id={`footer-${f.key}`}
+                value={cfg[f.key]}
+                onChange={(e) => setCfg({ ...cfg, [f.key]: e.target.value })}
+                className="mt-1"
+              />
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 flex justify-end">
+        <Button onClick={() => mut.mutate(cfg)} disabled={mut.isPending}>
+          {mut.isPending ? "Salvando..." : "Salvar rodapé"}
+        </Button>
+      </div>
+      {mut.isSuccess && (
+        <p className="mt-2 text-sm text-[oklch(0.6_0.18_145)]">✓ Rodapé atualizado.</p>
+      )}
+      {mut.isError && (
+        <p className="mt-2 text-sm text-destructive">Erro: {(mut.error as Error).message}</p>
+      )}
+    </section>
+  );
+}
+
