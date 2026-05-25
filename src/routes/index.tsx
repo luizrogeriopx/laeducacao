@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { listCourses, type Course } from "@/lib/courses.functions";
+import logo from "@/assets/laeducacao-logo.png";
 import { categorySlug } from "@/lib/category";
 
 export const Route = createFileRoute("/")({
