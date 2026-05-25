@@ -144,3 +144,10 @@
     color: var(--color-foreground);
   }
 }
+
+/* Mask Lovable floating badge */
+#lovable-badge,
+#gpt-engineer-badge {
+  display: none !important;
+}
+
