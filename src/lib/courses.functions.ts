@@ -306,16 +306,18 @@ export const updateCourse = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     await assertAdmin(context.userId);
     const { id, ...rest } = data;
-    const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
-    if (rest.title !== undefined) patch.title = rest.title;
-    if (rest.description !== undefined) patch.description = rest.description;
-    if (rest.image !== undefined) patch.image = rest.image;
-    if (rest.url !== undefined) patch.url = rest.url;
-    if (rest.category !== undefined) patch.category = rest.category;
-    if (rest.price_original !== undefined) patch.price_original = rest.price_original;
-    if (rest.price_current !== undefined) patch.price_current = rest.price_current;
-    if (rest.price_installments !== undefined) patch.price_installments = rest.price_installments;
-    if (rest.enabled !== undefined) patch.enabled = rest.enabled;
+    const patch = {
+      ...(rest.title !== undefined && { title: rest.title }),
+      ...(rest.description !== undefined && { description: rest.description }),
+      ...(rest.image !== undefined && { image: rest.image }),
+      ...(rest.url !== undefined && { url: rest.url }),
+      ...(rest.category !== undefined && { category: rest.category }),
+      ...(rest.price_original !== undefined && { price_original: rest.price_original }),
+      ...(rest.price_current !== undefined && { price_current: rest.price_current }),
+      ...(rest.price_installments !== undefined && { price_installments: rest.price_installments }),
+      ...(rest.enabled !== undefined && { enabled: rest.enabled }),
+      updated_at: new Date().toISOString(),
+    };
     const { error } = await supabaseAdmin.from("courses").update(patch).eq("id", id);
     if (error) throw new Error(error.message);
     return { ok: true };
