@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { getGoogleTagId } from "@/lib/settings.functions";
+import { getGoogleTagId, getSeoKeywords } from "@/lib/settings.functions";
 
 import appCss from "../styles.css?url";
 
@@ -71,14 +71,15 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   loader: async () => {
     try {
-      const { value } = await getGoogleTagId();
-      return { googleTagId: value };
+      const [tag, kw] = await Promise.all([getGoogleTagId(), getSeoKeywords()]);
+      return { googleTagId: tag.value, seoKeywords: kw.value };
     } catch {
-      return { googleTagId: "" };
+      return { googleTagId: "", seoKeywords: "" };
     }
   },
   head: ({ loaderData }) => {
     const gid = loaderData?.googleTagId?.trim();
+    const keywords = loaderData?.seoKeywords?.trim();
     const scripts = gid
       ? [
           { src: `https://www.googletagmanager.com/gtag/js?id=${gid}`, async: true },
@@ -93,6 +94,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         { title: "Lovable App" },
         { name: "description", content: "Cursos 100% Online e com Certificados reconhecidos pelo MEC" },
+        ...(keywords ? [{ name: "keywords", content: keywords }] : []),
         { name: "author", content: "Lovable" },
         { property: "og:title", content: "Lovable App" },
         { property: "og:description", content: "Cursos 100% Online e com Certificados reconhecidos pelo MEC" },
