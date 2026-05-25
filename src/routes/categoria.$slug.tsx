@@ -63,9 +63,11 @@ function CategoryPage() {
           ))}
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }
+
 
 function CourseCardMini({ course }: { course: Course }) {
   return (
