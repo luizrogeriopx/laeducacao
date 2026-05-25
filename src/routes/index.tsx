@@ -13,13 +13,17 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
-      { title: "Catálogo de Cursos - LA Educação Goiânia" },
+      { title: "LA Educação Goiânia — Cursos Online com Certificado MEC" },
       {
         name: "description",
         content:
-          "Conheça todos os cursos da LA Educação Polo Autorizado, organizados por categoria.",
+          "Catálogo completo de cursos EAD da LA Educação Polo Autorizado em Goiânia: EJA, Graduação, Pós-Graduação, Técnicos e Profissionalizantes com certificado reconhecido pelo MEC.",
       },
+      { property: "og:title", content: "LA Educação Goiânia — Cursos Online com Certificado MEC" },
+      { property: "og:description", content: "Catálogo completo de cursos EAD com certificado MEC em Goiânia." },
+      { property: "og:url", content: "https://laeducacao.lovable.app/" },
     ],
+    links: [{ rel: "canonical", href: "https://laeducacao.lovable.app/" }],
   }),
 });
 
