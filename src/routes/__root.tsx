@@ -88,21 +88,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           },
         ]
       : [];
+    const defaultTitle = "LA Educação Goiânia — Cursos Online com Certificado MEC";
+    const defaultDesc = "Cursos 100% Online com Certificados reconhecidos pelo MEC. EJA, Graduação, Pós-Graduação, Técnicos e Profissionalizantes em Goiânia.";
     return {
       meta: [
         { charSet: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
-        { title: "Lovable App" },
-        { name: "description", content: "Cursos 100% Online e com Certificados reconhecidos pelo MEC" },
+        { title: defaultTitle },
+        { name: "description", content: defaultDesc },
         ...(keywords ? [{ name: "keywords", content: keywords }] : []),
-        { name: "author", content: "Lovable" },
-        { property: "og:title", content: "Lovable App" },
-        { property: "og:description", content: "Cursos 100% Online e com Certificados reconhecidos pelo MEC" },
+        { name: "author", content: "LA Educação" },
+        { property: "og:site_name", content: "LA Educação Goiânia" },
+        { property: "og:title", content: defaultTitle },
+        { property: "og:description", content: defaultDesc },
         { property: "og:type", content: "website" },
-        { name: "twitter:card", content: "summary" },
-        { name: "twitter:site", content: "@Lovable" },
-        { name: "twitter:title", content: "Lovable App" },
-        { name: "twitter:description", content: "Cursos 100% Online e com Certificados reconhecidos pelo MEC" },
+        { property: "og:locale", content: "pt_BR" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: defaultTitle },
+        { name: "twitter:description", content: defaultDesc },
         { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/DHiOjp8ndWUzFfJtfqCiJhEeQ343/social-images/social-1779727637968-LAura.webp" },
         { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/DHiOjp8ndWUzFfJtfqCiJhEeQ343/social-images/social-1779727637968-LAura.webp" },
       ],
@@ -112,7 +115,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           href: appCss,
         },
       ],
-      scripts,
+      scripts: [
+        ...scripts,
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "EducationalOrganization",
+            name: "LA Educação Goiânia — Polo Autorizado",
+            url: "https://laeducacao.lovable.app",
+            logo: "https://storage.googleapis.com/gpt-engineer-file-uploads/DHiOjp8ndWUzFfJtfqCiJhEeQ343/social-images/social-1779727637968-LAura.webp",
+            address: { "@type": "PostalAddress", addressLocality: "Goiânia", addressRegion: "GO", addressCountry: "BR" },
+            contactPoint: { "@type": "ContactPoint", telephone: "+55-62-99659-2952", contactType: "customer service", areaServed: "BR", availableLanguage: "Portuguese" },
+            sameAs: [
+              "https://www.instagram.com/lic.laeducacao.goiania",
+              "https://www.facebook.com/lic.laeducacao.goiania",
+              "https://www.youtube.com/@lic.laeducacao.goiania",
+              "https://www.tiktok.com/@lic.laeducacao.goiania",
+            ],
+          }),
+        },
+      ],
     };
   },
   shellComponent: RootShell,
