@@ -111,9 +111,11 @@ function HomePage() {
           ))}
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }
+
 
 function CourseCardMini({ course }: { course: Course }) {
   return (
