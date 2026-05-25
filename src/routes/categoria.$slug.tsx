@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { listCourses, type Course } from "@/lib/courses.functions";
 import { categorySlug } from "@/lib/category";
+import { SiteFooter } from "@/components/SiteFooter";
+
 
 export const Route = createFileRoute("/categoria/$slug")({
   component: CategoryPage,
