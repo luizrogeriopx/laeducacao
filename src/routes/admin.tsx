@@ -125,6 +125,9 @@ function AdminBody({ userEmail }: { userEmail: string | null }) {
             <p className="text-sm text-muted-foreground">{userEmail}</p>
           </div>
           <div className="flex gap-2">
+            <Button asChild size="sm">
+              <Link to="/admin/cursos">Gerenciar cursos</Link>
+            </Button>
             <Button asChild variant="outline" size="sm">
               <Link to="/">Ver site</Link>
             </Button>

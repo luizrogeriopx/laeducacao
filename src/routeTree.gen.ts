@@ -14,6 +14,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CursoSlugRouteImport } from './routes/curso.$slug'
 import { Route as CategoriaSlugRouteImport } from './routes/categoria.$slug'
+import { Route as AdminCursosRouteImport } from './routes/admin.cursos'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -40,46 +41,67 @@ const CategoriaSlugRoute = CategoriaSlugRouteImport.update({
   path: '/categoria/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCursosRoute = AdminCursosRouteImport.update({
+  id: '/cursos',
+  path: '/cursos',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
+  '/admin/cursos': typeof AdminCursosRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/curso/$slug': typeof CursoSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
+  '/admin/cursos': typeof AdminCursosRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/curso/$slug': typeof CursoSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
+  '/admin/cursos': typeof AdminCursosRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/curso/$slug': typeof CursoSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/login' | '/categoria/$slug' | '/curso/$slug'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/admin/cursos'
+    | '/categoria/$slug'
+    | '/curso/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/login' | '/categoria/$slug' | '/curso/$slug'
+  to:
+    | '/'
+    | '/admin'
+    | '/login'
+    | '/admin/cursos'
+    | '/categoria/$slug'
+    | '/curso/$slug'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/login'
+    | '/admin/cursos'
     | '/categoria/$slug'
     | '/curso/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   LoginRoute: typeof LoginRoute
   CategoriaSlugRoute: typeof CategoriaSlugRoute
   CursoSlugRoute: typeof CursoSlugRoute
@@ -122,12 +144,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriaSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/cursos': {
+      id: '/admin/cursos'
+      path: '/cursos'
+      fullPath: '/admin/cursos'
+      preLoaderRoute: typeof AdminCursosRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminCursosRoute: typeof AdminCursosRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminCursosRoute: AdminCursosRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   LoginRoute: LoginRoute,
   CategoriaSlugRoute: CategoriaSlugRoute,
   CursoSlugRoute: CursoSlugRoute,
