@@ -1,18 +1,96 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, queryOptions } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { getCourseBySlug } from "@/lib/courses.functions";
 import { categorySlug } from "@/lib/category";
 import { whatsappCourseLink } from "@/lib/whatsapp";
 import { SiteFooter } from "@/components/SiteFooter";
 
+const courseQuery = (slug: string) =>
+  queryOptions({
+    queryKey: ["course", slug],
+    queryFn: () => getCourseBySlug({ data: { slug } }),
+  });
 
 export const Route = createFileRoute("/curso/$slug")({
   component: CoursePage,
-  head: ({ params }) => ({
-    meta: [{ title: `Curso ${params.slug} - LA Educação` }],
-  }),
+  loader: ({ params, context }) =>
+    context.queryClient.ensureQueryData(courseQuery(params.slug)),
+  head: ({ params, loaderData }) => {
+    const course = loaderData?.course;
+    const url = `https://laeducacao.lovable.app/curso/${params.slug}`;
+    const title = course
+      ? `${course.title} — LA Educação Goiânia`
+      : `Curso ${params.slug} — LA Educação Goiânia`;
+    const desc = course?.description
+      ? course.description.slice(0, 160)
+      : `Matricule-se no curso ${params.slug} com certificado reconhecido pelo MEC na LA Educação Polo Autorizado Goiânia.`;
+    const image = course?.image || "https://storage.googleapis.com/gpt-engineer-file-uploads/DHiOjp8ndWUzFfJtfqCiJhEeQ343/social-images/social-1779727637968-LAura.webp";
+
+    const meta = [
+      { title },
+      { name: "description", content: desc },
+      { property: "og:title", content: title },
+      { property: "og:description", content: desc },
+      { property: "og:url", content: url },
+      { property: "og:type", content: "product" },
+      { property: "og:image", content: image },
+      { name: "twitter:image", content: image },
+    ];
+
+    const scripts = course
+      ? [
+          {
+            type: "application/ld+json",
+            children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Course",
+              name: course.title,
+              description: course.description || desc,
+              image: image || undefined,
+              provider: {
+                "@type": "EducationalOrganization",
+                name: "LA Educação Goiânia — Polo Autorizado",
+                sameAs: "https://laeducacao.lovable.app",
+              },
+              ...(course.price_current != null && {
+                offers: {
+                  "@type": "Offer",
+                  price: course.price_current,
+                  priceCurrency: "BRL",
+                  availability: "https://schema.org/InStock",
+                  url,
+                },
+              }),
+              hasCourseInstance: {
+                "@type": "CourseInstance",
+                courseMode: "Online",
+                inLanguage: "pt-BR",
+              },
+            }),
+          },
+          {
+            type: "application/ld+json",
+            children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Início", item: "https://laeducacao.lovable.app/" },
+                { "@type": "ListItem", position: 2, name: course.category, item: `https://laeducacao.lovable.app/categoria/${categorySlug(course.category)}` },
+                { "@type": "ListItem", position: 3, name: course.title, item: url },
+              ],
+            }),
+          },
+        ]
+      : [];
+
+    return {
+      meta,
+      links: [{ rel: "canonical", href: url }],
+      scripts,
+    };
+  },
 });
 
 function CoursePage() {
@@ -33,6 +111,7 @@ function CoursePage() {
 
   const course = data?.course;
   if (!course) throw notFound();
+
 
   return (
     <div className="min-h-screen bg-background">
