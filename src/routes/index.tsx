@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { listCourses, type Course } from "@/lib/courses.functions";
+import logo from "@/assets/laeducacao-logo.png";
 import { categorySlug } from "@/lib/category";
 
 export const Route = createFileRoute("/")({
@@ -51,26 +52,26 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Catálogo de Cursos
-          </h1>
-          <p className="mt-2 text-muted-foreground">
-            LA Educação Polo Autorizado · Cursos organizados por categoria
-          </p>
-          <div className="mt-6 max-w-md">
-            <Input
-              type="search"
-              placeholder="Buscar curso ou categoria..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
+      <header className="border-b bg-foreground">
+        <div className="mx-auto flex max-w-6xl items-center justify-center px-4 py-8 sm:px-6">
+          <img
+            src={logo}
+            alt="LA Educação Polo Autorizado"
+            className="h-20 w-auto sm:h-24"
+          />
         </div>
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+        <div className="mb-8 max-w-md">
+          <Input
+            type="search"
+            placeholder="Buscar curso ou categoria..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
+
         {isLoading && (
           <p className="text-muted-foreground">Carregando cursos...</p>
         )}
