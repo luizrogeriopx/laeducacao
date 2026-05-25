@@ -58,7 +58,7 @@ function CoursePage() {
       </div>
 
       {/* Profile */}
-      <div className="mx-auto -mt-20 max-w-3xl px-4 sm:px-6">
+      <div className="relative z-10 mx-auto -mt-20 max-w-3xl px-4 sm:px-6">
         <div className="flex flex-col items-center text-center">
           {course.image ? (
             <img
