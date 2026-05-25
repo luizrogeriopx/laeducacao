@@ -9,6 +9,9 @@ import {
   getLastSync,
   isCurrentUserAdmin,
 } from "@/lib/courses.functions";
+import { getGoogleTagId, updateGoogleTagId } from "@/lib/settings.functions";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminPage,
