@@ -1,4 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { classifyCategory } from "./category";
 
 export interface Course {
   id: string;
@@ -7,14 +10,14 @@ export interface Course {
   title: string;
   description: string;
   image: string;
+  category: string;
+  price_original: number | null;
+  price_current: number | null;
+  price_installments: string | null;
 }
 
 const SITEMAP_URL = "https://trinity.sistemaead.com/sitemap.xml";
-const TITLE_PREFIX_RE = /^LA Educação Polo Autorizado\s*-\s*/i;
-
-// In-memory cache (per worker instance)
-let cache: { data: Course[]; expiresAt: number } | null = null;
-const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
+const TITLE_PREFIX_RE = /^LA Educa[cç][aã]o Polo Autorizado\s*-\s*/i;
 
 function decodeEntities(s: string): string {
   return s
@@ -37,7 +40,18 @@ function extractMeta(html: string, property: string): string {
   return m ? decodeEntities(m[1]) : "";
 }
 
-async function fetchCourse(url: string): Promise<Course | null> {
+function parsePriceBR(s: string): number | null {
+  // "249,90" -> 249.90 ; "1.299,90" -> 1299.90
+  const cleaned = s.replace(/\./g, "").replace(",", ".");
+  const n = parseFloat(cleaned);
+  return Number.isFinite(n) ? n : null;
+}
+
+interface ScrapedCourse extends Omit<Course, "category"> {
+  category: string;
+}
+
+async function scrapeCourse(url: string): Promise<ScrapedCourse | null> {
   try {
     const res = await fetch(url, {
       headers: { "User-Agent": "Mozilla/5.0 TrinityCatalog/1.0" },
@@ -47,56 +61,175 @@ async function fetchCourse(url: string): Promise<Course | null> {
 
     const rawTitle = extractMeta(html, "og:title");
     const title = rawTitle.replace(TITLE_PREFIX_RE, "").trim();
+    if (!title) return null;
     const description = extractMeta(html, "og:description");
     const image = extractMeta(html, "og:image");
+
+    // Prices: "de R$ 249,90 por" / "R$ 159,90 à vista" / "12x de R$ 16,27"
+    const original = html.match(/pc_de[^>]*>de<\/span>\s*<span[^>]*pc_valor[^>]*>\s*R\$\s*([\d.,]+)/i);
+    const current = html.match(/a_vista[^>]*>[\s\S]{0,200}?R\$\s*([\d.,]+)\s*[\s\S]{0,40}?vista/i)
+      ?? html.match(/R\$\s*([\d.,]+)\s*<[^>]*>?\s*\u00e0?\s*vista/i);
+    const installments = html.match(/(\d+\s*x\s*de\s*R\$\s*[\d.,]+)/i);
 
     const slugMatch = url.match(/\/curso-(\d+)-([^/]+)\/?$/);
     const id = slugMatch?.[1] ?? url;
     const slug = slugMatch?.[2] ?? "";
 
-    if (!title) return null;
-
-    return { id, slug, url, title, description, image };
+    return {
+      id,
+      slug,
+      url,
+      title,
+      description,
+      image,
+      category: classifyCategory(title),
+      price_original: original ? parsePriceBR(original[1]) : null,
+      price_current: current ? parsePriceBR(current[1]) : null,
+      price_installments: installments ? installments[1].replace(/\s+/g, " ") : null,
+    };
   } catch {
     return null;
   }
 }
 
-async function loadCatalog(): Promise<Course[]> {
-  const res = await fetch(SITEMAP_URL, {
-    headers: { "User-Agent": "Mozilla/5.0 TrinityCatalog/1.0" },
+// Public read: list all courses
+export const listCourses = createServerFn({ method: "GET" }).handler(async () => {
+  const { data, error } = await supabaseAdmin
+    .from("courses")
+    .select("*")
+    .eq("enabled", true)
+    .order("category", { ascending: true })
+    .order("title", { ascending: true })
+    .limit(1000);
+  if (error) throw new Error(error.message);
+  return { courses: (data ?? []) as Course[] };
+});
+
+export const getCourseBySlug = createServerFn({ method: "GET" })
+  .inputValidator((data: { slug: string }) => data)
+  .handler(async ({ data }) => {
+    const { data: row, error } = await supabaseAdmin
+      .from("courses")
+      .select("*")
+      .eq("slug", data.slug)
+      .eq("enabled", true)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    return { course: row as Course | null };
   });
-  if (!res.ok) throw new Error(`Falha ao buscar sitemap: ${res.status}`);
-  const xml = await res.text();
 
-  const urls = Array.from(
-    xml.matchAll(/https:\/\/trinity\.sistemaead\.com\/curso-[^<\s]+/g),
-  ).map((m) => m[0].replace(/[<\s].*$/, ""));
-
-  const unique = Array.from(new Set(urls));
-
-  // Parallel fetch with concurrency limit
-  const concurrency = 10;
-  const results: Course[] = [];
-  for (let i = 0; i < unique.length; i += concurrency) {
-    const batch = unique.slice(i, i + concurrency);
-    const batchResults = await Promise.all(batch.map(fetchCourse));
-    for (const c of batchResults) if (c) results.push(c);
-  }
-
-  // Sort by numeric ID descending (newest first, assuming higher IDs are newer)
-  results.sort((a, b) => Number(b.id) - Number(a.id));
-  return results;
+// Admin-only sync
+async function assertAdmin(userId: string) {
+  const { data, error } = await supabaseAdmin
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .eq("role", "admin")
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) throw new Error("Acesso negado: usuário não é admin.");
 }
 
-export const getCourses = createServerFn({ method: "GET" })
-  .inputValidator((data: { refresh?: boolean } | undefined) => data ?? {})
-  .handler(async ({ data }) => {
-    const now = Date.now();
-    if (!data.refresh && cache && cache.expiresAt > now) {
-      return { courses: cache.data, cachedAt: cache.expiresAt - CACHE_TTL_MS };
+export const syncCourses = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context.userId);
+
+    const { data: logRow, error: logErr } = await supabaseAdmin
+      .from("sync_log")
+      .insert({ status: "running" })
+      .select("id")
+      .single();
+    if (logErr) throw new Error(logErr.message);
+    const logId = logRow.id;
+
+    try {
+      const res = await fetch(SITEMAP_URL, {
+        headers: { "User-Agent": "Mozilla/5.0 TrinityCatalog/1.0" },
+      });
+      if (!res.ok) throw new Error(`Sitemap status ${res.status}`);
+      const xml = await res.text();
+
+      const urls = Array.from(
+        xml.matchAll(/https:\/\/trinity\.sistemaead\.com\/curso-[^<\s]+/g),
+      ).map((m) => m[0].replace(/[<\s].*$/, ""));
+      const unique = Array.from(new Set(urls));
+
+      const results: ScrapedCourse[] = [];
+      const concurrency = 10;
+      for (let i = 0; i < unique.length; i += concurrency) {
+        const batch = unique.slice(i, i + concurrency);
+        const batchResults = await Promise.all(batch.map(scrapeCourse));
+        for (const c of batchResults) if (c) results.push(c);
+      }
+
+      if (results.length === 0) throw new Error("Nenhum curso encontrado");
+
+      const rows = results.map((c) => ({
+        ...c,
+        enabled: true,
+        updated_at: new Date().toISOString(),
+      }));
+
+      const { error: upErr } = await supabaseAdmin
+        .from("courses")
+        .upsert(rows, { onConflict: "id" });
+      if (upErr) throw new Error(upErr.message);
+
+      // Disable courses no longer in sitemap
+      const ids = results.map((c) => c.id);
+      const { error: disErr } = await supabaseAdmin
+        .from("courses")
+        .update({ enabled: false })
+        .not("id", "in", `(${ids.map((i) => `"${i}"`).join(",")})`);
+      if (disErr) console.error("disable error", disErr);
+
+      await supabaseAdmin
+        .from("sync_log")
+        .update({
+          status: "success",
+          finished_at: new Date().toISOString(),
+          total_found: unique.length,
+          total_saved: results.length,
+        })
+        .eq("id", logId);
+
+      return { ok: true, total_found: unique.length, total_saved: results.length };
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      await supabaseAdmin
+        .from("sync_log")
+        .update({
+          status: "error",
+          finished_at: new Date().toISOString(),
+          message: msg,
+        })
+        .eq("id", logId);
+      throw new Error(msg);
     }
-    const courses = await loadCatalog();
-    cache = { data: courses, expiresAt: now + CACHE_TTL_MS };
-    return { courses, cachedAt: now };
+  });
+
+export const getLastSync = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context.userId);
+    const { data, error } = await supabaseAdmin
+      .from("sync_log")
+      .select("*")
+      .order("started_at", { ascending: false })
+      .limit(5);
+    if (error) throw new Error(error.message);
+    return { logs: data ?? [] };
+  });
+
+export const isCurrentUserAdmin = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data } = await supabaseAdmin
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "admin")
+      .maybeSingle();
+    return { isAdmin: !!data };
   });
