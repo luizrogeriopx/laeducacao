@@ -233,3 +233,113 @@ export const isCurrentUserAdmin = createServerFn({ method: "GET" })
       .maybeSingle();
     return { isAdmin: !!data };
   });
+
+// ---- Admin CRUD ----
+
+function slugify(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")
+    .slice(0, 80);
+}
+
+export const listAllCoursesAdmin = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context.userId);
+    const { data, error } = await supabaseAdmin
+      .from("courses")
+      .select("*")
+      .order("enabled", { ascending: false })
+      .order("category", { ascending: true })
+      .order("title", { ascending: true })
+      .limit(2000);
+    if (error) throw new Error(error.message);
+    return { courses: (data ?? []) as (Course & { enabled: boolean })[] };
+  });
+
+interface CourseInput {
+  title: string;
+  description?: string;
+  image?: string;
+  url?: string;
+  category?: string;
+  price_original?: number | null;
+  price_current?: number | null;
+  price_installments?: string | null;
+  enabled?: boolean;
+}
+
+export const createCourse = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: CourseInput) => data)
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.userId);
+    if (!data.title?.trim()) throw new Error("Título é obrigatório.");
+    const baseSlug = slugify(data.title) || `curso-${Date.now()}`;
+    const id = `manual-${Date.now()}`;
+    const row = {
+      id,
+      slug: baseSlug,
+      url: data.url?.trim() || `manual://${id}`,
+      title: data.title.trim(),
+      description: data.description ?? "",
+      image: data.image ?? "",
+      category: data.category?.trim() || classifyCategory(data.title),
+      price_original: data.price_original ?? null,
+      price_current: data.price_current ?? null,
+      price_installments: data.price_installments ?? null,
+      enabled: data.enabled ?? true,
+      updated_at: new Date().toISOString(),
+    };
+    const { error } = await supabaseAdmin.from("courses").insert(row);
+    if (error) throw new Error(error.message);
+    return { ok: true, id };
+  });
+
+export const updateCourse = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { id: string } & CourseInput) => data)
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.userId);
+    const { id, ...rest } = data;
+    const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    if (rest.title !== undefined) patch.title = rest.title;
+    if (rest.description !== undefined) patch.description = rest.description;
+    if (rest.image !== undefined) patch.image = rest.image;
+    if (rest.url !== undefined) patch.url = rest.url;
+    if (rest.category !== undefined) patch.category = rest.category;
+    if (rest.price_original !== undefined) patch.price_original = rest.price_original;
+    if (rest.price_current !== undefined) patch.price_current = rest.price_current;
+    if (rest.price_installments !== undefined) patch.price_installments = rest.price_installments;
+    if (rest.enabled !== undefined) patch.enabled = rest.enabled;
+    const { error } = await supabaseAdmin.from("courses").update(patch).eq("id", id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const deleteCourse = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { id: string }) => data)
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.userId);
+    const { error } = await supabaseAdmin.from("courses").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const toggleCourseEnabled = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { id: string; enabled: boolean }) => data)
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.userId);
+    const { error } = await supabaseAdmin
+      .from("courses")
+      .update({ enabled: data.enabled, updated_at: new Date().toISOString() })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
