@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { getCourseBySlug } from "@/lib/courses.functions";
 import { categorySlug } from "@/lib/category";
 import { whatsappCourseLink } from "@/lib/whatsapp";
+import { SiteFooter } from "@/components/SiteFooter";
+
 
 export const Route = createFileRoute("/curso/$slug")({
   component: CoursePage,
