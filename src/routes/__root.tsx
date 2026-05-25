@@ -71,10 +71,14 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   loader: async () => {
     try {
-      const [tag, kw] = await Promise.all([getGoogleTagId(), getSeoKeywords()]);
-      return { googleTagId: tag.value, seoKeywords: kw.value };
+      const [tag, kw, widget] = await Promise.all([
+        getGoogleTagId(),
+        getSeoKeywords(),
+        getChatWidgetUrl(),
+      ]);
+      return { googleTagId: tag.value, seoKeywords: kw.value, chatWidgetUrl: widget.value };
     } catch {
-      return { googleTagId: "", seoKeywords: "" };
+      return { googleTagId: "", seoKeywords: "", chatWidgetUrl: "" };
     }
   },
   head: ({ loaderData }) => {
