@@ -136,6 +136,8 @@ function CoursePage() {
       </div>
 
       <div className="h-16" />
+      <SiteFooter />
     </div>
   );
 }
+
