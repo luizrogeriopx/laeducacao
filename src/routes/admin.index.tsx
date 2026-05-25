@@ -9,6 +9,9 @@ import {
   getLastSync,
   isCurrentUserAdmin,
 } from "@/lib/courses.functions";
+import { getGoogleTagId, updateGoogleTagId } from "@/lib/settings.functions";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminPage,
@@ -168,6 +171,9 @@ function AdminBody({ userEmail }: { userEmail: string | null }) {
           )}
         </section>
 
+        <GoogleTagSection />
+
+
         <section className="rounded-xl border bg-card p-6 shadow-sm">
           <h2 className="text-lg font-semibold">Histórico</h2>
           <div className="mt-4 space-y-2 text-sm">
@@ -206,5 +212,54 @@ function AdminBody({ userEmail }: { userEmail: string | null }) {
         </section>
       </main>
     </div>
+  );
+}
+
+function GoogleTagSection() {
+  const qc = useQueryClient();
+  const getId = useServerFn(getGoogleTagId);
+  const updateId = useServerFn(updateGoogleTagId);
+  const q = useQuery({ queryKey: ["googleTagId"], queryFn: () => getId() });
+  const [value, setValue] = useState("");
+  useEffect(() => {
+    if (q.data?.value != null) setValue(q.data.value);
+  }, [q.data?.value]);
+
+  const mut = useMutation({
+    mutationFn: (v: string) => updateId({ data: { value: v } }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["googleTagId"] });
+    },
+  });
+
+  return (
+    <section className="rounded-xl border bg-card p-6 shadow-sm">
+      <h2 className="text-lg font-semibold">Google Tag (gtag.js)</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Cole apenas o ID de medição (ex.: <code className="rounded bg-muted px-1">G-XXXXXXX</code>).
+        O script é injetado automaticamente no <code>&lt;head&gt;</code> de todas as páginas.
+        Deixe vazio para desativar.
+      </p>
+      <div className="mt-4 space-y-2">
+        <Label htmlFor="gtag">ID do Google tag</Label>
+        <div className="flex gap-2">
+          <Input
+            id="gtag"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="G-XXXXXXX"
+          />
+          <Button onClick={() => mut.mutate(value)} disabled={mut.isPending}>
+            {mut.isPending ? "Salvando..." : "Salvar"}
+          </Button>
+        </div>
+        {mut.isSuccess && (
+          <p className="text-sm text-[oklch(0.6_0.18_145)]">✓ Salvo. Recarregue o site para aplicar.</p>
+        )}
+        {mut.isError && (
+          <p className="text-sm text-destructive">Erro: {(mut.error as Error).message}</p>
+        )}
+      </div>
+    </section>
   );
 }
