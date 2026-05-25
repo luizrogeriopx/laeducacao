@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { getGoogleTagId, getSeoKeywords } from "@/lib/settings.functions";
+import { getGoogleTagId, getSeoKeywords, getChatWidgetUrl } from "@/lib/settings.functions";
 
 import appCss from "../styles.css?url";
 
