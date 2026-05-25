@@ -9,12 +9,22 @@ import { SiteFooter } from "@/components/SiteFooter";
 
 export const Route = createFileRoute("/categoria/$slug")({
   component: CategoryPage,
-  head: ({ params }) => ({
-    meta: [
-      { title: `Categoria ${params.slug} - LA Educação` },
-      { name: "description", content: `Cursos da categoria ${params.slug}` },
-    ],
-  }),
+  head: ({ params }) => {
+    const url = `https://laeducacao.lovable.app/categoria/${params.slug}`;
+    const title = `Cursos de ${params.slug} — LA Educação Goiânia`;
+    const desc = `Confira os cursos da categoria ${params.slug} com certificado reconhecido pelo MEC na LA Educação Polo Autorizado Goiânia.`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:url", content: url },
+        { property: "og:type", content: "website" },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
 });
 
 function CategoryPage() {
