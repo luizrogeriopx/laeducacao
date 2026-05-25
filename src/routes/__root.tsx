@@ -69,30 +69,50 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Cursos 100% Online e com Certificados reconhecidos pelo MEC" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Cursos 100% Online e com Certificados reconhecidos pelo MEC" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Lovable App" },
-      { name: "twitter:description", content: "Cursos 100% Online e com Certificados reconhecidos pelo MEC" },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/DHiOjp8ndWUzFfJtfqCiJhEeQ343/social-images/social-1779727637968-LAura.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/DHiOjp8ndWUzFfJtfqCiJhEeQ343/social-images/social-1779727637968-LAura.webp" },
-    ],
-    links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
-    ],
-  }),
+  loader: async () => {
+    try {
+      const { value } = await getGoogleTagId();
+      return { googleTagId: value };
+    } catch {
+      return { googleTagId: "" };
+    }
+  },
+  head: ({ loaderData }) => {
+    const gid = loaderData?.googleTagId?.trim();
+    const scripts = gid
+      ? [
+          { src: `https://www.googletagmanager.com/gtag/js?id=${gid}`, async: true },
+          {
+            children: `window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${gid}');`,
+          },
+        ]
+      : [];
+    return {
+      meta: [
+        { charSet: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { title: "Lovable App" },
+        { name: "description", content: "Cursos 100% Online e com Certificados reconhecidos pelo MEC" },
+        { name: "author", content: "Lovable" },
+        { property: "og:title", content: "Lovable App" },
+        { property: "og:description", content: "Cursos 100% Online e com Certificados reconhecidos pelo MEC" },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary" },
+        { name: "twitter:site", content: "@Lovable" },
+        { name: "twitter:title", content: "Lovable App" },
+        { name: "twitter:description", content: "Cursos 100% Online e com Certificados reconhecidos pelo MEC" },
+        { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/DHiOjp8ndWUzFfJtfqCiJhEeQ343/social-images/social-1779727637968-LAura.webp" },
+        { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/DHiOjp8ndWUzFfJtfqCiJhEeQ343/social-images/social-1779727637968-LAura.webp" },
+      ],
+      links: [
+        {
+          rel: "stylesheet",
+          href: appCss,
+        },
+      ],
+      scripts,
+    };
+  },
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
