@@ -320,7 +320,7 @@ function ChatWidgetSection() {
   );
 }
 
-
+function SeoKeywordsSection() {
   const qc = useQueryClient();
   const getKw = useServerFn(getSeoKeywords);
   const updateKw = useServerFn(updateSeoKeywords);
