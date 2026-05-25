@@ -9,7 +9,7 @@ import {
   getLastSync,
   isCurrentUserAdmin,
 } from "@/lib/courses.functions";
-import { getGoogleTagId, updateGoogleTagId, getSeoKeywords, updateSeoKeywords } from "@/lib/settings.functions";
+import { getGoogleTagId, updateGoogleTagId, getSeoKeywords, updateSeoKeywords, getFooterConfig, updateFooterConfig, type FooterConfig } from "@/lib/settings.functions";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
