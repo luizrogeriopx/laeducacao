@@ -10,7 +10,7 @@ import {
   isCurrentUserAdmin,
 } from "@/lib/courses.functions";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/admin/")({
   component: AdminPage,
   head: () => ({ meta: [{ title: "Painel Admin" }] }),
 });
