@@ -7,6 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { getGoogleTagId } from "@/lib/settings.functions";
 
 import appCss from "../styles.css?url";
 
