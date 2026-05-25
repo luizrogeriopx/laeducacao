@@ -122,10 +122,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       ],
       scripts: [
         ...scripts,
-        {
-          src: "https://app.gptmaker.ai/widget/3F3AA78EB9EBF38E5B138A05928DB2A0/float.js",
-          async: true,
-        },
+        ...(widgetUrl ? [{ src: widgetUrl, async: true }] : []),
         {
           type: "application/ld+json",
           children: JSON.stringify({
