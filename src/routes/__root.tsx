@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { getGoogleTagId, getSeoKeywords } from "@/lib/settings.functions";
+import { getGoogleTagId, getSeoKeywords, getChatWidgetUrl } from "@/lib/settings.functions";
 
 import appCss from "../styles.css?url";
 
@@ -71,15 +71,20 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   loader: async () => {
     try {
-      const [tag, kw] = await Promise.all([getGoogleTagId(), getSeoKeywords()]);
-      return { googleTagId: tag.value, seoKeywords: kw.value };
+      const [tag, kw, widget] = await Promise.all([
+        getGoogleTagId(),
+        getSeoKeywords(),
+        getChatWidgetUrl(),
+      ]);
+      return { googleTagId: tag.value, seoKeywords: kw.value, chatWidgetUrl: widget.value };
     } catch {
-      return { googleTagId: "", seoKeywords: "" };
+      return { googleTagId: "", seoKeywords: "", chatWidgetUrl: "" };
     }
   },
   head: ({ loaderData }) => {
     const gid = loaderData?.googleTagId?.trim();
     const keywords = loaderData?.seoKeywords?.trim();
+    const widgetUrl = loaderData?.chatWidgetUrl?.trim();
     const scripts = gid
       ? [
           { src: `https://www.googletagmanager.com/gtag/js?id=${gid}`, async: true },
@@ -117,10 +122,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       ],
       scripts: [
         ...scripts,
-        {
-          src: "https://app.gptmaker.ai/widget/3F3AA78EB9EBF38E5B138A05928DB2A0/float.js",
-          async: true,
-        },
+        ...(widgetUrl ? [{ src: widgetUrl, async: true }] : []),
         {
           type: "application/ld+json",
           children: JSON.stringify({

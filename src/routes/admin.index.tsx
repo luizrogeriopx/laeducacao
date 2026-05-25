@@ -9,7 +9,7 @@ import {
   getLastSync,
   isCurrentUserAdmin,
 } from "@/lib/courses.functions";
-import { getGoogleTagId, updateGoogleTagId, getSeoKeywords, updateSeoKeywords, getFooterConfig, updateFooterConfig, type FooterConfig } from "@/lib/settings.functions";
+import { getGoogleTagId, updateGoogleTagId, getSeoKeywords, updateSeoKeywords, getFooterConfig, updateFooterConfig, getChatWidgetUrl, updateChatWidgetUrl, type FooterConfig } from "@/lib/settings.functions";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -176,6 +176,8 @@ function AdminBody({ userEmail }: { userEmail: string | null }) {
 
         <SeoKeywordsSection />
 
+        <ChatWidgetSection />
+
         <FooterConfigSection />
 
 
@@ -256,6 +258,52 @@ function GoogleTagSection() {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder="G-XXXXXXX"
+          />
+          <Button onClick={() => mut.mutate(value)} disabled={mut.isPending}>
+            {mut.isPending ? "Salvando..." : "Salvar"}
+          </Button>
+        </div>
+        {mut.isSuccess && (
+          <p className="text-sm text-[oklch(0.6_0.18_145)]">✓ Salvo. Recarregue o site para aplicar.</p>
+        )}
+        {mut.isError && (
+          <p className="text-sm text-destructive">Erro: {(mut.error as Error).message}</p>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function ChatWidgetSection() {
+  const qc = useQueryClient();
+  const getUrl = useServerFn(getChatWidgetUrl);
+  const updateUrl = useServerFn(updateChatWidgetUrl);
+  const q = useQuery({ queryKey: ["chatWidgetUrl"], queryFn: () => getUrl() });
+  const [value, setValue] = useState("");
+  useEffect(() => {
+    if (q.data?.value != null) setValue(q.data.value);
+  }, [q.data?.value]);
+
+  const mut = useMutation({
+    mutationFn: (v: string) => updateUrl({ data: { value: v } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["chatWidgetUrl"] }),
+  });
+
+  return (
+    <section className="rounded-xl border bg-card p-6 shadow-sm">
+      <h2 className="text-lg font-semibold">Widget de chat (agente de IA)</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Cole apenas a URL do script (terminada em <code className="rounded bg-muted px-1">.js</code>).
+        O balão aparece em todas as páginas. Deixe vazio para remover.
+      </p>
+      <div className="mt-4 space-y-2">
+        <Label htmlFor="chat-widget">URL do script</Label>
+        <div className="flex gap-2">
+          <Input
+            id="chat-widget"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="https://app.gptmaker.ai/widget/.../float.js"
           />
           <Button onClick={() => mut.mutate(value)} disabled={mut.isPending}>
             {mut.isPending ? "Salvando..." : "Salvar"}
