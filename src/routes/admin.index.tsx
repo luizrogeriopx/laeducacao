@@ -176,6 +176,9 @@ function AdminBody({ userEmail }: { userEmail: string | null }) {
 
         <SeoKeywordsSection />
 
+        <FooterConfigSection />
+
+
 
 
 
