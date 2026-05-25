@@ -39,6 +39,44 @@ export const updateGoogleTagId = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true, value: data.value };
   });
+export const getChatWidgetUrl = createServerFn({ method: "GET" }).handler(async () => {
+  const { data } = await supabaseAdmin
+    .from("site_settings")
+    .select("value")
+    .eq("key", "chat_widget_url")
+    .maybeSingle();
+  return { value: data?.value ?? "" };
+});
+
+export const updateChatWidgetUrl = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { value: string }) => {
+    const v = (data?.value ?? "").trim();
+    if (v.length > 500) throw new Error("URL muito longa");
+    if (v && !/^https:\/\/[A-Za-z0-9._\-/?=&%:#]+\.js(\?.*)?$/.test(v))
+      throw new Error("Use uma URL https:// terminando em .js");
+    return { value: v };
+  })
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { data: roleRow } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId)
+      .eq("role", "admin")
+      .maybeSingle();
+    if (!roleRow) throw new Error("Acesso restrito");
+
+    const { error } = await supabaseAdmin
+      .from("site_settings")
+      .upsert(
+        { key: "chat_widget_url", value: data.value, updated_at: new Date().toISOString() },
+        { onConflict: "key" },
+      );
+    if (error) throw new Error(error.message);
+    return { ok: true, value: data.value };
+  });
+
 
 export const getSeoKeywords = createServerFn({ method: "GET" }).handler(async () => {
   const { data } = await supabaseAdmin
