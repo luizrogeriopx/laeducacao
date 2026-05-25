@@ -9,8 +9,9 @@ import {
   getLastSync,
   isCurrentUserAdmin,
 } from "@/lib/courses.functions";
-import { getGoogleTagId, updateGoogleTagId } from "@/lib/settings.functions";
+import { getGoogleTagId, updateGoogleTagId, getSeoKeywords, updateSeoKeywords } from "@/lib/settings.functions";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/admin/")({
@@ -173,6 +174,10 @@ function AdminBody({ userEmail }: { userEmail: string | null }) {
 
         <GoogleTagSection />
 
+        <SeoKeywordsSection />
+
+
+
 
         <section className="rounded-xl border bg-card p-6 shadow-sm">
           <h2 className="text-lg font-semibold">Histórico</h2>
@@ -249,6 +254,54 @@ function GoogleTagSection() {
             onChange={(e) => setValue(e.target.value)}
             placeholder="G-XXXXXXX"
           />
+          <Button onClick={() => mut.mutate(value)} disabled={mut.isPending}>
+            {mut.isPending ? "Salvando..." : "Salvar"}
+          </Button>
+        </div>
+        {mut.isSuccess && (
+          <p className="text-sm text-[oklch(0.6_0.18_145)]">✓ Salvo. Recarregue o site para aplicar.</p>
+        )}
+        {mut.isError && (
+          <p className="text-sm text-destructive">Erro: {(mut.error as Error).message}</p>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function SeoKeywordsSection() {
+  const qc = useQueryClient();
+  const getKw = useServerFn(getSeoKeywords);
+  const updateKw = useServerFn(updateSeoKeywords);
+  const q = useQuery({ queryKey: ["seoKeywords"], queryFn: () => getKw() });
+  const [value, setValue] = useState("");
+  useEffect(() => {
+    if (q.data?.value != null) setValue(q.data.value);
+  }, [q.data?.value]);
+
+  const mut = useMutation({
+    mutationFn: (v: string) => updateKw({ data: { value: v } }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["seoKeywords"] });
+    },
+  });
+
+  return (
+    <section className="rounded-xl border bg-card p-6 shadow-sm">
+      <h2 className="text-lg font-semibold">Palavras-chave SEO (meta keywords)</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Separe por vírgula. Aparecem na tag <code className="rounded bg-muted px-1">&lt;meta name="keywords"&gt;</code> de todas as páginas. Deixe vazio para remover.
+      </p>
+      <div className="mt-4 space-y-2">
+        <Label htmlFor="seo-kw">Palavras-chave</Label>
+        <Textarea
+          id="seo-kw"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          rows={8}
+          placeholder="Cursos Online, Cursos EAD, ..."
+        />
+        <div className="flex justify-end">
           <Button onClick={() => mut.mutate(value)} disabled={mut.isPending}>
             {mut.isPending ? "Salvando..." : "Salvar"}
           </Button>
