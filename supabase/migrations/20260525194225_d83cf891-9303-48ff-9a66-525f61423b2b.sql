@@ -1,0 +1,4 @@
+INSERT INTO public.site_settings (key, value) VALUES (
+  'footer_config',
+  '{"company_name":"Licenciado Autorizado LA Educação","cnpj":"58.208.328/0001-88","tagline":"Transformando vidas através do ensino digital de excelência.","whatsapp_display":"(62) 9 9659-2952","email":"contato@laeducacaogo.br","hours":"Seg a Sex, 08h às 12h e 14h às 18h","instagram":"https://www.instagram.com/lic.laeducacao.goiania","facebook":"https://www.facebook.com/lic.laeducacao.goiania","youtube":"https://www.youtube.com/@lic.laeducacao.goiania","tiktok":"https://www.tiktok.com/@lic.laeducacao.goiania","whatsapp_url":"https://wa.me/556296592952","copyright":"© 2026 LA Educação - Licenciado Goiânia. Todos os direitos reservados."}'
+) ON CONFLICT (key) DO NOTHING;
