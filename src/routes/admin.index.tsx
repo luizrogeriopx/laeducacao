@@ -171,6 +171,9 @@ function AdminBody({ userEmail }: { userEmail: string | null }) {
           )}
         </section>
 
+        <GoogleTagSection />
+
+
         <section className="rounded-xl border bg-card p-6 shadow-sm">
           <h2 className="text-lg font-semibold">Histórico</h2>
           <div className="mt-4 space-y-2 text-sm">
