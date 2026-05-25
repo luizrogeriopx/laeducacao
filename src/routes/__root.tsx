@@ -84,6 +84,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: ({ loaderData }) => {
     const gid = loaderData?.googleTagId?.trim();
     const keywords = loaderData?.seoKeywords?.trim();
+    const widgetUrl = loaderData?.chatWidgetUrl?.trim();
     const scripts = gid
       ? [
           { src: `https://www.googletagmanager.com/gtag/js?id=${gid}`, async: true },
