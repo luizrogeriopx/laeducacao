@@ -111,7 +111,7 @@ function BlogPostPage() {
             />
           )}
           <div
-            className="prose prose-neutral mt-8 max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-a:text-primary prose-strong:text-foreground"
+            className="blog-content mt-8"
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{ __html: html }}
           />
