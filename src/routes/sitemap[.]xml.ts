@@ -9,14 +9,22 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const { data: courses } = await supabaseAdmin
-          .from("courses")
-          .select("slug, category, updated_at")
-          .eq("enabled", true)
-          .limit(2000);
+        const [{ data: courses }, { data: posts }] = await Promise.all([
+          supabaseAdmin
+            .from("courses")
+            .select("slug, category, updated_at")
+            .eq("enabled", true)
+            .limit(2000),
+          supabaseAdmin
+            .from("blog_posts")
+            .select("slug, updated_at")
+            .eq("published", true)
+            .limit(2000),
+        ]);
 
         const entries: { path: string; lastmod?: string; priority?: string; changefreq?: string }[] = [
           { path: "/", changefreq: "daily", priority: "1.0" },
+          { path: "/blog", changefreq: "daily", priority: "0.9" },
         ];
 
         const cats = new Set<string>();
@@ -33,6 +41,14 @@ export const Route = createFileRoute("/sitemap.xml")({
           entries.push({
             path: `/categoria/${categorySlug(cat)}`,
             changefreq: "weekly",
+            priority: "0.7",
+          });
+        }
+        for (const p of posts ?? []) {
+          entries.push({
+            path: `/blog/${p.slug}`,
+            lastmod: p.updated_at ?? undefined,
+            changefreq: "monthly",
             priority: "0.7",
           });
         }

@@ -77,12 +77,20 @@ function HomePage() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b bg-foreground">
-        <div className="mx-auto flex max-w-6xl items-center justify-center px-4 py-8 sm:px-6">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-8 sm:px-6">
           <img
             src={logo}
             alt="LA Educação Polo Autorizado"
             className="h-20 w-auto sm:h-24"
           />
+          <nav className="text-sm font-medium">
+            <Link
+              to="/blog"
+              className="rounded-md bg-background/10 px-4 py-2 text-background hover:bg-background/20"
+            >
+              Blog
+            </Link>
+          </nav>
         </div>
       </header>
 
