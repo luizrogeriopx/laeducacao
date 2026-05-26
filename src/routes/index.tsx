@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { listCourses, type Course } from "@/lib/courses.functions";
 import logo from "@/assets/laeducacao-logo.png";
@@ -30,6 +30,8 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   const fetchCourses = useServerFn(listCourses);
   const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ["courses"],
@@ -37,24 +39,40 @@ function HomePage() {
   });
 
   const courses = data?.courses ?? [];
-  const grouped = useMemo(() => {
+
+  const suggestions = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const filtered = q
-      ? courses.filter(
-          (c) =>
-            c.title.toLowerCase().includes(q) ||
-            c.description.toLowerCase().includes(q) ||
-            c.category.toLowerCase().includes(q),
-        )
-      : courses;
+    if (q.length < 3) return [];
+    return courses
+      .filter(
+        (c) =>
+          c.title.toLowerCase().includes(q) ||
+          c.category.toLowerCase().includes(q),
+      )
+      .slice(0, 8);
+  }, [courses, query]);
+
+  const grouped = useMemo(() => {
     const map = new Map<string, Course[]>();
-    for (const c of filtered) {
+    for (const c of courses) {
       const arr = map.get(c.category) ?? [];
       arr.push(c);
       map.set(c.category, arr);
     }
     return Array.from(map.entries()).sort(([a], [b]) => a.localeCompare(b));
-  }, [courses, query]);
+  }, [courses]);
+
+  useEffect(() => {
+    function onClick(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  const showDropdown = open && query.trim().length >= 3;
 
   return (
     <div className="min-h-screen bg-background">
@@ -69,13 +87,53 @@ function HomePage() {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        <div className="mb-8 max-w-md">
+        <div className="relative mb-8 max-w-md" ref={containerRef}>
           <Input
             type="search"
-            placeholder="Buscar curso ou categoria..."
+            placeholder="Buscar curso ou categoria (mín. 3 letras)..."
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setOpen(true);
+            }}
+            onFocus={() => setOpen(true)}
           />
+          {showDropdown && (
+            <div className="absolute z-50 mt-1 w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-lg">
+              {suggestions.length === 0 ? (
+                <div className="px-3 py-4 text-sm text-muted-foreground">
+                  Nenhum curso encontrado para "{query}".
+                </div>
+              ) : (
+                <ul className="max-h-80 overflow-y-auto">
+                  {suggestions.map((c) => (
+                    <li key={c.id}>
+                      <Link
+                        to="/curso/$slug"
+                        params={{ slug: c.slug }}
+                        onClick={() => setOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2 hover:bg-accent"
+                      >
+                        {c.image ? (
+                          <img
+                            src={c.image}
+                            alt=""
+                            className="h-10 w-10 flex-shrink-0 rounded object-cover"
+                          />
+                        ) : (
+                          <div className="h-10 w-10 flex-shrink-0 rounded bg-muted" />
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium">{c.title}</p>
+                          <p className="truncate text-xs text-muted-foreground">{c.category}</p>
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
         </div>
 
         {isLoading && (
