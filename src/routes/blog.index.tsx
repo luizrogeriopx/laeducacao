@@ -5,7 +5,7 @@ import { listPublishedPosts } from "@/lib/blog.functions";
 import { SiteFooter } from "@/components/SiteFooter";
 import logo from "@/assets/laeducacao-logo.png";
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/blog/")({
   component: BlogList,
   head: () => ({
     meta: [
