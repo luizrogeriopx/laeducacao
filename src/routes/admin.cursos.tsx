@@ -23,6 +23,8 @@ import {
   isCurrentUserAdmin,
   type Course,
 } from "@/lib/courses.functions";
+import { listCategories, type CourseCategory } from "@/lib/categories.functions";
+
 
 export const Route = createFileRoute("/admin/cursos")({
   component: AdminCoursesPage,
