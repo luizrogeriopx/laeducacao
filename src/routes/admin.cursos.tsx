@@ -98,6 +98,12 @@ function Body() {
     queryFn: () => listFn(),
     enabled: adminQ.data?.isAdmin === true,
   });
+  const catsQ = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => listCategoriesFn(),
+  });
+  const categories = catsQ.data?.categories ?? [];
+
 
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
