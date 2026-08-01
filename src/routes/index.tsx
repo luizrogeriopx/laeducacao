@@ -1,5 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
+import { listCategories } from "@/lib/categories.functions";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -32,6 +35,18 @@ function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  // Carregar categorias dinamicamente do banco de dados (gerenciado no painel admin)
+  const fetchCategories = useServerFn(listCategories);
+  const { data: categoriesData } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => fetchCategories(),
+  });
+
+  const categories = categoriesData?.categories ?? [];
+  const half = Math.ceil(categories.length / 2);
+  const col1 = categories.slice(0, half);
+  const col2 = categories.slice(half);
 
   // Carregar script do widget GPTMaker
   useEffect(() => {
@@ -67,26 +82,6 @@ function HomePage() {
     { src: "/img/Selos_LA_EducaReclameAqui.png", alt: "Selo Reclame Aqui" },
     { src: "/img/Selos_LA_EducaGoogle.png", alt: "Selo Google" },
     { src: "/img/Selos_INIPI.png", alt: "Selo INIPI" },
-  ];
-
-  const cursosCol1 = [
-    "Cursos Livres",
-    "Profissionalizantes",
-    "Profissionalizantes Avançado",
-    "EJA Fundamental e Médio",
-    "Técnico",
-    "Pós-Técnico",
-    "Certificação por Competência",
-  ];
-
-  const cursosCol2 = [
-    "Superior Sequencial",
-    "Extensão Universitária",
-    "Licenciatura",
-    "Tecnólogo",
-    "Pós-Graduação",
-    "Bacharelado",
-    "Doutorado",
   ];
 
   return (
@@ -142,31 +137,33 @@ function HomePage() {
               </a>
             </li>
             
-            {/* Cursos Dropdown */}
+            {/* Cursos Dropdown (Desktop) */}
             <li className="relative group md:block hidden">
               <span className="text-neutral-700 font-semibold hover:text-[#1a237e] transition-colors cursor-pointer flex items-center gap-1">
                 Cursos <span className="text-xs">▼</span>
               </span>
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white min-w-[500px] shadow-2xl p-6 rounded-lg border-t-4 border-[#1a237e] grid grid-cols-2 gap-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
                 <div className="flex flex-col gap-2">
-                  {cursosCol1.map((c) => (
+                  {col1.map((cat) => (
                     <Link
-                      key={c}
-                      to="/catalogo"
+                      key={cat.id}
+                      to="/categoria/$slug"
+                      params={{ slug: cat.slug }}
                       className="text-xs text-neutral-600 hover:text-[#1a237e] hover:pl-1 transition-all pb-1.5 border-b border-neutral-100"
                     >
-                      {c}
+                      {cat.name}
                     </Link>
                   ))}
                 </div>
                 <div className="flex flex-col gap-2">
-                  {cursosCol2.map((c) => (
+                  {col2.map((cat) => (
                     <Link
-                      key={c}
-                      to="/catalogo"
+                      key={cat.id}
+                      to="/categoria/$slug"
+                      params={{ slug: cat.slug }}
                       className="text-xs text-neutral-600 hover:text-[#1a237e] hover:pl-1 transition-all pb-1.5 border-b border-neutral-100"
                     >
-                      {c}
+                      {cat.name}
                     </Link>
                   ))}
                 </div>
@@ -182,18 +179,19 @@ function HomePage() {
                 Cursos <span className="text-xs transition-transform duration-300">{dropdownOpen ? "▲" : "▼"}</span>
               </button>
               <div
-                className={`bg-neutral-50 overflow-hidden transition-all duration-300 w-full flex flex-col items-center ${
-                  dropdownOpen ? "max-h-[500px] py-4" : "max-h-0"
+                className={`bg-neutral-50 overflow-hidden transition-all duration-300 w-full flex flex-col items-center max-h-[300px] overflow-y-auto ${
+                  dropdownOpen ? "py-4" : "max-h-0"
                 }`}
               >
-                {[...cursosCol1, ...cursosCol2].map((c) => (
+                {categories.map((cat) => (
                   <Link
-                    key={c}
-                    to="/catalogo"
+                    key={cat.id}
+                    to="/categoria/$slug"
+                    params={{ slug: cat.slug }}
                     onClick={() => setMenuOpen(false)}
-                    className="w-full text-sm text-neutral-600 hover:text-[#1a237e] py-1.5 hover:bg-neutral-100"
+                    className="w-full text-center text-sm text-neutral-600 hover:text-[#1a237e] py-1.5 hover:bg-neutral-100 block"
                   >
-                    {c}
+                    {cat.name}
                   </Link>
                 ))}
               </div>
