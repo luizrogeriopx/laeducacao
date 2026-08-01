@@ -106,7 +106,7 @@ function Body() {
     queryKey: ["categories"],
     queryFn: () => listCategoriesFn(),
   });
-  const categories = catsQ.data?.categories ?? [];
+  const categories: CourseCategory[] = catsQ.data?.categories ?? [];
 
 
   const [search, setSearch] = useState("");
