@@ -91,6 +91,8 @@ function Body() {
   const updateFn = useServerFn(updateCourse);
   const deleteFn = useServerFn(deleteCourse);
   const toggleFn = useServerFn(toggleCourseEnabled);
+  const listCategoriesFn = useServerFn(listCategories);
+
 
   const adminQ = useQuery({ queryKey: ["isAdmin"], queryFn: () => checkAdmin() });
   const coursesQ = useQuery({
