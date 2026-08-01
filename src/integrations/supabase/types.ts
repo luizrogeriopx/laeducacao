@@ -58,6 +58,9 @@ export type Database = {
           created_at: string
           id: string
           name: string
+          price_current: number | null
+          price_installments: string | null
+          price_original: number | null
           slug: string
           sort_order: number
           updated_at: string
@@ -66,6 +69,9 @@ export type Database = {
           created_at?: string
           id?: string
           name: string
+          price_current?: number | null
+          price_installments?: string | null
+          price_original?: number | null
           slug: string
           sort_order?: number
           updated_at?: string
@@ -74,6 +80,9 @@ export type Database = {
           created_at?: string
           id?: string
           name?: string
+          price_current?: number | null
+          price_installments?: string | null
+          price_original?: number | null
           slug?: string
           sort_order?: number
           updated_at?: string
