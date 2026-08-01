@@ -133,8 +133,12 @@ function AdminBody({ userEmail }: { userEmail: string | null }) {
               <Link to="/admin/cursos">Gerenciar cursos</Link>
             </Button>
             <Button asChild size="sm" variant="secondary">
+              <Link to="/admin/categorias">Categorias e preços</Link>
+            </Button>
+            <Button asChild size="sm" variant="secondary">
               <Link to="/admin/blog">Gerenciar blog</Link>
             </Button>
+
             <Button asChild variant="outline" size="sm">
               <Link to="/">Ver site</Link>
             </Button>
