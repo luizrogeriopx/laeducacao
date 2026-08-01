@@ -155,34 +155,40 @@ export const syncCourses = createServerFn({ method: "POST" })
       ).map((m) => m[0].replace(/[<\s].*$/, ""));
       const unique = Array.from(new Set(urls));
 
+      // Somente cursos novos: nunca sobrescreve os que já estão no banco
+      const { data: existing, error: exErr } = await supabaseAdmin
+        .from("courses")
+        .select("id,url")
+        .limit(5000);
+      if (exErr) throw new Error(exErr.message);
+      const existingIds = new Set((existing ?? []).map((r) => r.id));
+      const existingUrls = new Set((existing ?? []).map((r) => r.url));
+
+      const newUrls = unique.filter((u) => {
+        if (existingUrls.has(u)) return false;
+        const id = u.match(/\/curso-(\d+)-/)?.[1];
+        return !(id && existingIds.has(id));
+      });
+
       const results: ScrapedCourse[] = [];
       const concurrency = 10;
-      for (let i = 0; i < unique.length; i += concurrency) {
-        const batch = unique.slice(i, i + concurrency);
+      for (let i = 0; i < newUrls.length; i += concurrency) {
+        const batch = newUrls.slice(i, i + concurrency);
         const batchResults = await Promise.all(batch.map(scrapeCourse));
-        for (const c of batchResults) if (c) results.push(c);
+        for (const c of batchResults) if (c && !existingIds.has(c.id)) results.push(c);
       }
 
-      if (results.length === 0) throw new Error("Nenhum curso encontrado");
-
-      const rows = results.map((c) => ({
-        ...c,
-        enabled: true,
-        updated_at: new Date().toISOString(),
-      }));
-
-      const { error: upErr } = await supabaseAdmin
-        .from("courses")
-        .upsert(rows, { onConflict: "id" });
-      if (upErr) throw new Error(upErr.message);
-
-      // Disable courses no longer in sitemap
-      const ids = results.map((c) => c.id);
-      const { error: disErr } = await supabaseAdmin
-        .from("courses")
-        .update({ enabled: false })
-        .not("id", "in", `(${ids.map((i) => `"${i}"`).join(",")})`);
-      if (disErr) console.error("disable error", disErr);
+      if (results.length > 0) {
+        const rows = results.map((c) => ({
+          ...c,
+          enabled: true,
+          updated_at: new Date().toISOString(),
+        }));
+        const { error: upErr } = await supabaseAdmin
+          .from("courses")
+          .upsert(rows, { onConflict: "id", ignoreDuplicates: true });
+        if (upErr) throw new Error(upErr.message);
+      }
 
       await supabaseAdmin
         .from("sync_log")
