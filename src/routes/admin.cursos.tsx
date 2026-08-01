@@ -23,6 +23,8 @@ import {
   isCurrentUserAdmin,
   type Course,
 } from "@/lib/courses.functions";
+import { listCategories, type CourseCategory } from "@/lib/categories.functions";
+
 
 export const Route = createFileRoute("/admin/cursos")({
   component: AdminCoursesPage,
@@ -91,6 +93,8 @@ function Body() {
   const updateFn = useServerFn(updateCourse);
   const deleteFn = useServerFn(deleteCourse);
   const toggleFn = useServerFn(toggleCourseEnabled);
+  const listCategoriesFn = useServerFn(listCategories);
+
 
   const adminQ = useQuery({ queryKey: ["isAdmin"], queryFn: () => checkAdmin() });
   const coursesQ = useQuery({
@@ -98,6 +102,12 @@ function Body() {
     queryFn: () => listFn(),
     enabled: adminQ.data?.isAdmin === true,
   });
+  const catsQ = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => listCategoriesFn(),
+  });
+  const categories: CourseCategory[] = catsQ.data?.categories ?? [];
+
 
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
@@ -110,17 +120,22 @@ function Body() {
 
   const saveMut = useMutation({
     mutationFn: async (f: FormState) => {
+      const cat = categories.find((c) => c.name === f.category);
       const payload = {
         title: f.title,
         description: f.description,
         image: f.image,
         url: f.url,
         category: f.category,
-        price_original: toNum(f.price_original),
-        price_current: toNum(f.price_current),
-        price_installments: f.price_installments || null,
+        // Preços vêm da categoria (editáveis em /admin/categorias)
+        price_original: cat ? cat.price_original : toNum(f.price_original),
+        price_current: cat ? cat.price_current : toNum(f.price_current),
+        price_installments: cat
+          ? cat.price_installments
+          : f.price_installments || null,
         enabled: f.enabled,
       };
+
       if (f.id) return updateFn({ data: { id: f.id, ...payload } });
       return createFn({ data: payload });
     },
@@ -352,13 +367,24 @@ function Body() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label>Categoria</Label>
-                <Input
+                <select
+                  className="mt-1 h-9 w-full rounded-md border border-input bg-background px-3 text-sm"
                   value={form.category}
                   onChange={(e) =>
                     setForm({ ...form, category: e.target.value })
                   }
-                  placeholder="Auto se vazio"
-                />
+                >
+                  <option value="">Automática pelo título</option>
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.name}>
+                      {c.name}
+                    </option>
+                  ))}
+                  {form.category &&
+                    !categories.some((c) => c.name === form.category) && (
+                      <option value={form.category}>{form.category}</option>
+                    )}
+                </select>
               </div>
               <div>
                 <Label>URL externa (matricula)</Label>
@@ -369,38 +395,27 @@ function Body() {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <Label>Preço original</Label>
-                <Input
-                  value={form.price_original}
-                  onChange={(e) =>
-                    setForm({ ...form, price_original: e.target.value })
-                  }
-                  placeholder="249,90"
-                />
-              </div>
-              <div>
-                <Label>Preço atual</Label>
-                <Input
-                  value={form.price_current}
-                  onChange={(e) =>
-                    setForm({ ...form, price_current: e.target.value })
-                  }
-                  placeholder="159,90"
-                />
-              </div>
-              <div>
-                <Label>Parcelas</Label>
-                <Input
-                  value={form.price_installments}
-                  onChange={(e) =>
-                    setForm({ ...form, price_installments: e.target.value })
-                  }
-                  placeholder="12x de R$ 16,27"
-                />
-              </div>
+            <div className="rounded-lg border bg-muted/40 p-3 text-sm text-muted-foreground">
+              Os preços são definidos por categoria em{" "}
+              <Link
+                to="/admin/categorias"
+                className="font-medium text-foreground underline"
+              >
+                Categorias e preços
+              </Link>
+              .
+              {(() => {
+                const cat = categories.find((c) => c.name === form.category);
+                return cat?.price_current != null ? (
+                  <span className="ml-1">
+                    Preço atual de “{cat.name}”: R${" "}
+                    {cat.price_current.toFixed(2).replace(".", ",")}
+                    {cat.price_installments ? ` ou ${cat.price_installments}` : ""}.
+                  </span>
+                ) : null;
+              })()}
             </div>
+
             <label className="flex items-center gap-2 text-sm">
               <input
                 type="checkbox"
