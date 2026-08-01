@@ -120,17 +120,22 @@ function Body() {
 
   const saveMut = useMutation({
     mutationFn: async (f: FormState) => {
+      const cat = categories.find((c) => c.name === f.category);
       const payload = {
         title: f.title,
         description: f.description,
         image: f.image,
         url: f.url,
         category: f.category,
-        price_original: toNum(f.price_original),
-        price_current: toNum(f.price_current),
-        price_installments: f.price_installments || null,
+        // Preços vêm da categoria (editáveis em /admin/categorias)
+        price_original: cat ? cat.price_original : toNum(f.price_original),
+        price_current: cat ? cat.price_current : toNum(f.price_current),
+        price_installments: cat
+          ? cat.price_installments
+          : f.price_installments || null,
         enabled: f.enabled,
       };
+
       if (f.id) return updateFn({ data: { id: f.id, ...payload } });
       return createFn({ data: payload });
     },
