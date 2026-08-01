@@ -145,12 +145,10 @@
   }
 }
 
-/* Mask Lovable floating badge */
 #lovable-badge,
 #gpt-engineer-badge {
   display: none !important;
 }
-
 
 /* Blog post content (rendered from Markdown) */
 .blog-content { line-height: 1.7; color: var(--foreground); }
@@ -166,3 +164,33 @@
 .blog-content strong { font-weight: 700; color: var(--foreground); }
 .blog-content blockquote { border-left: 3px solid var(--border); padding-left: 1rem; color: var(--muted-foreground); margin: 1rem 0; }
 .blog-content code { background: var(--muted); padding: 0.15rem 0.35rem; border-radius: 0.25rem; font-size: 0.9em; }
+
+/* Custom Homepage & Chat Styles from Old Site */
+.home-theme {
+  --home-primary: #1a237e;
+  --home-secondary: #da1069;
+  --home-dark: #121212;
+  --home-light: #f8f9fa;
+  --home-white: #ffffff;
+  --home-text: #333333;
+}
+
+.home-hero {
+  height: 70vh;
+  background: linear-gradient(rgba(26, 35, 126, 0.85), rgba(26, 35, 126, 0.7)), url('/img/banner.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.seal-img {
+  max-width: 140px;
+  filter: grayscale(100%);
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.seal-img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
