@@ -94,12 +94,12 @@ export const updateCategory = createServerFn({ method: "POST" })
     if (!current) throw new Error("Categoria não encontrada.");
 
     const newName = data.name?.trim();
-    const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
-    if (newName) {
-      patch.name = newName;
-      patch.slug = categorySlug(newName);
-    }
-    if (data.sort_order !== undefined) patch.sort_order = data.sort_order;
+    const patch = {
+      updated_at: new Date().toISOString(),
+      ...(newName ? { name: newName, slug: categorySlug(newName) } : {}),
+      ...(data.sort_order !== undefined ? { sort_order: data.sort_order } : {}),
+    };
+
 
     const { error } = await supabaseAdmin
       .from("course_categories")
