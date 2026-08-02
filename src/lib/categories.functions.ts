@@ -194,6 +194,7 @@ export const setCategoryPrice = createServerFn({ method: "POST" })
           updated_at: new Date().toISOString(),
         })
         .eq("category", current.name)
+        .eq("custom_pricing", false)
         .select("id");
       if (upErr) throw new Error(upErr.message);
       updated = rows?.length ?? 0;

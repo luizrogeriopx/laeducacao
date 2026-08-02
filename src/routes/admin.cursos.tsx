@@ -45,6 +45,7 @@ interface FormState {
   price_current: string;
   price_installments: string;
   display_installments: boolean;
+  custom_pricing: boolean;
   enabled: boolean;
 }
 
@@ -58,6 +59,7 @@ const empty: FormState = {
   price_current: "",
   price_installments: "",
   display_installments: false,
+  custom_pricing: false,
   enabled: true,
 };
 
@@ -124,21 +126,22 @@ function Body() {
   const saveMut = useMutation({
     mutationFn: async (f: FormState) => {
       const cat = categories.find((c) => c.name === f.category);
+      const isCustom = f.custom_pricing || !cat;
       const payload = {
         title: f.title,
         description: f.description,
         image: f.image,
         url: f.url,
         category: f.category,
-        // Preços vêm da categoria (editáveis em /admin/categorias)
-        price_original: cat ? cat.price_original : toNum(f.price_original),
-        price_current: cat ? cat.price_current : toNum(f.price_current),
-        price_installments: cat
-          ? cat.price_installments
-          : f.price_installments || null,
-        display_installments: cat
-          ? cat.display_installments
-          : f.display_installments,
+        price_original: isCustom ? toNum(f.price_original) : (cat ? cat.price_original : null),
+        price_current: isCustom ? toNum(f.price_current) : (cat ? cat.price_current : null),
+        price_installments: isCustom
+          ? f.price_installments || null
+          : (cat ? cat.price_installments : null),
+        display_installments: isCustom
+          ? f.display_installments
+          : (cat ? cat.display_installments : false),
+        custom_pricing: f.custom_pricing,
         enabled: f.enabled,
       };
 
@@ -201,6 +204,7 @@ function Body() {
       price_current: c.price_current?.toString() ?? "",
       price_installments: c.price_installments ?? "",
       display_installments: c.display_installments ?? false,
+      custom_pricing: c.custom_pricing ?? false,
       enabled: c.enabled,
     });
     setOpen(true);
@@ -402,45 +406,100 @@ function Body() {
                 />
               </div>
             </div>
-            <div className="rounded-lg border bg-muted/40 p-3 text-sm text-muted-foreground">
-              Os preços são definidos por categoria em{" "}
-              <Link
-                to="/admin/categorias"
-                className="font-medium text-foreground underline"
-              >
-                Categorias e preços
-              </Link>
-              .
-              {(() => {
-                const cat = categories.find((c) => c.name === form.category);
-                return cat?.price_current != null ? (
-                  <span className="ml-1">
-                    Preço atual de “{cat.name}”: R${" "}
-                    {formatPrice(cat.price_current)}
-                    {cat.price_installments ? ` ou ${cat.price_installments}` : ""}.
-                  </span>
-                ) : null;
-              })()}
-            </div>
+            {form.category && (
+              <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={form.custom_pricing}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    const cat = categories.find((c) => c.name === form.category);
+                    setForm({
+                      ...form,
+                      custom_pricing: checked,
+                      ...(checked && cat && {
+                        price_original: form.price_original || (cat.price_original?.toString() ?? ""),
+                        price_current: form.price_current || (cat.price_current?.toString() ?? ""),
+                        price_installments: form.price_installments || (cat.price_installments ?? ""),
+                        display_installments: form.display_installments || (cat.display_installments ?? false),
+                      })
+                    });
+                  }}
+                />
+                Definir preço personalizado para este curso (ignorar preço da categoria)
+              </label>
+            )}
 
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={
-                  categories.some((c) => c.name === form.category)
-                    ? categories.find((c) => c.name === form.category)?.display_installments ?? false
-                    : form.display_installments
-                }
-                disabled={categories.some((c) => c.name === form.category)}
-                onChange={(e) =>
-                  setForm({ ...form, display_installments: e.target.checked })
-                }
-              />
-              Exibir valor parcelado em destaque nas páginas e cartões
-              {categories.some((c) => c.name === form.category) && (
-                <span className="text-xs text-muted-foreground"> (Herdado da categoria)</span>
-              )}
-            </label>
+            {(!form.category || form.custom_pricing) ? (
+              <div className="grid gap-3 rounded-lg border bg-muted/20 p-4">
+                <h4 className="text-sm font-semibold">Preços Personalizados</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label>Preço original</Label>
+                    <Input
+                      value={form.price_original}
+                      onChange={(e) => setForm({ ...form, price_original: e.target.value })}
+                      placeholder="249,90"
+                    />
+                  </div>
+                  <div>
+                    <Label>Preço atual</Label>
+                    <Input
+                      value={form.price_current}
+                      onChange={(e) => setForm({ ...form, price_current: e.target.value })}
+                      placeholder="159,90"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label>Parcelamento</Label>
+                  <Input
+                    value={form.price_installments}
+                    onChange={(e) => setForm({ ...form, price_installments: e.target.value })}
+                    placeholder="12x de R$ 16,27"
+                  />
+                </div>
+                <label className="flex items-center gap-2 text-sm cursor-pointer mt-1">
+                  <input
+                    type="checkbox"
+                    checked={form.display_installments}
+                    onChange={(e) =>
+                      setForm({ ...form, display_installments: e.target.checked })
+                    }
+                  />
+                  Exibir valor parcelado em destaque nas páginas e cartões
+                </label>
+              </div>
+            ) : (
+              <div className="rounded-lg border bg-muted/40 p-3 text-sm text-muted-foreground">
+                Os preços são herdados da categoria em{" "}
+                <Link
+                  to="/admin/categorias"
+                  className="font-medium text-foreground underline"
+                >
+                  Categorias e preços
+                </Link>
+                .
+                {(() => {
+                  const cat = categories.find((c) => c.name === form.category);
+                  return cat?.price_current != null ? (
+                    <span className="ml-1">
+                      Preço atual de “{cat.name}”: R${" "}
+                      {formatPrice(cat.price_current)}
+                      {cat.price_installments ? ` ou ${cat.price_installments}` : ""}.
+                    </span>
+                  ) : null;
+                })()}
+                {(() => {
+                  const cat = categories.find((c) => c.name === form.category);
+                  return cat?.display_installments ? (
+                    <span className="block mt-1 text-xs text-muted-foreground">
+                      * Esta categoria exibe o valor parcelado em destaque.
+                    </span>
+                  ) : null;
+                })()}
+              </div>
+            )}
 
             <label className="flex items-center gap-2 text-sm">
               <input

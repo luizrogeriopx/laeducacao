@@ -96,6 +96,7 @@ export type Database = {
         Row: {
           category: string
           created_at: string
+          custom_pricing: boolean
           description: string
           display_installments: boolean
           enabled: boolean
@@ -112,6 +113,7 @@ export type Database = {
         Insert: {
           category?: string
           created_at?: string
+          custom_pricing?: boolean
           description?: string
           display_installments?: boolean
           enabled?: boolean
@@ -128,6 +130,7 @@ export type Database = {
         Update: {
           category?: string
           created_at?: string
+          custom_pricing?: boolean
           description?: string
           display_installments?: boolean
           enabled?: boolean

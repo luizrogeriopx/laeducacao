@@ -15,6 +15,7 @@ export interface Course {
   price_current: number | null;
   price_installments: string | null;
   display_installments: boolean;
+  custom_pricing: boolean;
 }
 
 const SITEMAP_URL = "https://trinity.sistemaead.com/sitemap.xml";
@@ -278,6 +279,7 @@ interface CourseInput {
   price_current?: number | null;
   price_installments?: string | null;
   display_installments?: boolean;
+  custom_pricing?: boolean;
   enabled?: boolean;
 }
 
@@ -301,6 +303,7 @@ export const createCourse = createServerFn({ method: "POST" })
       price_current: data.price_current ?? null,
       price_installments: data.price_installments ?? null,
       display_installments: data.display_installments ?? false,
+      custom_pricing: data.custom_pricing ?? false,
       enabled: data.enabled ?? true,
       updated_at: new Date().toISOString(),
     };
@@ -325,6 +328,7 @@ export const updateCourse = createServerFn({ method: "POST" })
       ...(rest.price_current !== undefined && { price_current: rest.price_current }),
       ...(rest.price_installments !== undefined && { price_installments: rest.price_installments }),
       ...(rest.display_installments !== undefined && { display_installments: rest.display_installments }),
+      ...(rest.custom_pricing !== undefined && { custom_pricing: rest.custom_pricing }),
       ...(rest.enabled !== undefined && { enabled: rest.enabled }),
       updated_at: new Date().toISOString(),
     };
