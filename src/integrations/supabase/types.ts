@@ -56,6 +56,7 @@ export type Database = {
       course_categories: {
         Row: {
           created_at: string
+          display_installments: boolean
           id: string
           name: string
           price_current: number | null
@@ -67,6 +68,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          display_installments?: boolean
           id?: string
           name: string
           price_current?: number | null
@@ -78,6 +80,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          display_installments?: boolean
           id?: string
           name?: string
           price_current?: number | null
@@ -94,6 +97,7 @@ export type Database = {
           category: string
           created_at: string
           description: string
+          display_installments: boolean
           enabled: boolean
           id: string
           image: string
@@ -109,6 +113,7 @@ export type Database = {
           category?: string
           created_at?: string
           description?: string
+          display_installments?: boolean
           enabled?: boolean
           id: string
           image?: string
@@ -124,6 +129,7 @@ export type Database = {
           category?: string
           created_at?: string
           description?: string
+          display_installments?: boolean
           enabled?: boolean
           id?: string
           image?: string

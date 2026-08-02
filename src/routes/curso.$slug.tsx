@@ -173,25 +173,40 @@ function CoursePage() {
           {/* Price */}
           {(course.price_current != null || course.price_original != null) && (
             <div className="mt-6 rounded-xl border bg-card px-6 py-4">
-              {course.price_original != null &&
-                course.price_current != null &&
-                course.price_original > course.price_current && (
-                  <p className="text-sm text-muted-foreground line-through">
-                    De R$ {formatPrice(course.price_original)}
+              {course.display_installments && course.price_installments ? (
+                <>
+                  <p className="text-3xl font-bold text-primary">
+                    {course.price_installments}
                   </p>
-                )}
-              {course.price_current != null && (
-                <p className="text-3xl font-bold text-primary">
-                  R$ {formatPrice(course.price_current)}
-                  <span className="ml-1 text-sm font-normal text-muted-foreground">
-                    à vista
-                  </span>
-                </p>
-              )}
-              {course.price_installments && (
-                <p className="mt-1 text-sm text-muted-foreground">
-                  ou {course.price_installments}
-                </p>
+                  {course.price_current != null && (
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      ou R$ {formatPrice(course.price_current)} à vista
+                    </p>
+                  )}
+                </>
+              ) : (
+                <>
+                  {course.price_original != null &&
+                    course.price_current != null &&
+                    course.price_original > course.price_current && (
+                      <p className="text-sm text-muted-foreground line-through">
+                        De R$ {formatPrice(course.price_original)}
+                      </p>
+                    )}
+                  {course.price_current != null && (
+                    <p className="text-3xl font-bold text-primary">
+                      R$ {formatPrice(course.price_current)}
+                      <span className="ml-1 text-sm font-normal text-muted-foreground">
+                        à vista
+                      </span>
+                    </p>
+                  )}
+                  {course.price_installments && (
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      ou {course.price_installments}
+                    </p>
+                  )}
+                </>
               )}
             </div>
           )}

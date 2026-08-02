@@ -36,6 +36,7 @@ interface CatRow {
   price_original: number | null;
   price_current: number | null;
   price_installments: string | null;
+  display_installments: boolean;
   course_count: number;
 }
 
@@ -97,6 +98,7 @@ function Body() {
   const [pOriginal, setPOriginal] = useState("");
   const [pCurrent, setPCurrent] = useState("");
   const [pInstall, setPInstall] = useState("");
+  const [displayInstallments, setDisplayInstallments] = useState(false);
   const [applyAll, setApplyAll] = useState(true);
 
   const createMut = useMutation({
@@ -124,6 +126,7 @@ function Body() {
       price_original: number | null;
       price_current: number | null;
       price_installments: string | null;
+      display_installments: boolean;
       apply: boolean;
     }) => priceFn({ data: v }),
     onSuccess: () => {
@@ -159,6 +162,7 @@ function Body() {
     setPOriginal(c.price_original?.toString() ?? "");
     setPCurrent(c.price_current?.toString() ?? "");
     setPInstall(c.price_installments ?? "");
+    setDisplayInstallments(c.display_installments ?? false);
     setApplyAll(true);
   };
 
@@ -373,6 +377,14 @@ function Body() {
             <label className="flex items-center gap-2 text-sm">
               <input
                 type="checkbox"
+                checked={displayInstallments}
+                onChange={(e) => setDisplayInstallments(e.target.checked)}
+              />
+              Exibir valor parcelado em destaque nas páginas e cartões
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
                 checked={applyAll}
                 onChange={(e) => setApplyAll(e.target.checked)}
               />
@@ -398,6 +410,7 @@ function Body() {
                   price_original: toNum(pOriginal),
                   price_current: toNum(pCurrent),
                   price_installments: pInstall.trim() || null,
+                  display_installments: displayInstallments,
                   apply: applyAll,
                 })
               }

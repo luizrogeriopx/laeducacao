@@ -11,6 +11,7 @@ export interface CourseCategory {
   price_original: number | null;
   price_current: number | null;
   price_installments: string | null;
+  display_installments: boolean;
 }
 
 async function assertAdmin(userId: string) {
@@ -155,6 +156,7 @@ export const setCategoryPrice = createServerFn({ method: "POST" })
       price_original: number | null;
       price_current: number | null;
       price_installments: string | null;
+      display_installments: boolean;
       apply: boolean;
     }) => data,
   )
@@ -174,6 +176,7 @@ export const setCategoryPrice = createServerFn({ method: "POST" })
         price_original: data.price_original,
         price_current: data.price_current,
         price_installments: data.price_installments,
+        display_installments: data.display_installments,
         updated_at: new Date().toISOString(),
       })
       .eq("id", data.id);
@@ -187,6 +190,7 @@ export const setCategoryPrice = createServerFn({ method: "POST" })
           price_original: data.price_original,
           price_current: data.price_current,
           price_installments: data.price_installments,
+          display_installments: data.display_installments,
           updated_at: new Date().toISOString(),
         })
         .eq("category", current.name)

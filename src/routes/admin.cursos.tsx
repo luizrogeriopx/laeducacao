@@ -44,6 +44,7 @@ interface FormState {
   price_original: string;
   price_current: string;
   price_installments: string;
+  display_installments: boolean;
   enabled: boolean;
 }
 
@@ -56,6 +57,7 @@ const empty: FormState = {
   price_original: "",
   price_current: "",
   price_installments: "",
+  display_installments: false,
   enabled: true,
 };
 
@@ -134,6 +136,9 @@ function Body() {
         price_installments: cat
           ? cat.price_installments
           : f.price_installments || null,
+        display_installments: cat
+          ? cat.display_installments
+          : f.display_installments,
         enabled: f.enabled,
       };
 
@@ -195,6 +200,7 @@ function Body() {
       price_original: c.price_original?.toString() ?? "",
       price_current: c.price_current?.toString() ?? "",
       price_installments: c.price_installments ?? "",
+      display_installments: c.display_installments ?? false,
       enabled: c.enabled,
     });
     setOpen(true);
@@ -416,6 +422,25 @@ function Body() {
                 ) : null;
               })()}
             </div>
+
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={
+                  categories.some((c) => c.name === form.category)
+                    ? categories.find((c) => c.name === form.category)?.display_installments ?? false
+                    : form.display_installments
+                }
+                disabled={categories.some((c) => c.name === form.category)}
+                onChange={(e) =>
+                  setForm({ ...form, display_installments: e.target.checked })
+                }
+              />
+              Exibir valor parcelado em destaque nas páginas e cartões
+              {categories.some((c) => c.name === form.category) && (
+                <span className="text-xs text-muted-foreground"> (Herdado da categoria)</span>
+              )}
+            </label>
 
             <label className="flex items-center gap-2 text-sm">
               <input

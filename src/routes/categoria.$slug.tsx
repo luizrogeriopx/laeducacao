@@ -101,10 +101,16 @@ function CourseCardMini({ course }: { course: Course }) {
         <h3 className="line-clamp-2 text-sm font-semibold leading-snug">
           {course.title}
         </h3>
-        {course.price_current != null && (
+        {course.display_installments && course.price_installments ? (
           <p className="mt-1 text-sm font-semibold text-primary">
-            R$ {formatPrice(course.price_current)}
+            {course.price_installments}
           </p>
+        ) : (
+          course.price_current != null && (
+            <p className="mt-1 text-sm font-semibold text-primary">
+              R$ {formatPrice(course.price_current)}
+            </p>
+          )
         )}
       </div>
     </Link>
