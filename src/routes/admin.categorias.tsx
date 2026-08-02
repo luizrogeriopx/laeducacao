@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { isCurrentUserAdmin } from "@/lib/courses.functions";
+import { formatPrice } from "@/lib/utils";
 import {
   listCategoriesAdmin,
   createCategory,
@@ -40,7 +41,7 @@ interface CatRow {
 
 function toNum(v: string): number | null {
   if (!v.trim()) return null;
-  const n = parseFloat(v.replace(",", "."));
+  const n = parseFloat(v.replace(/\./g, "").replace(",", "."));
   return Number.isFinite(n) ? n : null;
 }
 
@@ -230,7 +231,7 @@ function Body() {
                     {c.price_current != null ? (
                       <>
                         <span className="font-medium">
-                          R$ {c.price_current.toFixed(2).replace(".", ",")}
+                          R$ {formatPrice(c.price_current)}
                         </span>
                         {c.price_installments && (
                           <span className="ml-1 text-xs text-muted-foreground">

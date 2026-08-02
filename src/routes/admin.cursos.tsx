@@ -24,6 +24,7 @@ import {
   type Course,
 } from "@/lib/courses.functions";
 import { listCategories, type CourseCategory } from "@/lib/categories.functions";
+import { formatPrice } from "@/lib/utils";
 
 
 export const Route = createFileRoute("/admin/cursos")({
@@ -60,7 +61,7 @@ const empty: FormState = {
 
 function toNum(v: string): number | null {
   if (!v.trim()) return null;
-  const n = parseFloat(v.replace(",", "."));
+  const n = parseFloat(v.replace(/\./g, "").replace(",", "."));
   return Number.isFinite(n) ? n : null;
 }
 
@@ -266,7 +267,7 @@ function Body() {
                   <td className="p-3 text-muted-foreground">{c.category}</td>
                   <td className="p-3">
                     {c.price_current != null
-                      ? `R$ ${c.price_current.toFixed(2).replace(".", ",")}`
+                      ? `R$ ${formatPrice(c.price_current)}`
                       : "—"}
                   </td>
                   <td className="p-3">
@@ -409,7 +410,7 @@ function Body() {
                 return cat?.price_current != null ? (
                   <span className="ml-1">
                     Preço atual de “{cat.name}”: R${" "}
-                    {cat.price_current.toFixed(2).replace(".", ",")}
+                    {formatPrice(cat.price_current)}
                     {cat.price_installments ? ` ou ${cat.price_installments}` : ""}.
                   </span>
                 ) : null;

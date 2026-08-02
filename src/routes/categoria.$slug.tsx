@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { listCourses, type Course } from "@/lib/courses.functions";
 import { categorySlug } from "@/lib/category";
 import { SiteFooter } from "@/components/SiteFooter";
+import { formatPrice } from "@/lib/utils";
 
 
 export const Route = createFileRoute("/categoria/$slug")({
@@ -102,7 +103,7 @@ function CourseCardMini({ course }: { course: Course }) {
         </h3>
         {course.price_current != null && (
           <p className="mt-1 text-sm font-semibold text-primary">
-            R$ {course.price_current.toFixed(2).replace(".", ",")}
+            R$ {formatPrice(course.price_current)}
           </p>
         )}
       </div>

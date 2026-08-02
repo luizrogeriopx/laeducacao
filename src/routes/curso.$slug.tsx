@@ -6,6 +6,7 @@ import { getCourseBySlug } from "@/lib/courses.functions";
 import { categorySlug } from "@/lib/category";
 import { whatsappCourseLink } from "@/lib/whatsapp";
 import { SiteFooter } from "@/components/SiteFooter";
+import { formatPrice } from "@/lib/utils";
 
 const courseQuery = (slug: string) =>
   queryOptions({
@@ -176,12 +177,12 @@ function CoursePage() {
                 course.price_current != null &&
                 course.price_original > course.price_current && (
                   <p className="text-sm text-muted-foreground line-through">
-                    De R$ {course.price_original.toFixed(2).replace(".", ",")}
+                    De R$ {formatPrice(course.price_original)}
                   </p>
                 )}
               {course.price_current != null && (
                 <p className="text-3xl font-bold text-primary">
-                  R$ {course.price_current.toFixed(2).replace(".", ",")}
+                  R$ {formatPrice(course.price_current)}
                   <span className="ml-1 text-sm font-normal text-muted-foreground">
                     à vista
                   </span>
@@ -203,11 +204,6 @@ function CoursePage() {
                 rel="noopener noreferrer"
               >
                 Matricule-se pelo WhatsApp
-              </a>
-            </Button>
-            <Button asChild variant="outline">
-              <a href={course.url} target="_blank" rel="noopener noreferrer">
-                Ver detalhes no site oficial
               </a>
             </Button>
           </div>
