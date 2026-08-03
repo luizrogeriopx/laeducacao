@@ -44,8 +44,8 @@ function CategoryPage() {
 
   const { categoryName, items, known } = useMemo(() => {
     const courses = data?.courses ?? [];
-    const matches = courses.filter((c) => categorySlug(c.category) === slug);
-    const cat = (catData?.categories ?? []).find((c) => c.slug === slug);
+    const matches = courses.filter((c: Course) => categorySlug(c.category) === slug);
+    const cat = (catData?.categories ?? []).find((c: CourseCategory) => c.slug === slug);
     return {
       categoryName: cat?.name ?? matches[0]?.category ?? slug,
       items: matches,
