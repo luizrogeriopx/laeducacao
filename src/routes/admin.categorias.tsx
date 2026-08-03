@@ -37,6 +37,7 @@ interface CatRow {
   price_current: number | null;
   price_installments: string | null;
   display_installments: boolean;
+  hide_price: boolean;
   course_count: number;
 }
 
@@ -99,6 +100,7 @@ function Body() {
   const [pCurrent, setPCurrent] = useState("");
   const [pInstall, setPInstall] = useState("");
   const [displayInstallments, setDisplayInstallments] = useState(false);
+  const [hidePrice, setHidePrice] = useState(false);
   const [applyAll, setApplyAll] = useState(true);
 
   const createMut = useMutation({
