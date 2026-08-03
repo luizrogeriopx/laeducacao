@@ -57,6 +57,7 @@ export type Database = {
         Row: {
           created_at: string
           display_installments: boolean | null
+          hide_price: boolean
           id: string
           name: string
           price_current: number | null
@@ -69,6 +70,7 @@ export type Database = {
         Insert: {
           created_at?: string
           display_installments?: boolean | null
+          hide_price?: boolean
           id?: string
           name: string
           price_current?: number | null
@@ -81,6 +83,7 @@ export type Database = {
         Update: {
           created_at?: string
           display_installments?: boolean | null
+          hide_price?: boolean
           id?: string
           name?: string
           price_current?: number | null
@@ -100,6 +103,7 @@ export type Database = {
           description: string
           display_installments: boolean | null
           enabled: boolean
+          hide_price: boolean
           id: string
           image: string
           price_current: number | null
@@ -117,6 +121,7 @@ export type Database = {
           description?: string
           display_installments?: boolean | null
           enabled?: boolean
+          hide_price?: boolean
           id: string
           image?: string
           price_current?: number | null
@@ -134,6 +139,7 @@ export type Database = {
           description?: string
           display_installments?: boolean | null
           enabled?: boolean
+          hide_price?: boolean
           id?: string
           image?: string
           price_current?: number | null

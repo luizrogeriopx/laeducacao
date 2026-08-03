@@ -16,6 +16,7 @@ export interface Course {
   price_installments: string | null;
   display_installments: boolean;
   custom_pricing: boolean;
+  hide_price: boolean;
 }
 
 const SITEMAP_URL = "https://trinity.sistemaead.com/sitemap.xml";
@@ -90,6 +91,7 @@ async function scrapeCourse(url: string): Promise<ScrapedCourse | null> {
       price_installments: installments ? installments[1].replace(/\s+/g, " ") : null,
       display_installments: false,
       custom_pricing: false,
+      hide_price: false,
     };
   } catch {
     return null;
