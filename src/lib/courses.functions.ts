@@ -16,6 +16,7 @@ export interface Course {
   price_installments: string | null;
   display_installments: boolean;
   custom_pricing: boolean;
+  hide_price: boolean;
 }
 
 const SITEMAP_URL = "https://trinity.sistemaead.com/sitemap.xml";
