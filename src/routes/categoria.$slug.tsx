@@ -116,7 +116,8 @@ function CourseCardMini({ course }: { course: Course }) {
         <h3 className="line-clamp-2 text-sm font-semibold leading-snug">
           {course.title}
         </h3>
-        {course.display_installments && course.price_installments ? (
+        {course.hide_price ? null : course.display_installments &&
+          course.price_installments ? (
           <p className="mt-1 text-sm font-semibold text-primary">
             {course.price_installments}
           </p>
