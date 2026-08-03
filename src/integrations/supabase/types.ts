@@ -56,7 +56,7 @@ export type Database = {
       course_categories: {
         Row: {
           created_at: string
-          display_installments: boolean
+          display_installments: boolean | null
           id: string
           name: string
           price_current: number | null
@@ -68,7 +68,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          display_installments?: boolean
+          display_installments?: boolean | null
           id?: string
           name: string
           price_current?: number | null
@@ -80,7 +80,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          display_installments?: boolean
+          display_installments?: boolean | null
           id?: string
           name?: string
           price_current?: number | null
@@ -96,9 +96,9 @@ export type Database = {
         Row: {
           category: string
           created_at: string
-          custom_pricing: boolean
+          custom_pricing: boolean | null
           description: string
-          display_installments: boolean
+          display_installments: boolean | null
           enabled: boolean
           id: string
           image: string
@@ -113,9 +113,9 @@ export type Database = {
         Insert: {
           category?: string
           created_at?: string
-          custom_pricing?: boolean
+          custom_pricing?: boolean | null
           description?: string
-          display_installments?: boolean
+          display_installments?: boolean | null
           enabled?: boolean
           id: string
           image?: string
@@ -130,9 +130,9 @@ export type Database = {
         Update: {
           category?: string
           created_at?: string
-          custom_pricing?: boolean
+          custom_pricing?: boolean | null
           description?: string
-          display_installments?: boolean
+          display_installments?: boolean | null
           enabled?: boolean
           id?: string
           image?: string
