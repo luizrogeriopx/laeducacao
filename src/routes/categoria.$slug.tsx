@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { listCourses, type Course } from "@/lib/courses.functions";
+import { listCategories, type CourseCategory } from "@/lib/categories.functions";
 import { categorySlug } from "@/lib/category";
 import { SiteFooter } from "@/components/SiteFooter";
 import { formatPrice } from "@/lib/utils";
