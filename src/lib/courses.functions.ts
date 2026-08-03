@@ -88,6 +88,8 @@ async function scrapeCourse(url: string): Promise<ScrapedCourse | null> {
       price_original: original ? parsePriceBR(original[1]) : null,
       price_current: current ? parsePriceBR(current[1]) : null,
       price_installments: installments ? installments[1].replace(/\s+/g, " ") : null,
+      display_installments: false,
+      custom_pricing: false,
     };
   } catch {
     return null;
