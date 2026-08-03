@@ -129,6 +129,7 @@ function Body() {
       price_current: number | null;
       price_installments: string | null;
       display_installments: boolean;
+      hide_price: boolean;
       apply: boolean;
     }) => priceFn({ data: v }),
     onSuccess: () => {
