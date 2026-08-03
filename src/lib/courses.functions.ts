@@ -91,6 +91,7 @@ async function scrapeCourse(url: string): Promise<ScrapedCourse | null> {
       price_installments: installments ? installments[1].replace(/\s+/g, " ") : null,
       display_installments: false,
       custom_pricing: false,
+      hide_price: false,
     };
   } catch {
     return null;
