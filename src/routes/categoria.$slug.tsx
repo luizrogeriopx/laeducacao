@@ -31,21 +31,28 @@ export const Route = createFileRoute("/categoria/$slug")({
 function CategoryPage() {
   const { slug } = Route.useParams();
   const fetchCourses = useServerFn(listCourses);
+  const fetchCategories = useServerFn(listCategories);
   const { data, isLoading } = useQuery({
     queryKey: ["courses"],
     queryFn: () => fetchCourses(),
   });
+  const { data: catData } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => fetchCategories(),
+  });
 
-  const { categoryName, items } = useMemo(() => {
+  const { categoryName, items, known } = useMemo(() => {
     const courses = data?.courses ?? [];
     const matches = courses.filter((c) => categorySlug(c.category) === slug);
+    const cat = (catData?.categories ?? []).find((c) => c.slug === slug);
     return {
-      categoryName: matches[0]?.category ?? slug,
+      categoryName: cat?.name ?? matches[0]?.category ?? slug,
       items: matches,
+      known: Boolean(cat),
     };
-  }, [data, slug]);
+  }, [data, catData, slug]);
 
-  if (!isLoading && data && items.length === 0) {
+  if (!isLoading && data && catData && items.length === 0 && !known) {
     throw notFound();
   }
 
@@ -68,12 +75,19 @@ function CategoryPage() {
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {items.map((c) => (
-            <CourseCardMini key={c.id} course={c} />
-          ))}
-        </div>
+        {items.length === 0 ? (
+          <p className="rounded-xl border bg-card p-8 text-center text-muted-foreground">
+            Nenhum curso cadastrado nesta categoria no momento.
+          </p>
+        ) : (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {items.map((c) => (
+              <CourseCardMini key={c.id} course={c} />
+            ))}
+          </div>
+        )}
       </main>
+
       <SiteFooter />
     </div>
   );
