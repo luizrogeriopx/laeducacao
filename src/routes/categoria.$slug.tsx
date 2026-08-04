@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { listCourses, type Course } from "@/lib/courses.functions";
+import { listCategories, type CourseCategory } from "@/lib/categories.functions";
 import { categorySlug } from "@/lib/category";
 import { SiteFooter } from "@/components/SiteFooter";
 import { formatPrice } from "@/lib/utils";
@@ -58,21 +59,28 @@ export const Route = createFileRoute("/categoria/$slug")({
 function CategoryPage() {
   const { slug } = Route.useParams();
   const fetchCourses = useServerFn(listCourses);
+  const fetchCategories = useServerFn(listCategories);
   const { data, isLoading } = useQuery({
     queryKey: ["courses"],
     queryFn: () => fetchCourses(),
   });
+  const { data: catData } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => fetchCategories(),
+  });
 
-  const { categoryName, items } = useMemo(() => {
+  const { categoryName, items, known } = useMemo(() => {
     const courses = data?.courses ?? [];
-    const matches = courses.filter((c) => categorySlug(c.category) === slug);
+    const matches = courses.filter((c: Course) => categorySlug(c.category) === slug);
+    const cat = (catData?.categories ?? []).find((c: CourseCategory) => c.slug === slug);
     return {
-      categoryName: matches[0]?.category ?? getCategoryName(slug),
+      categoryName: cat?.name ?? matches[0]?.category ?? getCategoryName(slug),
       items: matches,
+      known: Boolean(cat),
     };
-  }, [data, slug]);
+  }, [data, catData, slug]);
 
-  if (!isLoading && data && items.length === 0) {
+  if (!isLoading && data && catData && items.length === 0 && !known) {
     throw notFound();
   }
 
@@ -95,15 +103,22 @@ function CategoryPage() {
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {items.map((c) => (
-            <CourseCardMini key={c.id} course={c} />
-          ))}
-        </div>
+        {items.length === 0 ? (
+          <p className="rounded-xl border bg-card p-8 text-center text-muted-foreground">
+            Nenhum curso cadastrado nesta categoria no momento.
+          </p>
+        ) : (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {items.map((c) => (
+              <CourseCardMini key={c.id} course={c} />
+            ))}
+          </div>
+        )}
 
         {/* Descrição rica para SEO */}
         <CategoryDescription name={categoryName} />
       </main>
+
       <SiteFooter />
     </div>
   );
@@ -161,7 +176,8 @@ function CourseCardMini({ course }: { course: Course }) {
         <h2 className="line-clamp-2 text-sm font-semibold leading-snug text-neutral-800 group-hover:text-[#1a237e]">
           {course.title}
         </h2>
-        {course.display_installments && course.price_installments ? (
+        {course.hide_price ? null : course.display_installments &&
+          course.price_installments ? (
           <p className="mt-1 text-sm font-semibold text-primary">
             {course.price_installments}
           </p>

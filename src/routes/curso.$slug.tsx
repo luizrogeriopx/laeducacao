@@ -171,7 +171,8 @@ function CoursePage() {
           )}
 
           {/* Price */}
-          {(course.price_current != null || course.price_original != null) && (
+          {!course.hide_price &&
+            (course.price_current != null || course.price_original != null) && (
             <div className="mt-6 rounded-xl border bg-card px-6 py-4">
               {course.display_installments && course.price_installments ? (
                 <>

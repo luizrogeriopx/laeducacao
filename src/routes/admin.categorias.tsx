@@ -37,6 +37,7 @@ interface CatRow {
   price_current: number | null;
   price_installments: string | null;
   display_installments: boolean;
+  hide_price: boolean;
   course_count: number;
 }
 
@@ -99,6 +100,7 @@ function Body() {
   const [pCurrent, setPCurrent] = useState("");
   const [pInstall, setPInstall] = useState("");
   const [displayInstallments, setDisplayInstallments] = useState(false);
+  const [hidePrice, setHidePrice] = useState(false);
   const [applyAll, setApplyAll] = useState(true);
 
   const createMut = useMutation({
@@ -127,6 +129,7 @@ function Body() {
       price_current: number | null;
       price_installments: string | null;
       display_installments: boolean;
+      hide_price: boolean;
       apply: boolean;
     }) => priceFn({ data: v }),
     onSuccess: () => {
@@ -163,6 +166,7 @@ function Body() {
     setPCurrent(c.price_current?.toString() ?? "");
     setPInstall(c.price_installments ?? "");
     setDisplayInstallments(c.display_installments ?? false);
+    setHidePrice(c.hide_price ?? false);
     setApplyAll(true);
   };
 
@@ -385,6 +389,14 @@ function Body() {
             <label className="flex items-center gap-2 text-sm">
               <input
                 type="checkbox"
+                checked={hidePrice}
+                onChange={(e) => setHidePrice(e.target.checked)}
+              />
+              Ocultar preço nas páginas (mesmo com valores definidos)
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
                 checked={applyAll}
                 onChange={(e) => setApplyAll(e.target.checked)}
               />
@@ -411,6 +423,7 @@ function Body() {
                   price_current: toNum(pCurrent),
                   price_installments: pInstall.trim() || null,
                   display_installments: displayInstallments,
+                  hide_price: hidePrice,
                   apply: applyAll,
                 })
               }
