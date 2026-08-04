@@ -6,6 +6,7 @@ import { listCourses, type Course } from "@/lib/courses.functions";
 import { listCategories, type CourseCategory } from "@/lib/categories.functions";
 import { categorySlug } from "@/lib/category";
 import { SiteFooter } from "@/components/SiteFooter";
+import { SiteHeader } from "@/components/SiteHeader";
 import { formatPrice } from "@/lib/utils";
 
 
@@ -85,7 +86,8 @@ function CategoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pt-20">
+      <SiteHeader />
       <header className="border-b bg-card">
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
           <Link
