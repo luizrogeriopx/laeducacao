@@ -3,7 +3,7 @@ import type {} from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { categorySlug } from "@/lib/category";
 
-const BASE_URL = "https://laeducacao.lovable.app";
+const BASE_URL = "https://www.laeducacaogo.com.br";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -25,6 +25,8 @@ export const Route = createFileRoute("/sitemap.xml")({
         const entries: { path: string; lastmod?: string; priority?: string; changefreq?: string }[] = [
           { path: "/", changefreq: "daily", priority: "1.0" },
           { path: "/blog", changefreq: "daily", priority: "0.9" },
+          { path: "/catalogo", changefreq: "weekly", priority: "0.8" },
+          { path: "/matricula", changefreq: "weekly", priority: "0.8" },
         ];
 
         const cats = new Set<string>();

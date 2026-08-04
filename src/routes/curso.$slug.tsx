@@ -20,14 +20,14 @@ export const Route = createFileRoute("/curso/$slug")({
     context.queryClient.ensureQueryData(courseQuery(params.slug)),
   head: ({ params, loaderData }) => {
     const course = loaderData?.course;
-    const url = `https://laeducacao.lovable.app/curso/${params.slug}`;
+    const url = `https://www.laeducacaogo.com.br/curso/${params.slug}`;
     const title = course
-      ? `${course.title} — LA Educação Goiânia`
-      : `Curso ${params.slug} — LA Educação Goiânia`;
-    const desc = course?.description
-      ? course.description.slice(0, 160)
+      ? `${course.title} em Goiânia e Aparecida de Goiânia | LA`
+      : `Curso ${params.slug} em Goiânia | LA Educação`;
+    const desc = course
+      ? `Faça o curso de ${course.title} EAD em Goiânia e Aparecida de Goiânia com certificado reconhecido pelo MEC. Matrículas abertas e suporte via WhatsApp!`
       : `Matricule-se no curso ${params.slug} com certificado reconhecido pelo MEC na LA Educação Polo Autorizado Goiânia.`;
-    const image = course?.image || "https://storage.googleapis.com/gpt-engineer-file-uploads/DHiOjp8ndWUzFfJtfqCiJhEeQ343/social-images/social-1779727637968-LAura.webp";
+    const image = course?.image || "https://www.laeducacaogo.com.br/img/banner-cursos-ead-goiania.png";
 
     const meta = [
       { title },
@@ -53,7 +53,7 @@ export const Route = createFileRoute("/curso/$slug")({
               provider: {
                 "@type": "EducationalOrganization",
                 name: "LA Educação Goiânia — Polo Autorizado",
-                sameAs: "https://laeducacao.lovable.app",
+                sameAs: "https://www.laeducacaogo.com.br",
               },
               ...(course.price_current != null && {
                 offers: {
@@ -77,8 +77,8 @@ export const Route = createFileRoute("/curso/$slug")({
               "@context": "https://schema.org",
               "@type": "BreadcrumbList",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Início", item: "https://laeducacao.lovable.app/" },
-                { "@type": "ListItem", position: 2, name: course.category, item: `https://laeducacao.lovable.app/categoria/${categorySlug(course.category)}` },
+                { "@type": "ListItem", position: 1, name: "Início", item: "https://www.laeducacaogo.com.br/" },
+                { "@type": "ListItem", position: 2, name: course.category, item: `https://www.laeducacaogo.com.br/categoria/${categorySlug(course.category)}` },
                 { "@type": "ListItem", position: 3, name: course.title, item: url },
               ],
             }),
@@ -221,6 +221,44 @@ function CoursePage() {
                 Matricule-se pelo WhatsApp
               </a>
             </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 border-t mt-12 text-neutral-600 space-y-8">
+        <h2 className="text-2xl font-bold text-[#1a237e] text-center">
+          Por que fazer o curso de {course.title} na LA Educação?
+        </h2>
+        <p>
+          O curso online de <strong>{course.title}</strong> é uma excelente escolha para quem reside em <strong>Goiânia</strong>, <strong>Aparecida de Goiânia</strong> ou em outras cidades de <strong>Goiás</strong> e busca qualificação profissional rápida de alto nível. Com o mercado cada vez mais exigente por certificações oficiais, estar preparado com um curso reconhecido é um diferencial essencial para processos de contratação e progressão de carreira.
+        </p>
+        
+        <h3 className="text-xl font-bold text-[#1a237e] mt-6">Vantagens de Estudar EAD Conosco</h3>
+        <ul className="list-disc pl-6 space-y-2">
+          <li><strong>Certificado Reconhecido pelo MEC</strong>: Ao concluir os estudos, você recebe a certificação com validade nacional, aceita em empresas, concursos e faculdades.</li>
+          <li><strong>Plataforma de Ensino 100% Online</strong>: Estude no seu próprio ritmo, de manhã, à tarde ou nos finais de semana. O conteúdo completo fica disponível 24 horas por dia.</li>
+          <li><strong>Suporte Rápido e Humanizado</strong>: Esqueça o atendimento impessoal. Nosso time em Goiânia está sempre disponível via WhatsApp para auxiliar em questões financeiras, pedagógicas e de emissão de certificado.</li>
+          <li><strong>Material Didático Completo</strong>: Apostilas digitais, videoaulas e questionários práticos desenvolvidos por profissionais do setor.</li>
+        </ul>
+
+        <h3 className="text-xl font-bold text-[#1a237e] mt-6">Mercado de Trabalho para {course.title} em Goiás</h3>
+        <p>
+          As empresas de Goiânia, Aparecida de Goiânia, Anápolis e região metropolitana buscam constantemente profissionais capacitados em {course.category}. A certificação obtida ao final deste curso comprova as competências necessárias e coloca seu currículo em posição de destaque diante dos recrutadores locais.
+        </p>
+        <p>
+          A flexibilidade do ensino digital EAD garante que você possa continuar trabalhando enquanto adquire novas competências. Conclua os módulos no seu tempo e esteja pronto para as melhores oportunidades de emprego em Goiás.
+        </p>
+
+        <div className="bg-[#f8f9fa] border border-neutral-100 p-6 rounded-xl text-center my-8">
+          <h4 className="font-bold text-[#1a237e] text-lg mb-2">Matrículas abertas com início imediato!</h4>
+          <p className="text-sm mb-4">Inscreva-se hoje mesmo e turbine sua carreira com o curso de {course.title}.</p>
+          <div className="flex justify-center gap-3">
+            <Link to="/matricula" className="bg-[#da1069] text-white hover:bg-[#1a237e] font-bold py-2.5 px-6 rounded-full text-sm transition-all shadow">
+              Iniciar Matrícula Online
+            </Link>
+            <Link to="/categoria/$slug" params={{ slug: categorySlug(course.category) }} className="bg-[#1a237e] text-white hover:bg-neutral-800 font-bold py-2.5 px-6 rounded-full text-sm transition-all shadow">
+              Ver Outros Cursos de {course.category}
+            </Link>
           </div>
         </div>
       </div>

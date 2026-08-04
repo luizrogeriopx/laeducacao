@@ -17,17 +17,20 @@ export const Route = createFileRoute("/blog/$slug")({
   head: ({ loaderData }) => {
     const p = loaderData?.post;
     if (!p) return {};
-    const url = `https://laeducacao.lovable.app/blog/${p.slug}`;
+    const url = `https://www.laeducacaogo.com.br/blog/${p.slug}`;
+    const image = p.cover_image || "https://www.laeducacaogo.com.br/img/banner-cursos-ead-goiania.png";
+    const desc = p.excerpt ? p.excerpt.slice(0, 160) : `${p.title} - Leia mais no blog da LA Educação Polo Goiânia e Aparecida.`;
     return {
       meta: [
-        { title: `${p.title} — Blog LA Educação` },
-        { name: "description", content: p.excerpt || p.title },
-        { property: "og:title", content: p.title },
-        { property: "og:description", content: p.excerpt || p.title },
+        { title: `${p.title} | Blog LA Educação` },
+        { name: "description", content: desc },
+        { property: "og:title", content: `${p.title} | Blog LA Educação` },
+        { property: "og:description", content: desc },
         { property: "og:type", content: "article" },
         { property: "og:url", content: url },
-        ...(p.cover_image ? [{ property: "og:image", content: p.cover_image }] : []),
-        ...(p.cover_image ? [{ name: "twitter:image", content: p.cover_image }] : []),
+        { property: "og:image", content: image },
+        { name: "twitter:image", content: image },
+        { name: "twitter:card", content: "summary_large_image" },
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [
@@ -37,14 +40,22 @@ export const Route = createFileRoute("/blog/$slug")({
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             headline: p.title,
-            description: p.excerpt,
+            description: p.excerpt || desc,
             datePublished: p.published_at,
             dateModified: p.updated_at,
-            image: p.cover_image || undefined,
-            author: { "@type": "Organization", name: "LA Educação Goiânia" },
+            image: image,
+            author: {
+              "@type": "Organization",
+              name: "LA Educação Goiânia",
+              url: "https://www.laeducacaogo.com.br"
+            },
             publisher: {
               "@type": "Organization",
               name: "LA Educação Goiânia",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://www.laeducacaogo.com.br/img/selo-la-educacao-goiania.png"
+              }
             },
             mainEntityOfPage: url,
           }),

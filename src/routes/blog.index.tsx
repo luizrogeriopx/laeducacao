@@ -8,18 +8,25 @@ import logo from "@/assets/laeducacao-logo.png";
 export const Route = createFileRoute("/blog/")({
   component: BlogList,
   head: () => ({
+    title: "Blog LA Educação | EJA, Cursos e Carreira em Goiás",
     meta: [
-      { title: "Blog LA Educação Goiânia — Dicas sobre EJA, Técnicos e Carreira" },
+      {
+        name: "keywords",
+        content: "EJA Goiânia, EJA Aparecida de Goiânia, Supletivo EAD Goiás, Cursos profissionalizantes Goiânia, Blog LA Educação, Carreira Goiás",
+      },
       {
         name: "description",
         content:
-          "Artigos sobre EJA, cursos técnicos, faculdade, salários e carreira. Tire dúvidas sobre certificação MEC e dê o próximo passo nos estudos.",
+          "Confira dicas, notícias e tire dúvidas sobre EJA, Supletivo EAD, cursos profissionalizantes e mercado de trabalho em Goiânia, Aparecida de Goiânia e região.",
       },
-      { property: "og:title", content: "Blog LA Educação Goiânia" },
-      { property: "og:description", content: "Conteúdos sobre EJA, cursos técnicos e carreira." },
-      { property: "og:url", content: "https://laeducacao.lovable.app/blog" },
+      { property: "og:title", content: "Blog LA Educação | EJA, Cursos e Carreira em Goiás" },
+      { property: "og:description", content: "Artigos e notícias sobre EJA, supletivo EAD, cursos profissionalizantes e mercado de trabalho em Goiânia, Aparecida e Goiás." },
+      { property: "og:url", content: "https://www.laeducacaogo.com.br/blog" },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://www.laeducacaogo.com.br/img/banner-cursos-ead-goiania.png" },
+      { name: "twitter:image", content: "https://www.laeducacaogo.com.br/img/banner-cursos-ead-goiania.png" },
     ],
-    links: [{ rel: "canonical", href: "https://laeducacao.lovable.app/blog" }],
+    links: [{ rel: "canonical", href: "https://www.laeducacaogo.com.br/blog" }],
   }),
 });
 

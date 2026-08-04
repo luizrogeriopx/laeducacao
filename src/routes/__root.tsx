@@ -93,8 +93,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           },
         ]
       : [];
-    const defaultTitle = "LA Educação Goiânia — Cursos Online com Certificado MEC";
-    const defaultDesc = "Cursos 100% Online com Certificados reconhecidos pelo MEC. EJA, Graduação, Pós-Graduação, Técnicos e Profissionalizantes em Goiânia.";
+    const defaultTitle = "EJA, Supletivo e Cursos Profissionalizantes EAD | LA Educação";
+    const defaultDesc = "Conclua seus estudos ou faça um curso profissionalizante EAD com certificado reconhecido pelo MEC na LA Educação Polo Goiânia e Aparecida. Matrículas abertas!";
     return {
       meta: [
         { charSet: "utf-8" },
@@ -111,14 +111,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: defaultTitle },
         { name: "twitter:description", content: defaultDesc },
-        { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/DHiOjp8ndWUzFfJtfqCiJhEeQ343/social-images/social-1779727637968-LAura.webp" },
-        { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/DHiOjp8ndWUzFfJtfqCiJhEeQ343/social-images/social-1779727637968-LAura.webp" },
+        { property: "og:image", content: "https://www.laeducacaogo.com.br/img/banner-cursos-ead-goiania.png" },
+        { name: "twitter:image", content: "https://www.laeducacaogo.com.br/img/banner-cursos-ead-goiania.png" },
       ],
       links: [
         {
           rel: "stylesheet",
           href: appCss,
         },
+        {
+          rel: "preload",
+          href: "/img/banner-cursos-ead-goiania.png",
+          as: "image",
+          type: "image/png"
+        }
       ],
       scripts: [
         ...scripts,
@@ -127,18 +133,65 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           type: "application/ld+json",
           children: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "EducationalOrganization",
-            name: "LA Educação Goiânia — Polo Autorizado",
-            url: "https://laeducacao.lovable.app",
-            logo: "https://storage.googleapis.com/gpt-engineer-file-uploads/DHiOjp8ndWUzFfJtfqCiJhEeQ343/social-images/social-1779727637968-LAura.webp",
-            address: { "@type": "PostalAddress", addressLocality: "Goiânia", addressRegion: "GO", addressCountry: "BR" },
-            contactPoint: { "@type": "ContactPoint", telephone: "+55-62-99659-2952", contactType: "customer service", areaServed: "BR", availableLanguage: "Portuguese" },
-            sameAs: [
-              "https://www.instagram.com/lic.laeducacao.goiania",
-              "https://www.facebook.com/lic.laeducacao.goiania",
-              "https://www.youtube.com/@lic.laeducacao.goiania",
-              "https://www.tiktok.com/@lic.laeducacao.goiania",
-            ],
+            "@graph": [
+              {
+                "@type": "EducationalOrganization",
+                "@id": "https://www.laeducacaogo.com.br/#organization",
+                "name": "LA Educação Goiânia",
+                "url": "https://www.laeducacaogo.com.br",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://www.laeducacaogo.com.br/img/selo-la-educacao-goiania.png",
+                  "caption": "LA Educação Logo"
+                },
+                "description": "Polo Autorizado de Cursos EAD com Certificado MEC. Supletivo EJA, Graduação, Pós-Graduação e Cursos Profissionalizantes em Goiânia, Aparecida de Goiânia e Goiás.",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": "Goiânia",
+                  "addressRegion": "GO",
+                  "addressCountry": "BR"
+                },
+                "contactPoint": {
+                  "@type": "ContactPoint",
+                  "telephone": "+55-62-99659-2952",
+                  "contactType": "customer service",
+                  "areaServed": "BR",
+                  "availableLanguage": "Portuguese"
+                },
+                "sameAs": [
+                  "https://www.instagram.com/lic.laeducacao.goiania",
+                  "https://www.facebook.com/lic.laeducacao.goiania",
+                  "https://www.youtube.com/@lic.laeducacao.goiania",
+                  "https://www.tiktok.com/@lic.laeducacao.goiania"
+                ]
+              },
+              {
+                "@type": "LocalBusiness",
+                "@id": "https://www.laeducacaogo.com.br/#localbusiness",
+                "name": "LA Educação Goiânia e Aparecida",
+                "image": "https://www.laeducacaogo.com.br/img/banner-cursos-ead-goiania.png",
+                "telephone": "+55-62-99659-2952",
+                "url": "https://www.laeducacaogo.com.br",
+                "address": {
+                  "@type": "PostalAddress",
+                  "streetAddress": "Polo Autorizado EAD",
+                  "addressLocality": "Goiânia",
+                  "addressRegion": "GO",
+                  "addressCountry": "BR"
+                },
+                "geo": {
+                  "@type": "GeoCoordinates",
+                  "latitude": "-16.6869",
+                  "longitude": "-49.2648"
+                },
+                "openingHoursSpecification": {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                  "opens": "08:00",
+                  "closes": "18:00"
+                }
+              }
+            ]
           }),
         },
       ],

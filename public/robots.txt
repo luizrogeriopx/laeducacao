@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /admin
-Disallow: /login
 
-Sitemap: https://laeducacao.lovable.app/sitemap.xml
+Sitemap: https://www.laeducacaogo.com.br/sitemap.xml

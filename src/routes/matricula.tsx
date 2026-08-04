@@ -4,10 +4,17 @@ import { useState, useEffect, useRef } from "react";
 export const Route = createFileRoute("/matricula")({
   component: MatriculaPage,
   head: () => ({
-    title: "Matrícula Online - LA Educação",
+    title: "Matrícula Online | EJA e Cursos Técnicos em Goiânia",
     meta: [
-      { name: "description", content: "Faça sua matrícula online no portal da LA Educação de forma rápida através do nosso chat inteligente." }
-    ]
+      { name: "description", content: "Faça sua pré-matrícula online na LA Educação. Conclua seus estudos ou inicie um curso profissionalizante EAD em Goiânia e Aparecida de Goiânia. Inscreva-se!" },
+      { property: "og:title", content: "Matrícula Online | EJA e Cursos Técnicos em Goiânia" },
+      { property: "og:description", content: "Faça sua pré-matrícula online na LA Educação. Conclua seus estudos ou inicie um curso profissionalizante EAD com certificado MEC em Goiânia e Aparecida." },
+      { property: "og:url", content: "https://www.laeducacaogo.com.br/matricula" },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://www.laeducacaogo.com.br/img/banner-cursos-ead-goiania.png" },
+      { name: "twitter:image", content: "https://www.laeducacaogo.com.br/img/banner-cursos-ead-goiania.png" },
+    ],
+    links: [{ rel: "canonical", href: "https://www.laeducacaogo.com.br/matricula" }]
   })
 });
 
@@ -236,8 +243,8 @@ function MatriculaPage() {
             ←
           </Link>
           <img
-            src="/matricula/img/agente.jpeg"
-            alt="Ana Luiza"
+            src="/matricula/img/atendente-la-educacao-goiania.jpeg"
+            alt="Ana Luiza - Atendente da LA Educação em Goiânia"
             className="w-11 h-11 rounded-full object-cover border-2 border-white/50"
           />
           <div className="flex-1 min-w-0">
@@ -311,6 +318,57 @@ function MatriculaPage() {
           </button>
         </div>
       </div>
+
+      <section className="sr-only">
+        <h1>Matrícula Online — EJA, Ensino Médio, Ensino Fundamental e Cursos Profissionalizantes</h1>
+        <p>
+          Seja bem-vindo ao portal de pré-matrícula da LA Educação. Esta página foi projetada para que você possa iniciar sua inscrição de forma rápida e segura no <strong>supletivo EJA EAD</strong> ou em nossos <strong>cursos profissionalizantes com certificado</strong> reconhecido pelo MEC. Oferecemos suporte completo para moradores de <strong>Goiânia</strong>, <strong>Aparecida de Goiânia</strong>, <strong>Anápolis</strong>, <strong>Trindade</strong>, <strong>Senador Canedo</strong> e todo o estado de <strong>Goiás</strong>.
+        </p>
+
+        <h2>Como funciona o processo de matrícula online?</h2>
+        <p>
+          Nosso chat inteligente guiará você passo a passo para coletar as informações necessárias para a sua ficha de matrícula. Esse processo automatizado e humanizado facilita o envio de dados sem burocracia. Você informará dados como seu nome completo, CPF, RG, data de nascimento, endereço residencial com CEP e suas preferências de curso. O formulário é criptografado e enviado diretamente para a nossa secretaria escolar em Goiânia para processamento imediato.
+        </p>
+
+        <h2>Quais são os requisitos para matrícula na EJA (Educação de Jovens e Adultos) EAD?</h2>
+        <p>
+          Para ingressar na modalidade de jovens e adultos (EJA) do <strong>Ensino Fundamental EAD</strong>, o aluno deve ter idade mínima de 15 anos completos no ato da matrícula. Para ingressar no <strong>Ensino Médio EAD</strong> ou realizar o supletivo para conclusão de nível médio, a idade mínima exigida por lei é de 18 anos completos. Não há limite máximo de idade, e incentivamos todos que desejam retornar aos estudos a realizar a sua inscrição.
+        </p>
+
+        <h2>Quais documentos são exigidos para a homologação da matrícula?</h2>
+        <p>
+          Para concluir com sucesso seu processo e garantir a validade de sua certificação junto ao Ministério da Educação (MEC), os seguintes documentos deverão ser encaminhados para a nossa equipe de suporte pedagógico após o preenchimento do formulário inicial do chat:
+        </p>
+        <ul>
+          <li>Cópia legível do Documento de Identidade (RG) e CPF.</li>
+          <li>Comprovante de residência atualizado (Goiânia, Aparecida de Goiânia ou região de Goiás).</li>
+          <li>Histórico Escolar anterior da última série concluída (para aproveitamento de matérias).</li>
+          <li>Certidão de Nascimento ou de Casamento.</li>
+          <li>Título de Eleitor e comprovante de quitação eleitoral (para maiores de 18 anos).</li>
+        </ul>
+
+        <h2>Cursos Profissionalizantes de Alta Empregabilidade em Goiás</h2>
+        <p>
+          A LA Educação também oferece matrículas abertas para diversos <strong>cursos profissionalizantes em Goiânia</strong> e <strong>cursos profissionalizantes em Aparecida de Goiânia</strong>, ideais para quem busca rápida inserção ou recolocação no mercado de trabalho de Goiás. Nossos programas mais populares contam com suporte online e certificado oficial:
+        </p>
+        <ul>
+          <li><strong>Curso de Administração</strong>: Foco em gestão empresarial, contabilidade básica, fluxo de caixa e rotinas de escritório comerciais em Goiânia e região.</li>
+          <li><strong>Curso de Cuidador de Idosos</strong>: Qualificação voltada para primeiros socorros, acompanhamento de saúde física e mental e atendimento de idosos com dedicação e profissionalismo.</li>
+          <li><strong>Curso de Atendente de Farmácia</strong>: Capacitação para trabalhar no comércio farmacêutico, organizando medicamentos, interpretando receitas e prestando excelente atendimento.</li>
+          <li><strong>Curso de Recepcionista</strong>: Desenvolva habilidades de atendimento telefônico, recepção de clientes, etiqueta corporativa e organização de agendas.</li>
+          <li><strong>Curso de Informática</strong>: Essencial para qualquer vaga de emprego. Aprenda Word, Excel, navegação corporativa e ferramentas administrativas.</li>
+        </ul>
+
+        <h2>Reconhecimento MEC e Validade Nacional do Certificado</h2>
+        <p>
+          Todos os cursos oferecidos pela LA Educação e suas instituições parceiras credenciadas são integralmente regulamentados e autorizados pelo MEC. O certificado emitido após a conclusão do EJA ou Supletivo EAD possui validade nacional equivalente à do ensino regular presencial. Com ele, você poderá se candidatar a vagas de emprego que exigem o ensino médio ou fundamental completo, inscrever-se em cursos técnicos, realizar exames vestibulares, prestar o ENEM (Exame Nacional do Ensino Médio) ou ingressar na Faculdade / Ensino Superior EAD ou presencial.
+        </p>
+
+        <h2>Polo de Atendimento e Atendimento Humanizado</h2>
+        <p>
+          Nosso polo de apoio ao estudante em Goiânia, Goiás, garante total retaguarda pedagógica e administrativa. Se você tiver qualquer dúvida durante o preenchimento do seu cadastro de matrícula, ou precisar de informações adicionais sobre os cursos e mensalidades, pode entrar em contato conosco pelo WhatsApp (62) 99659-2952 de segunda a sexta-feira, das 08h às 18h. A LA Educação está comprometida em transformar vidas através de um ensino digital acessível e de extrema qualidade.
+        </p>
+      </section>
     </div>
   );
 }

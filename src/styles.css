@@ -177,7 +177,7 @@
 
 .home-hero {
   height: 70vh;
-  background: linear-gradient(rgba(26, 35, 126, 0.85), rgba(26, 35, 126, 0.7)), url('/img/banner.png');
+  background: linear-gradient(rgba(26, 35, 126, 0.85), rgba(26, 35, 126, 0.7)), url('/img/banner-cursos-ead-goiania.png');
   background-size: cover;
   background-position: center;
 }
