@@ -128,10 +128,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       ],
       scripts: [
         ...scripts,
-        { src: "https://www.googletagmanager.com/gtag/js?id=AW-10841602881", async: true },
-        {
-          children: `window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'AW-10841602881');`,
-        },
         ...(widgetUrl ? [{ src: widgetUrl, async: true }] : []),
         {
           type: "application/ld+json",
@@ -211,6 +207,16 @@ function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-10841602881"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-10841602881');
+          `
+        }} />
         <HeadContent />
       </head>
       <body>
