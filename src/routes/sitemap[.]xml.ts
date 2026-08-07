@@ -24,6 +24,16 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         const entries: { path: string; lastmod?: string; priority?: string; changefreq?: string }[] = [
           { path: "/", changefreq: "daily", priority: "1.0" },
+          { path: "/eja-goiania", changefreq: "weekly", priority: "0.9" },
+          { path: "/eja-aparecida-de-goiania", changefreq: "weekly", priority: "0.9" },
+          { path: "/supletivo-goiania", changefreq: "weekly", priority: "0.9" },
+          { path: "/supletivo-aparecida-de-goiania", changefreq: "weekly", priority: "0.9" },
+          { path: "/eja-online", changefreq: "weekly", priority: "0.9" },
+          { path: "/supletivo-online", changefreq: "weekly", priority: "0.9" },
+          { path: "/quem-somos", changefreq: "monthly", priority: "0.7" },
+          { path: "/politica-privacidade", changefreq: "monthly", priority: "0.5" },
+          { path: "/termos-uso", changefreq: "monthly", priority: "0.5" },
+          { path: "/contato", changefreq: "monthly", priority: "0.7" },
           { path: "/blog", changefreq: "daily", priority: "0.9" },
           { path: "/catalogo", changefreq: "weekly", priority: "0.8" },
           { path: "/matricula", changefreq: "weekly", priority: "0.8" },

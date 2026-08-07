@@ -9,9 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermosUsoRouteImport } from './routes/termos-uso'
+import { Route as SupletivoOnlineRouteImport } from './routes/supletivo-online'
+import { Route as SupletivoGoianiaRouteImport } from './routes/supletivo-goiania'
+import { Route as SupletivoAparecidaDeGoianiaRouteImport } from './routes/supletivo-aparecida-de-goiania'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as QuemSomosRouteImport } from './routes/quem-somos'
+import { Route as PoliticaPrivacidadeRouteImport } from './routes/politica-privacidade'
 import { Route as MatriculaRouteImport } from './routes/matricula'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as EjaOnlineRouteImport } from './routes/eja-online'
+import { Route as EjaGoianiaRouteImport } from './routes/eja-goiania'
+import { Route as EjaAparecidaDeGoianiaRouteImport } from './routes/eja-aparecida-de-goiania'
+import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as CatalogoRouteImport } from './routes/catalogo'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
@@ -24,9 +34,40 @@ import { Route as AdminCursosRouteImport } from './routes/admin.cursos'
 import { Route as AdminCategoriasRouteImport } from './routes/admin.categorias'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 
+const TermosUsoRoute = TermosUsoRouteImport.update({
+  id: '/termos-uso',
+  path: '/termos-uso',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupletivoOnlineRoute = SupletivoOnlineRouteImport.update({
+  id: '/supletivo-online',
+  path: '/supletivo-online',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupletivoGoianiaRoute = SupletivoGoianiaRouteImport.update({
+  id: '/supletivo-goiania',
+  path: '/supletivo-goiania',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupletivoAparecidaDeGoianiaRoute =
+  SupletivoAparecidaDeGoianiaRouteImport.update({
+    id: '/supletivo-aparecida-de-goiania',
+    path: '/supletivo-aparecida-de-goiania',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuemSomosRoute = QuemSomosRouteImport.update({
+  id: '/quem-somos',
+  path: '/quem-somos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliticaPrivacidadeRoute = PoliticaPrivacidadeRouteImport.update({
+  id: '/politica-privacidade',
+  path: '/politica-privacidade',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MatriculaRoute = MatriculaRouteImport.update({
@@ -37,6 +78,26 @@ const MatriculaRoute = MatriculaRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EjaOnlineRoute = EjaOnlineRouteImport.update({
+  id: '/eja-online',
+  path: '/eja-online',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EjaGoianiaRoute = EjaGoianiaRouteImport.update({
+  id: '/eja-goiania',
+  path: '/eja-goiania',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EjaAparecidaDeGoianiaRoute = EjaAparecidaDeGoianiaRouteImport.update({
+  id: '/eja-aparecida-de-goiania',
+  path: '/eja-aparecida-de-goiania',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContatoRoute = ContatoRouteImport.update({
+  id: '/contato',
+  path: '/contato',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CatalogoRoute = CatalogoRouteImport.update({
@@ -99,9 +160,19 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/catalogo': typeof CatalogoRoute
+  '/contato': typeof ContatoRoute
+  '/eja-aparecida-de-goiania': typeof EjaAparecidaDeGoianiaRoute
+  '/eja-goiania': typeof EjaGoianiaRoute
+  '/eja-online': typeof EjaOnlineRoute
   '/login': typeof LoginRoute
   '/matricula': typeof MatriculaRoute
+  '/politica-privacidade': typeof PoliticaPrivacidadeRoute
+  '/quem-somos': typeof QuemSomosRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supletivo-aparecida-de-goiania': typeof SupletivoAparecidaDeGoianiaRoute
+  '/supletivo-goiania': typeof SupletivoGoianiaRoute
+  '/supletivo-online': typeof SupletivoOnlineRoute
+  '/termos-uso': typeof TermosUsoRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/cursos': typeof AdminCursosRoute
@@ -114,9 +185,19 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/catalogo': typeof CatalogoRoute
+  '/contato': typeof ContatoRoute
+  '/eja-aparecida-de-goiania': typeof EjaAparecidaDeGoianiaRoute
+  '/eja-goiania': typeof EjaGoianiaRoute
+  '/eja-online': typeof EjaOnlineRoute
   '/login': typeof LoginRoute
   '/matricula': typeof MatriculaRoute
+  '/politica-privacidade': typeof PoliticaPrivacidadeRoute
+  '/quem-somos': typeof QuemSomosRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supletivo-aparecida-de-goiania': typeof SupletivoAparecidaDeGoianiaRoute
+  '/supletivo-goiania': typeof SupletivoGoianiaRoute
+  '/supletivo-online': typeof SupletivoOnlineRoute
+  '/termos-uso': typeof TermosUsoRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/cursos': typeof AdminCursosRoute
@@ -131,9 +212,19 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/catalogo': typeof CatalogoRoute
+  '/contato': typeof ContatoRoute
+  '/eja-aparecida-de-goiania': typeof EjaAparecidaDeGoianiaRoute
+  '/eja-goiania': typeof EjaGoianiaRoute
+  '/eja-online': typeof EjaOnlineRoute
   '/login': typeof LoginRoute
   '/matricula': typeof MatriculaRoute
+  '/politica-privacidade': typeof PoliticaPrivacidadeRoute
+  '/quem-somos': typeof QuemSomosRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/supletivo-aparecida-de-goiania': typeof SupletivoAparecidaDeGoianiaRoute
+  '/supletivo-goiania': typeof SupletivoGoianiaRoute
+  '/supletivo-online': typeof SupletivoOnlineRoute
+  '/termos-uso': typeof TermosUsoRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/cursos': typeof AdminCursosRoute
@@ -149,9 +240,19 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/catalogo'
+    | '/contato'
+    | '/eja-aparecida-de-goiania'
+    | '/eja-goiania'
+    | '/eja-online'
     | '/login'
     | '/matricula'
+    | '/politica-privacidade'
+    | '/quem-somos'
     | '/sitemap.xml'
+    | '/supletivo-aparecida-de-goiania'
+    | '/supletivo-goiania'
+    | '/supletivo-online'
+    | '/termos-uso'
     | '/admin/blog'
     | '/admin/categorias'
     | '/admin/cursos'
@@ -164,9 +265,19 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/catalogo'
+    | '/contato'
+    | '/eja-aparecida-de-goiania'
+    | '/eja-goiania'
+    | '/eja-online'
     | '/login'
     | '/matricula'
+    | '/politica-privacidade'
+    | '/quem-somos'
     | '/sitemap.xml'
+    | '/supletivo-aparecida-de-goiania'
+    | '/supletivo-goiania'
+    | '/supletivo-online'
+    | '/termos-uso'
     | '/admin/blog'
     | '/admin/categorias'
     | '/admin/cursos'
@@ -180,9 +291,19 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/catalogo'
+    | '/contato'
+    | '/eja-aparecida-de-goiania'
+    | '/eja-goiania'
+    | '/eja-online'
     | '/login'
     | '/matricula'
+    | '/politica-privacidade'
+    | '/quem-somos'
     | '/sitemap.xml'
+    | '/supletivo-aparecida-de-goiania'
+    | '/supletivo-goiania'
+    | '/supletivo-online'
+    | '/termos-uso'
     | '/admin/blog'
     | '/admin/categorias'
     | '/admin/cursos'
@@ -197,9 +318,19 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   CatalogoRoute: typeof CatalogoRoute
+  ContatoRoute: typeof ContatoRoute
+  EjaAparecidaDeGoianiaRoute: typeof EjaAparecidaDeGoianiaRoute
+  EjaGoianiaRoute: typeof EjaGoianiaRoute
+  EjaOnlineRoute: typeof EjaOnlineRoute
   LoginRoute: typeof LoginRoute
   MatriculaRoute: typeof MatriculaRoute
+  PoliticaPrivacidadeRoute: typeof PoliticaPrivacidadeRoute
+  QuemSomosRoute: typeof QuemSomosRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SupletivoAparecidaDeGoianiaRoute: typeof SupletivoAparecidaDeGoianiaRoute
+  SupletivoGoianiaRoute: typeof SupletivoGoianiaRoute
+  SupletivoOnlineRoute: typeof SupletivoOnlineRoute
+  TermosUsoRoute: typeof TermosUsoRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CategoriaSlugRoute: typeof CategoriaSlugRoute
   CursoSlugRoute: typeof CursoSlugRoute
@@ -208,11 +339,53 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/termos-uso': {
+      id: '/termos-uso'
+      path: '/termos-uso'
+      fullPath: '/termos-uso'
+      preLoaderRoute: typeof TermosUsoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supletivo-online': {
+      id: '/supletivo-online'
+      path: '/supletivo-online'
+      fullPath: '/supletivo-online'
+      preLoaderRoute: typeof SupletivoOnlineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supletivo-goiania': {
+      id: '/supletivo-goiania'
+      path: '/supletivo-goiania'
+      fullPath: '/supletivo-goiania'
+      preLoaderRoute: typeof SupletivoGoianiaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supletivo-aparecida-de-goiania': {
+      id: '/supletivo-aparecida-de-goiania'
+      path: '/supletivo-aparecida-de-goiania'
+      fullPath: '/supletivo-aparecida-de-goiania'
+      preLoaderRoute: typeof SupletivoAparecidaDeGoianiaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quem-somos': {
+      id: '/quem-somos'
+      path: '/quem-somos'
+      fullPath: '/quem-somos'
+      preLoaderRoute: typeof QuemSomosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/politica-privacidade': {
+      id: '/politica-privacidade'
+      path: '/politica-privacidade'
+      fullPath: '/politica-privacidade'
+      preLoaderRoute: typeof PoliticaPrivacidadeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/matricula': {
@@ -227,6 +400,34 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eja-online': {
+      id: '/eja-online'
+      path: '/eja-online'
+      fullPath: '/eja-online'
+      preLoaderRoute: typeof EjaOnlineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eja-goiania': {
+      id: '/eja-goiania'
+      path: '/eja-goiania'
+      fullPath: '/eja-goiania'
+      preLoaderRoute: typeof EjaGoianiaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eja-aparecida-de-goiania': {
+      id: '/eja-aparecida-de-goiania'
+      path: '/eja-aparecida-de-goiania'
+      fullPath: '/eja-aparecida-de-goiania'
+      preLoaderRoute: typeof EjaAparecidaDeGoianiaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contato': {
+      id: '/contato'
+      path: '/contato'
+      fullPath: '/contato'
+      preLoaderRoute: typeof ContatoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catalogo': {
@@ -329,9 +530,19 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   CatalogoRoute: CatalogoRoute,
+  ContatoRoute: ContatoRoute,
+  EjaAparecidaDeGoianiaRoute: EjaAparecidaDeGoianiaRoute,
+  EjaGoianiaRoute: EjaGoianiaRoute,
+  EjaOnlineRoute: EjaOnlineRoute,
   LoginRoute: LoginRoute,
   MatriculaRoute: MatriculaRoute,
+  PoliticaPrivacidadeRoute: PoliticaPrivacidadeRoute,
+  QuemSomosRoute: QuemSomosRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SupletivoAparecidaDeGoianiaRoute: SupletivoAparecidaDeGoianiaRoute,
+  SupletivoGoianiaRoute: SupletivoGoianiaRoute,
+  SupletivoOnlineRoute: SupletivoOnlineRoute,
+  TermosUsoRoute: TermosUsoRoute,
   BlogSlugRoute: BlogSlugRoute,
   CategoriaSlugRoute: CategoriaSlugRoute,
   CursoSlugRoute: CursoSlugRoute,

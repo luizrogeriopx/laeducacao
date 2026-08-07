@@ -128,6 +128,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       ],
       scripts: [
         ...scripts,
+        { src: "https://www.googletagmanager.com/gtag/js?id=AW-10841602881", async: true },
+        {
+          children: `window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'AW-10841602881');`,
+        },
         ...(widgetUrl ? [{ src: widgetUrl, async: true }] : []),
         {
           type: "application/ld+json",

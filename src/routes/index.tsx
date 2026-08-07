@@ -44,7 +44,7 @@ export const Route = createFileRoute("/")({
       ]
     };
     return {
-      title: "EJA, Supletivo e Cursos Profissionalizantes em Goiânia | LA",
+      title: "EJA e Supletivo em Goiânia e Aparecida de Goiânia | LA Educação",
       meta: [
         {
           name: "keywords",
@@ -54,13 +54,13 @@ export const Route = createFileRoute("/")({
         {
           name: "description",
           content:
-            "Conclua o Ensino Médio ou Fundamental EAD em Goiânia e Aparecida de Goiânia. Cursos profissionalizantes e EJA com certificado reconhecido pelo MEC. Matriule-se!",
+            "Conclua o Ensino Médio ou Fundamental EAD em Goiânia e Aparecida de Goiânia. Supletivo EJA reconhecido pelo MEC de forma rápida, segura e autorizada. Matriule-se!",
         },
-        { property: "og:title", content: "EJA, Supletivo e Cursos Profissionalizantes em Goiânia | LA" },
+        { property: "og:title", content: "EJA e Supletivo em Goiânia e Aparecida de Goiânia | LA Educação" },
         {
           property: "og:description",
           content:
-            "Conclua seus estudos EAD ou faça um curso profissionalizante com certificado reconhecido pelo MEC. Matrículas abertas em Goiânia, Aparecida e Goiás!",
+            "Conclua seus estudos EAD com o Supletivo EJA reconhecido pelo MEC de forma rápida, segura e autorizada. Matrículas abertas em Goiânia, Aparecida e Goiás!",
         },
         { property: "og:url", content: "https://www.laeducacaogo.com.br/" },
         { property: "og:image", content: "https://www.laeducacaogo.com.br/img/banner-cursos-ead-goiania.png" },
@@ -113,10 +113,10 @@ function HomePage() {
       >
         <div className="max-w-3xl flex flex-col items-center gap-5">
           <h1 className="text-3xl sm:text-5xl font-extrabold leading-tight">
-            EJA, Supletivo e Cursos EAD em Goiânia
+            EJA e Supletivo 100% Online em Goiânia e Aparecida de Goiânia
           </h1>
           <p className="text-lg sm:text-xl text-neutral-100 max-w-2xl">
-            + de 300 Cursos de alta qualidade com certificação reconhecida a sua disposição.
+            Conclua o Ensino Fundamental ou Médio de forma rápida, segura e autorizada.
           </p>
           <Link
             to="/catalogo"
