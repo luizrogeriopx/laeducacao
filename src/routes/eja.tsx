@@ -289,16 +289,24 @@ function EjaLanding() {
         </div>
       </section>
 
-      {/* Botão flutuante */}
-      <a
-        href={wa()}
-        target="_blank"
-        rel="noopener noreferrer"
-        title="Fale conosco no WhatsApp"
-        className="fixed bottom-6 right-6 z-50 bg-[oklch(0.65_0.18_145)] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform"
-      >
-        <MessageCircle className="w-8 h-8" />
-      </a>
+      {/* Certificação Garantida */}
+      <section className="py-16 px-5 bg-white">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#1a237e] mb-10">CERTIFICAÇÃO GARANTIDA</h2>
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 lg:gap-16">
+            {seals.map((s, idx) => (
+              <div key={idx} className="flex justify-center items-center p-2">
+                <img
+                  src={s.src}
+                  alt={s.alt}
+                  loading="lazy"
+                  className="seal-img max-h-24 object-contain"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <SiteFooter />
     </div>
