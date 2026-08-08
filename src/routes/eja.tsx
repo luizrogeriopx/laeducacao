@@ -4,7 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { MessageCircle, Check } from "lucide-react";
 import { getEjaConfig } from "@/lib/eja.functions";
-import { ejaWhatsappLink } from "@/lib/eja-config";
+import { ejaWhatsappLink, type EjaConfig } from "@/lib/eja-config";
 
 const CANONICAL = "https://www.laeducacaogo.com.br/eja";
 
@@ -72,7 +72,8 @@ export const Route = createFileRoute("/eja")({
 });
 
 function EjaLanding() {
-  const { config: cfg } = Route.useLoaderData();
+  const { config } = Route.useLoaderData();
+  const cfg = config as EjaConfig;
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const wa = (msg?: string) => ejaWhatsappLink(cfg, msg);
 

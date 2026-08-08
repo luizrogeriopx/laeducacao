@@ -21,6 +21,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as EjaOnlineRouteImport } from './routes/eja-online'
 import { Route as EjaGoianiaRouteImport } from './routes/eja-goiania'
 import { Route as EjaAparecidaDeGoianiaRouteImport } from './routes/eja-aparecida-de-goiania'
+import { Route as EjaRouteImport } from './routes/eja'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as CatalogoRouteImport } from './routes/catalogo'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -95,6 +96,11 @@ const EjaAparecidaDeGoianiaRoute = EjaAparecidaDeGoianiaRouteImport.update({
   path: '/eja-aparecida-de-goiania',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EjaRoute = EjaRouteImport.update({
+  id: '/eja',
+  path: '/eja',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContatoRoute = ContatoRouteImport.update({
   id: '/contato',
   path: '/contato',
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/catalogo': typeof CatalogoRoute
   '/contato': typeof ContatoRoute
+  '/eja': typeof EjaRoute
   '/eja-aparecida-de-goiania': typeof EjaAparecidaDeGoianiaRoute
   '/eja-goiania': typeof EjaGoianiaRoute
   '/eja-online': typeof EjaOnlineRoute
@@ -186,6 +193,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/catalogo': typeof CatalogoRoute
   '/contato': typeof ContatoRoute
+  '/eja': typeof EjaRoute
   '/eja-aparecida-de-goiania': typeof EjaAparecidaDeGoianiaRoute
   '/eja-goiania': typeof EjaGoianiaRoute
   '/eja-online': typeof EjaOnlineRoute
@@ -213,6 +221,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/catalogo': typeof CatalogoRoute
   '/contato': typeof ContatoRoute
+  '/eja': typeof EjaRoute
   '/eja-aparecida-de-goiania': typeof EjaAparecidaDeGoianiaRoute
   '/eja-goiania': typeof EjaGoianiaRoute
   '/eja-online': typeof EjaOnlineRoute
@@ -241,6 +250,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/catalogo'
     | '/contato'
+    | '/eja'
     | '/eja-aparecida-de-goiania'
     | '/eja-goiania'
     | '/eja-online'
@@ -266,6 +276,7 @@ export interface FileRouteTypes {
     | '/'
     | '/catalogo'
     | '/contato'
+    | '/eja'
     | '/eja-aparecida-de-goiania'
     | '/eja-goiania'
     | '/eja-online'
@@ -292,6 +303,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/catalogo'
     | '/contato'
+    | '/eja'
     | '/eja-aparecida-de-goiania'
     | '/eja-goiania'
     | '/eja-online'
@@ -319,6 +331,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   CatalogoRoute: typeof CatalogoRoute
   ContatoRoute: typeof ContatoRoute
+  EjaRoute: typeof EjaRoute
   EjaAparecidaDeGoianiaRoute: typeof EjaAparecidaDeGoianiaRoute
   EjaGoianiaRoute: typeof EjaGoianiaRoute
   EjaOnlineRoute: typeof EjaOnlineRoute
@@ -421,6 +434,13 @@ declare module '@tanstack/react-router' {
       path: '/eja-aparecida-de-goiania'
       fullPath: '/eja-aparecida-de-goiania'
       preLoaderRoute: typeof EjaAparecidaDeGoianiaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eja': {
+      id: '/eja'
+      path: '/eja'
+      fullPath: '/eja'
+      preLoaderRoute: typeof EjaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contato': {
@@ -531,6 +551,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   CatalogoRoute: CatalogoRoute,
   ContatoRoute: ContatoRoute,
+  EjaRoute: EjaRoute,
   EjaAparecidaDeGoianiaRoute: EjaAparecidaDeGoianiaRoute,
   EjaGoianiaRoute: EjaGoianiaRoute,
   EjaOnlineRoute: EjaOnlineRoute,
@@ -551,13 +572,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
