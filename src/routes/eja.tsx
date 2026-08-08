@@ -197,7 +197,7 @@ function EjaLanding() {
           >
             <MessageCircle className="w-5 h-5" /> {cfg.offer_cta}
           </a>
-          <p className="text-xl sm:text-2xl font-extrabold uppercase tracking-wide text-[#da1069]">
+          <p className="text-xl sm:text-2xl font-extrabold uppercase tracking-wide text-white">
             {cfg.offer_note}
           </p>
         </div>
