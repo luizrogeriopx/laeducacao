@@ -129,7 +129,7 @@ function HomePage() {
 
       {/* Selos de Confiança */}
       <section className="py-20 w-full max-w-6xl mx-auto px-5 text-center">
-        <h2 className="text-3xl font-bold text-[#1a237e] mb-12">Selos de Confiança</h2>
+        <h2 className="text-3xl font-bold text-[#1a237e] mb-12">CERTIFICAÇÃO GARANTIDA</h2>
         
         <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 lg:gap-16">
           {seals.map((s, idx) => (
