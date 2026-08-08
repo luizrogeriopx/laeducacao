@@ -21,6 +21,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as EjaOnlineRouteImport } from './routes/eja-online'
 import { Route as EjaGoianiaRouteImport } from './routes/eja-goiania'
 import { Route as EjaAparecidaDeGoianiaRouteImport } from './routes/eja-aparecida-de-goiania'
+import { Route as EjaRouteImport } from './routes/eja'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as CatalogoRouteImport } from './routes/catalogo'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -30,6 +31,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as CursoSlugRouteImport } from './routes/curso.$slug'
 import { Route as CategoriaSlugRouteImport } from './routes/categoria.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AdminEjaRouteImport } from './routes/admin.eja'
 import { Route as AdminCursosRouteImport } from './routes/admin.cursos'
 import { Route as AdminCategoriasRouteImport } from './routes/admin.categorias'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
@@ -95,6 +97,11 @@ const EjaAparecidaDeGoianiaRoute = EjaAparecidaDeGoianiaRouteImport.update({
   path: '/eja-aparecida-de-goiania',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EjaRoute = EjaRouteImport.update({
+  id: '/eja',
+  path: '/eja',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContatoRoute = ContatoRouteImport.update({
   id: '/contato',
   path: '/contato',
@@ -140,6 +147,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminEjaRoute = AdminEjaRouteImport.update({
+  id: '/eja',
+  path: '/eja',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCursosRoute = AdminCursosRouteImport.update({
   id: '/cursos',
   path: '/cursos',
@@ -161,6 +173,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/catalogo': typeof CatalogoRoute
   '/contato': typeof ContatoRoute
+  '/eja': typeof EjaRoute
   '/eja-aparecida-de-goiania': typeof EjaAparecidaDeGoianiaRoute
   '/eja-goiania': typeof EjaGoianiaRoute
   '/eja-online': typeof EjaOnlineRoute
@@ -176,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/admin/blog': typeof AdminBlogRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/cursos': typeof AdminCursosRoute
+  '/admin/eja': typeof AdminEjaRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/curso/$slug': typeof CursoSlugRoute
@@ -186,6 +200,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/catalogo': typeof CatalogoRoute
   '/contato': typeof ContatoRoute
+  '/eja': typeof EjaRoute
   '/eja-aparecida-de-goiania': typeof EjaAparecidaDeGoianiaRoute
   '/eja-goiania': typeof EjaGoianiaRoute
   '/eja-online': typeof EjaOnlineRoute
@@ -201,6 +216,7 @@ export interface FileRoutesByTo {
   '/admin/blog': typeof AdminBlogRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/cursos': typeof AdminCursosRoute
+  '/admin/eja': typeof AdminEjaRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/curso/$slug': typeof CursoSlugRoute
@@ -213,6 +229,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/catalogo': typeof CatalogoRoute
   '/contato': typeof ContatoRoute
+  '/eja': typeof EjaRoute
   '/eja-aparecida-de-goiania': typeof EjaAparecidaDeGoianiaRoute
   '/eja-goiania': typeof EjaGoianiaRoute
   '/eja-online': typeof EjaOnlineRoute
@@ -228,6 +245,7 @@ export interface FileRoutesById {
   '/admin/blog': typeof AdminBlogRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/cursos': typeof AdminCursosRoute
+  '/admin/eja': typeof AdminEjaRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/curso/$slug': typeof CursoSlugRoute
@@ -241,6 +259,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/catalogo'
     | '/contato'
+    | '/eja'
     | '/eja-aparecida-de-goiania'
     | '/eja-goiania'
     | '/eja-online'
@@ -256,6 +275,7 @@ export interface FileRouteTypes {
     | '/admin/blog'
     | '/admin/categorias'
     | '/admin/cursos'
+    | '/admin/eja'
     | '/blog/$slug'
     | '/categoria/$slug'
     | '/curso/$slug'
@@ -266,6 +286,7 @@ export interface FileRouteTypes {
     | '/'
     | '/catalogo'
     | '/contato'
+    | '/eja'
     | '/eja-aparecida-de-goiania'
     | '/eja-goiania'
     | '/eja-online'
@@ -281,6 +302,7 @@ export interface FileRouteTypes {
     | '/admin/blog'
     | '/admin/categorias'
     | '/admin/cursos'
+    | '/admin/eja'
     | '/blog/$slug'
     | '/categoria/$slug'
     | '/curso/$slug'
@@ -292,6 +314,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/catalogo'
     | '/contato'
+    | '/eja'
     | '/eja-aparecida-de-goiania'
     | '/eja-goiania'
     | '/eja-online'
@@ -307,6 +330,7 @@ export interface FileRouteTypes {
     | '/admin/blog'
     | '/admin/categorias'
     | '/admin/cursos'
+    | '/admin/eja'
     | '/blog/$slug'
     | '/categoria/$slug'
     | '/curso/$slug'
@@ -319,6 +343,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   CatalogoRoute: typeof CatalogoRoute
   ContatoRoute: typeof ContatoRoute
+  EjaRoute: typeof EjaRoute
   EjaAparecidaDeGoianiaRoute: typeof EjaAparecidaDeGoianiaRoute
   EjaGoianiaRoute: typeof EjaGoianiaRoute
   EjaOnlineRoute: typeof EjaOnlineRoute
@@ -423,6 +448,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EjaAparecidaDeGoianiaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/eja': {
+      id: '/eja'
+      path: '/eja'
+      fullPath: '/eja'
+      preLoaderRoute: typeof EjaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contato': {
       id: '/contato'
       path: '/contato'
@@ -486,6 +518,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/eja': {
+      id: '/admin/eja'
+      path: '/eja'
+      fullPath: '/admin/eja'
+      preLoaderRoute: typeof AdminEjaRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/cursos': {
       id: '/admin/cursos'
       path: '/cursos'
@@ -514,6 +553,7 @@ interface AdminRouteChildren {
   AdminBlogRoute: typeof AdminBlogRoute
   AdminCategoriasRoute: typeof AdminCategoriasRoute
   AdminCursosRoute: typeof AdminCursosRoute
+  AdminEjaRoute: typeof AdminEjaRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -521,6 +561,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBlogRoute: AdminBlogRoute,
   AdminCategoriasRoute: AdminCategoriasRoute,
   AdminCursosRoute: AdminCursosRoute,
+  AdminEjaRoute: AdminEjaRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -531,6 +572,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   CatalogoRoute: CatalogoRoute,
   ContatoRoute: ContatoRoute,
+  EjaRoute: EjaRoute,
   EjaAparecidaDeGoianiaRoute: EjaAparecidaDeGoianiaRoute,
   EjaGoianiaRoute: EjaGoianiaRoute,
   EjaOnlineRoute: EjaOnlineRoute,
@@ -551,13 +593,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

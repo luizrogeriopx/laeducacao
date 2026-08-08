@@ -24,6 +24,7 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         const entries: { path: string; lastmod?: string; priority?: string; changefreq?: string }[] = [
           { path: "/", changefreq: "daily", priority: "1.0" },
+          { path: "/eja", changefreq: "weekly", priority: "1.0" },
           { path: "/eja-goiania", changefreq: "weekly", priority: "0.9" },
           { path: "/eja-aparecida-de-goiania", changefreq: "weekly", priority: "0.9" },
           { path: "/supletivo-goiania", changefreq: "weekly", priority: "0.9" },
