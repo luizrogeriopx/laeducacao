@@ -177,7 +177,7 @@ function EjaLanding() {
           <p className="text-neutral-200 font-semibold">{cfg.offer_subtitle}</p>
           <div className="bg-white text-[#1a237e] rounded-2xl px-10 py-8 shadow-xl w-full">
             <div className="text-4xl sm:text-5xl font-extrabold">{cfg.offer_price}</div>
-            <p className="mt-3 text-sm font-bold uppercase tracking-wide text-[#da1069]">
+            <p className="mt-3 text-sm font-bold uppercase tracking-wide text-[#da1069] whitespace-pre-line leading-relaxed">
               {cfg.offer_installment}
             </p>
           </div>
@@ -189,7 +189,9 @@ function EjaLanding() {
           >
             <MessageCircle className="w-5 h-5" /> {cfg.offer_cta}
           </a>
-          <p className="text-xs text-neutral-300 max-w-xl leading-relaxed">{cfg.offer_note}</p>
+          <p className="text-xl sm:text-2xl font-extrabold uppercase tracking-wide text-white bg-[#da1069] rounded-full px-6 py-3 inline-block shadow-md">
+            {cfg.offer_note}
+          </p>
         </div>
       </section>
 
