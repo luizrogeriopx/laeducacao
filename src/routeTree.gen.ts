@@ -31,6 +31,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as CursoSlugRouteImport } from './routes/curso.$slug'
 import { Route as CategoriaSlugRouteImport } from './routes/categoria.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AdminEjaRouteImport } from './routes/admin.eja'
 import { Route as AdminCursosRouteImport } from './routes/admin.cursos'
 import { Route as AdminCategoriasRouteImport } from './routes/admin.categorias'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
@@ -146,6 +147,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminEjaRoute = AdminEjaRouteImport.update({
+  id: '/eja',
+  path: '/eja',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCursosRoute = AdminCursosRouteImport.update({
   id: '/cursos',
   path: '/cursos',
@@ -183,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/admin/blog': typeof AdminBlogRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/cursos': typeof AdminCursosRoute
+  '/admin/eja': typeof AdminEjaRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/curso/$slug': typeof CursoSlugRoute
@@ -209,6 +216,7 @@ export interface FileRoutesByTo {
   '/admin/blog': typeof AdminBlogRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/cursos': typeof AdminCursosRoute
+  '/admin/eja': typeof AdminEjaRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/curso/$slug': typeof CursoSlugRoute
@@ -237,6 +245,7 @@ export interface FileRoutesById {
   '/admin/blog': typeof AdminBlogRoute
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/cursos': typeof AdminCursosRoute
+  '/admin/eja': typeof AdminEjaRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/curso/$slug': typeof CursoSlugRoute
@@ -266,6 +275,7 @@ export interface FileRouteTypes {
     | '/admin/blog'
     | '/admin/categorias'
     | '/admin/cursos'
+    | '/admin/eja'
     | '/blog/$slug'
     | '/categoria/$slug'
     | '/curso/$slug'
@@ -292,6 +302,7 @@ export interface FileRouteTypes {
     | '/admin/blog'
     | '/admin/categorias'
     | '/admin/cursos'
+    | '/admin/eja'
     | '/blog/$slug'
     | '/categoria/$slug'
     | '/curso/$slug'
@@ -319,6 +330,7 @@ export interface FileRouteTypes {
     | '/admin/blog'
     | '/admin/categorias'
     | '/admin/cursos'
+    | '/admin/eja'
     | '/blog/$slug'
     | '/categoria/$slug'
     | '/curso/$slug'
@@ -506,6 +518,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/eja': {
+      id: '/admin/eja'
+      path: '/eja'
+      fullPath: '/admin/eja'
+      preLoaderRoute: typeof AdminEjaRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/cursos': {
       id: '/admin/cursos'
       path: '/cursos'
@@ -534,6 +553,7 @@ interface AdminRouteChildren {
   AdminBlogRoute: typeof AdminBlogRoute
   AdminCategoriasRoute: typeof AdminCategoriasRoute
   AdminCursosRoute: typeof AdminCursosRoute
+  AdminEjaRoute: typeof AdminEjaRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -541,6 +561,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBlogRoute: AdminBlogRoute,
   AdminCategoriasRoute: AdminCategoriasRoute,
   AdminCursosRoute: AdminCursosRoute,
+  AdminEjaRoute: AdminEjaRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 

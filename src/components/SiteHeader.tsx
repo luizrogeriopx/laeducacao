@@ -84,6 +84,15 @@ export function SiteHeader() {
               Início
             </Link>
           </li>
+          <li>
+            <Link
+              to="/eja"
+              onClick={() => setMenuOpen(false)}
+              className="text-neutral-700 font-semibold hover:text-[#1a237e] transition-colors"
+            >
+              EJA
+            </Link>
+          </li>
           
           {/* Cursos Dropdown (Desktop) */}
           <li className="relative group md:block hidden">
