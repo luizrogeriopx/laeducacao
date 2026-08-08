@@ -122,9 +122,9 @@ export const EJA_DEFAULT: EjaConfig = {
   offer_title: "Comece sua EJA hoje",
   offer_subtitle: "EJA 100% Online",
   offer_price: "10x de R$ 99,90",
-  offer_installment: "PARCELAMENTO NO BOLETO MENSAL: 1 parcela no ato da matrícula por PIX + 9 boletos mensais.",
-  offer_note:
-    "Condições sujeitas a análise e aos requisitos de elegibilidade da instituição. Podem ser aplicadas taxas administrativas e exigida documentação escolar. Consulte nossa equipe antes de efetivar a matrícula.",
+  offer_installment:
+    "PARCELAMENTO NO BOLETO MENSAL\n1 parcela no ato da matrícula por PIX + 9 boletos mensais.",
+  offer_note: "SEM CONSULTA SPC SERASA",
   offer_cta: "QUERO GARANTIR MINHA VAGA",
 
   diff_title: "Por que escolher a LA Educação?",
