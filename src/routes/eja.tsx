@@ -77,6 +77,14 @@ function EjaLanding() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const wa = (msg?: string) => ejaWhatsappLink(cfg, msg);
 
+  const seals = [
+    { src: "/img/selo-mec-reconhecido.png", alt: "Selo MEC de Reconhecimento e Validação Nacional" },
+    { src: "/img/selo-la-educacao-goiania.png", alt: "Selo LA Educação - Cursos EAD em Goiânia" },
+    { src: "/img/selo-la-educacao-reclame-aqui.png", alt: "Selo Reclame Aqui - Excelente Reputação LA Educação" },
+    { src: "/img/selo-la-educacao-avaliacao-google.png", alt: "Selo Google Avaliação Cinco Estrelas" },
+    { src: "/img/selo-inipi-certificados.png", alt: "Selo INIPI de Certificação Profissional de Qualidade" },
+  ];
+
   return (
     <div className="min-h-screen bg-white font-sans text-neutral-800">
       <SiteHeader />
