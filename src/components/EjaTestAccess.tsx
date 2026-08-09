@@ -91,7 +91,13 @@ export function EjaTestAccess() {
           >
             <ExternalLink className="h-4 w-4" /> Acessar plataforma
           </a>
-          <CopyButton value={FULL} label="todas as informações" />
+          <CopyButton
+            value={FULL}
+            label="todas as informações"
+            actionLabel="Compartilhar"
+            copiedLabel="Copiado!"
+            className="inline-flex items-center gap-1.5 rounded-full bg-[#1a237e] px-6 py-3 text-sm font-bold text-white shadow transition hover:opacity-90"
+          />
         </div>
       </div>
     </section>
