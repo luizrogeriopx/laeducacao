@@ -71,20 +71,16 @@ export function EjaTestAccess() {
         </dl>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <button
-            type="button"
-            onClick={openPlatform}
+          <a
+            href={PLATAFORMA}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-full bg-[#1a237e] px-6 py-3 text-sm font-bold text-white shadow transition hover:opacity-90"
           >
             <ExternalLink className="h-4 w-4" /> Acessar plataforma
-          </button>
+          </a>
           <CopyButton value={FULL} label="todas as informações" />
         </div>
-        <p className="mt-3 text-xs text-neutral-500">
-          {ready
-            ? "Login e senha copiados! É só colar nos campos da plataforma (Ctrl+V)."
-            : "Ao clicar, copiamos o login e a senha para você colar na tela de acesso."}
-        </p>
       </div>
     </section>
   );
