@@ -6,6 +6,7 @@ import { listCourses, type Course } from "@/lib/courses.functions";
 import { listCategories, type CourseCategory } from "@/lib/categories.functions";
 import { categorySlug } from "@/lib/category";
 import { SiteFooter } from "@/components/SiteFooter";
+import { EjaTestAccess } from "@/components/EjaTestAccess";
 import { SiteHeader } from "@/components/SiteHeader";
 import { formatPrice } from "@/lib/utils";
 
