@@ -122,6 +122,9 @@ function CategoryPage() {
         <CategoryDescription name={categoryName} />
       </main>
 
+      {slug === "eja" && <EjaTestAccess />}
+
+
       <SiteFooter />
     </div>
   );
