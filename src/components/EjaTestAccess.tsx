@@ -10,7 +10,19 @@ Login: ${LOGIN}
 Senha: ${SENHA}
 PLATAFORMA: ${PLATAFORMA}`;
 
-function CopyButton({ value, label }: { value: string; label: string }) {
+function CopyButton({
+  value,
+  label,
+  actionLabel = "Copiar",
+  copiedLabel = "Copiado",
+  className = "inline-flex items-center gap-1.5 rounded-lg border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-[#1a237e] transition hover:bg-neutral-100",
+}: {
+  value: string;
+  label: string;
+  actionLabel?: string;
+  copiedLabel?: string;
+  className?: string;
+}) {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
     try {
@@ -25,11 +37,11 @@ function CopyButton({ value, label }: { value: string; label: string }) {
     <button
       type="button"
       onClick={copy}
-      aria-label={`Copiar ${label}`}
-      className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-[#1a237e] transition hover:bg-neutral-100"
+      aria-label={`${actionLabel} ${label}`}
+      className={className}
     >
       {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-      {copied ? "Copiado" : "Copiar"}
+      {copied ? copiedLabel : actionLabel}
     </button>
   );
 }
