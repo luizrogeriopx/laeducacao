@@ -35,18 +35,6 @@ function CopyButton({ value, label }: { value: string; label: string }) {
 }
 
 export function EjaTestAccess() {
-  const [ready, setReady] = useState(false);
-
-  const openPlatform = async () => {
-    try {
-      await navigator.clipboard.writeText(`${LOGIN}\t${SENHA}`);
-      setReady(true);
-    } catch {
-      setReady(false);
-    }
-    window.open(PLATAFORMA, "_blank", "noopener,noreferrer");
-  };
-
   return (
     <section className="px-5 py-16">
       <div className="mx-auto max-w-3xl rounded-2xl border border-neutral-200 bg-neutral-50 p-6 sm:p-8 shadow-sm">
