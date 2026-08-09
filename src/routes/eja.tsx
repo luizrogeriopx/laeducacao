@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { MessageCircle, Check } from "lucide-react";
 import { getEjaConfig } from "@/lib/eja.functions";
+import { EjaTestAccess } from "@/components/EjaTestAccess";
 import { ejaWhatsappLink, type EjaConfig } from "@/lib/eja-config";
 
 const CANONICAL = "https://www.laeducacaogo.com.br/eja";
