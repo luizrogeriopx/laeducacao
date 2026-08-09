@@ -298,8 +298,11 @@ function EjaLanding() {
         </div>
       </section>
 
+      <EjaTestAccess />
+
       {/* Certificação Garantida */}
       <section className="py-16 px-5 bg-white">
+
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl font-bold text-[#1a237e] mb-10">CERTIFICAÇÃO GARANTIDA</h2>
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 lg:gap-16">
