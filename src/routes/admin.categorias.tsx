@@ -182,6 +182,9 @@ function Body() {
             </p>
           </div>
           <div className="flex gap-2">
+            <Button asChild size="sm" variant="secondary">
+              <Link to="/admin/matriculas">Matrículas</Link>
+            </Button>
             <Button asChild variant="outline" size="sm">
               <Link to="/admin">Voltar</Link>
             </Button>

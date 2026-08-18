@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useState, useEffect, useRef } from "react";
+import { submitMatricula } from "@/lib/matriculas.functions";
 
 export const Route = createFileRoute("/matricula")({
   component: MatriculaPage,
@@ -101,25 +103,8 @@ function MatriculaPage() {
   const [step, setStep] = useState(0);
   const [respostas, setRespostas] = useState<string[]>([]);
   const [isSending, setIsSending] = useState(false);
+  const sendMatricula = useServerFn(submitMatricula);
   const chatEndRef = useRef<HTMLDivElement>(null);
-
-  // Carregar script do EmailJS
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js";
-    script.async = true;
-    script.onload = () => {
-      if ((window as any).emailjs) {
-        (window as any).emailjs.init("si2ZQ_-rNh6YsXuHQ");
-      }
-    };
-    document.body.appendChild(script);
-    return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-    };
-  }, []);
 
   // Rolar para o final do chat ao receber nova mensagem
   useEffect(() => {
@@ -158,68 +143,72 @@ function MatriculaPage() {
             .filter((m) => m.sender !== "typing")
             .concat({ id: typingId, text: perguntas[nextStep], sender: "bot" })
         );
-      }, 1000);
+      }, 800);
     } else {
       // Finalizar e enviar
       enviarFicha(novasRespostas, nextId + 1);
     }
   };
 
-  const enviarFicha = (resps: string[], lastId: number) => {
+  const enviarFicha = async (resps: string[], lastId: number) => {
     setIsSending(true);
     setMessages((prev) => [...prev, { id: lastId, text: "", sender: "typing" }]);
 
-    setTimeout(() => {
-      const emailjs = (window as any).emailjs;
-      const textoFormulario = resps
-        .map((resp, idx) => `${perguntas[idx]}\nResposta: ${resp}`)
-        .join("\n\n");
+    try {
+      const respostasCompletas = perguntas.map((pergunta, idx) => ({
+        pergunta,
+        resposta: resps[idx] || "",
+      }));
 
-      if (emailjs) {
-        emailjs
-          .send("service_laeducacaogo", "template_8mm84u5", {
-            message: textoFormulario
+      await sendMatricula({
+        data: {
+          nome_completo: resps[0] || "Não informado",
+          cpf: resps[1] || "",
+          data_nascimento: resps[2] || "",
+          rg_numero: resps[3] || "",
+          rg_orgao_emissor: resps[4] || "",
+          rg_data_emissao: resps[5] || "",
+          naturalidade: resps[6] || "",
+          nome_pai: resps[7] || "",
+          nome_mae: resps[8] || "",
+          cep: resps[9] || "",
+          endereco_rua: resps[10] || "",
+          endereco_bairro: resps[11] || "",
+          endereco_cidade: resps[12] || "",
+          endereco_estado: resps[13] || "",
+          telefone: resps[14] || "",
+          email: resps[15] || "",
+          escolaridade: resps[16] || "",
+          ano_conclusao: resps[17] || "",
+          escola_anterior: resps[18] || "",
+          curso_desejado: resps[19] || "",
+          respostas_completas: respostasCompletas,
+        },
+      });
+
+      setMessages((prev) =>
+        prev
+          .filter((m) => m.sender !== "typing")
+          .concat({
+            id: lastId + 1,
+            text: "Matrícula recebida com sucesso! ✅\n\nTodos os seus dados foram registrados no sistema da nossa secretaria. Entraremos em contato em breve pelo número informado para dar continuidade!",
+            sender: "bot"
           })
-          .then(() => {
-            setMessages((prev) =>
-              prev
-                .filter((m) => m.sender !== "typing")
-                .concat({
-                  id: lastId + 1,
-                  text: "Matrícula enviada com sucesso! ✅ Agora é só aguardar o contato da nossa secretaria no número informado!",
-                  sender: "bot"
-                })
-            );
-            setIsSending(false);
+      );
+    } catch (err: any) {
+      console.error("Erro ao registrar matrícula:", err);
+      setMessages((prev) =>
+        prev
+          .filter((m) => m.sender !== "typing")
+          .concat({
+            id: lastId + 1,
+            text: "Ocorreu um erro ao salvar seus dados. ❌ Por favor, tente novamente ou entre em contato diretamente com nossa secretaria pelo WhatsApp.",
+            sender: "bot"
           })
-          .catch((err: any) => {
-            console.error("Erro no EmailJS:", err);
-            setMessages((prev) =>
-              prev
-                .filter((m) => m.sender !== "typing")
-                .concat({
-                  id: lastId + 1,
-                  text: "Ocorreu um erro ao enviar sua matrícula via e-mail. ❌ Por favor, tente novamente ou entre em contato direto pelo WhatsApp.",
-                  sender: "bot"
-                })
-            );
-            setIsSending(false);
-          });
-      } else {
-        // Fallback caso o script do EmailJS não tenha carregado
-        console.error("SDK do EmailJS não carregou.");
-        setMessages((prev) =>
-          prev
-            .filter((m) => m.sender !== "typing")
-            .concat({
-              id: lastId + 1,
-              text: "Serviço de envio temporariamente indisponível. ❌ Por favor, copie suas respostas e nos envie diretamente.",
-              sender: "bot"
-            })
-        );
-        setIsSending(false);
-      }
-    }, 1200);
+      );
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

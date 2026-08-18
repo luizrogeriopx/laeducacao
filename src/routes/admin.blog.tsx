@@ -102,6 +102,9 @@ function AdminBlogBody() {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-6 sm:px-6">
           <h1 className="text-2xl font-bold">Blog — Posts</h1>
           <div className="flex gap-2">
+            <Button asChild size="sm" variant="secondary">
+              <Link to="/admin/matriculas">Matrículas</Link>
+            </Button>
             <Button asChild variant="outline" size="sm">
               <Link to="/admin">← Painel</Link>
             </Button>

@@ -152,6 +152,93 @@ export type Database = {
         }
         Relationships: []
       }
+      matriculas: {
+        Row: {
+          id: string
+          created_at: string
+          updated_at: string
+          status: string
+          nome_completo: string
+          cpf: string
+          data_nascimento: string | null
+          rg_numero: string | null
+          rg_orgao_emissor: string | null
+          rg_data_emissao: string | null
+          naturalidade: string | null
+          nome_pai: string | null
+          nome_mae: string | null
+          cep: string | null
+          endereco_rua: string | null
+          endereco_bairro: string | null
+          endereco_cidade: string | null
+          endereco_estado: string | null
+          telefone: string | null
+          email: string | null
+          escolaridade: string | null
+          ano_conclusao: string | null
+          escola_anterior: string | null
+          curso_desejado: string | null
+          observacoes: string | null
+          respostas_completas: Json | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          status?: string
+          nome_completo: string
+          cpf: string
+          data_nascimento?: string | null
+          rg_numero?: string | null
+          rg_orgao_emissor?: string | null
+          rg_data_emissao?: string | null
+          naturalidade?: string | null
+          nome_pai?: string | null
+          nome_mae?: string | null
+          cep?: string | null
+          endereco_rua?: string | null
+          endereco_bairro?: string | null
+          endereco_cidade?: string | null
+          endereco_estado?: string | null
+          telefone?: string | null
+          email?: string | null
+          escolaridade?: string | null
+          ano_conclusao?: string | null
+          escola_anterior?: string | null
+          curso_desejado?: string | null
+          observacoes?: string | null
+          respostas_completas?: Json | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          status?: string
+          nome_completo?: string
+          cpf?: string
+          data_nascimento?: string | null
+          rg_numero?: string | null
+          rg_orgao_emissor?: string | null
+          rg_data_emissao?: string | null
+          naturalidade?: string | null
+          nome_pai?: string | null
+          nome_mae?: string | null
+          cep?: string | null
+          endereco_rua?: string | null
+          endereco_bairro?: string | null
+          endereco_cidade?: string | null
+          endereco_estado?: string | null
+          telefone?: string | null
+          email?: string | null
+          escolaridade?: string | null
+          ano_conclusao?: string | null
+          escola_anterior?: string | null
+          curso_desejado?: string | null
+          observacoes?: string | null
+          respostas_completas?: Json | null
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           key: string

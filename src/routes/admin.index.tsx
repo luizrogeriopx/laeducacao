@@ -9,10 +9,12 @@ import {
   getLastSync,
   isCurrentUserAdmin,
 } from "@/lib/courses.functions";
+import { getMatriculasMetricsAdmin } from "@/lib/matriculas.functions";
 import { getGoogleTagId, updateGoogleTagId, getSeoKeywords, updateSeoKeywords, getFooterConfig, updateFooterConfig, getChatWidgetUrl, updateChatWidgetUrl, type FooterConfig } from "@/lib/settings.functions";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { GraduationCap, ArrowRight, AlertCircle, CheckCircle2, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminPage,
@@ -62,10 +64,18 @@ function AdminBody({ userEmail }: { userEmail: string | null }) {
   const checkAdmin = useServerFn(isCurrentUserAdmin);
   const runSync = useServerFn(syncCourses);
   const fetchLog = useServerFn(getLastSync);
+  const fetchMatriculasMetrics = useServerFn(getMatriculasMetricsAdmin);
 
   const adminQ = useQuery({
     queryKey: ["isAdmin"],
     queryFn: () => checkAdmin(),
+  });
+
+  const matriculasQ = useQuery({
+    queryKey: ["adminMatriculasMetrics"],
+    queryFn: () => fetchMatriculasMetrics(),
+    enabled: adminQ.data?.isAdmin === true,
+    refetchInterval: 10000,
   });
 
   const logsQ = useQuery({
@@ -120,6 +130,15 @@ function AdminBody({ userEmail }: { userEmail: string | null }) {
     );
   }
 
+  const matMetrics = matriculasQ.data || {
+    total: 0,
+    pendentes: 0,
+    emAtendimento: 0,
+    matriculados: 0,
+    cancelados: 0,
+    hoje: 0,
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card">
@@ -128,7 +147,17 @@ function AdminBody({ userEmail }: { userEmail: string | null }) {
             <h1 className="text-2xl font-bold">Painel Admin</h1>
             <p className="text-sm text-muted-foreground">{userEmail}</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
+            <Button asChild size="sm" className="bg-[#da1069] hover:bg-[#b00d54] text-white">
+              <Link to="/admin/matriculas">
+                Matrículas
+                {matMetrics.pendentes > 0 && (
+                  <span className="ml-1.5 rounded-full bg-white text-[#da1069] px-1.5 py-0.2 text-[10px] font-bold">
+                    {matMetrics.pendentes}
+                  </span>
+                )}
+              </Link>
+            </Button>
             <Button asChild size="sm">
               <Link to="/admin/cursos">Gerenciar cursos</Link>
             </Button>
@@ -153,6 +182,50 @@ function AdminBody({ userEmail }: { userEmail: string | null }) {
       </header>
 
       <main className="mx-auto max-w-4xl space-y-6 px-4 py-8 sm:px-6">
+        {/* Card Principal de Matrículas */}
+        <section className="rounded-xl border bg-card p-6 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2">
+                <GraduationCap className="h-6 w-6 text-[#da1069]" />
+                <h2 className="text-lg font-bold">Matrículas & Inscrições Online</h2>
+              </div>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Inscrições preenchidas pelos alunos no chat em <code className="rounded bg-muted px-1">/matricula</code>.
+              </p>
+            </div>
+            <Button asChild className="bg-[#da1069] hover:bg-[#b00d54] text-white self-start sm:self-auto">
+              <Link to="/admin/matriculas">
+                Ver todas as matrículas
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+
+          <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="rounded-lg border bg-muted/20 p-3">
+              <span className="text-xs text-muted-foreground block">Total Recebido</span>
+              <span className="text-xl font-bold">{matMetrics.total}</span>
+              <span className="text-[11px] text-muted-foreground block mt-0.5">+{matMetrics.hoje} hoje</span>
+            </div>
+            <div className="rounded-lg border border-amber-200 bg-amber-50/50 dark:bg-amber-950/20 p-3">
+              <span className="text-xs font-semibold text-amber-700 dark:text-amber-400 block">Pendentes</span>
+              <span className="text-xl font-bold text-amber-800 dark:text-amber-300">{matMetrics.pendentes}</span>
+              <span className="text-[11px] text-muted-foreground block mt-0.5">Aguardando</span>
+            </div>
+            <div className="rounded-lg border border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 p-3">
+              <span className="text-xs font-semibold text-blue-700 dark:text-blue-400 block">Em Atendimento</span>
+              <span className="text-xl font-bold text-blue-800 dark:text-blue-300">{matMetrics.emAtendimento}</span>
+              <span className="text-[11px] text-muted-foreground block mt-0.5">Em contato</span>
+            </div>
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50/50 dark:bg-emerald-950/20 p-3">
+              <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 block">Matriculados</span>
+              <span className="text-xl font-bold text-emerald-800 dark:text-emerald-300">{matMetrics.matriculados}</span>
+              <span className="text-[11px] text-muted-foreground block mt-0.5">Concluídos</span>
+            </div>
+          </div>
+        </section>
+
         <section className="rounded-xl border bg-card p-6 shadow-sm">
           <h2 className="text-lg font-semibold">Sincronização de cursos</h2>
           <p className="mt-1 text-sm text-muted-foreground">

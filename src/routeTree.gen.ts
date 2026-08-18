@@ -35,6 +35,7 @@ import { Route as AdminEjaRouteImport } from './routes/admin.eja'
 import { Route as AdminCursosRouteImport } from './routes/admin.cursos'
 import { Route as AdminCategoriasRouteImport } from './routes/admin.categorias'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
+import { Route as AdminMatriculasRouteImport } from './routes/admin.matriculas'
 
 const TermosUsoRoute = TermosUsoRouteImport.update({
   id: '/termos-uso',
@@ -167,6 +168,11 @@ const AdminBlogRoute = AdminBlogRouteImport.update({
   path: '/blog',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminMatriculasRoute = AdminMatriculasRouteImport.update({
+  id: '/matriculas',
+  path: '/matriculas',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -190,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/cursos': typeof AdminCursosRoute
   '/admin/eja': typeof AdminEjaRoute
+  '/admin/matriculas': typeof AdminMatriculasRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/curso/$slug': typeof CursoSlugRoute
@@ -217,6 +224,7 @@ export interface FileRoutesByTo {
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/cursos': typeof AdminCursosRoute
   '/admin/eja': typeof AdminEjaRoute
+  '/admin/matriculas': typeof AdminMatriculasRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/curso/$slug': typeof CursoSlugRoute
@@ -246,6 +254,7 @@ export interface FileRoutesById {
   '/admin/categorias': typeof AdminCategoriasRoute
   '/admin/cursos': typeof AdminCursosRoute
   '/admin/eja': typeof AdminEjaRoute
+  '/admin/matriculas': typeof AdminMatriculasRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/curso/$slug': typeof CursoSlugRoute
@@ -276,6 +285,7 @@ export interface FileRouteTypes {
     | '/admin/categorias'
     | '/admin/cursos'
     | '/admin/eja'
+    | '/admin/matriculas'
     | '/blog/$slug'
     | '/categoria/$slug'
     | '/curso/$slug'
@@ -303,6 +313,7 @@ export interface FileRouteTypes {
     | '/admin/categorias'
     | '/admin/cursos'
     | '/admin/eja'
+    | '/admin/matriculas'
     | '/blog/$slug'
     | '/categoria/$slug'
     | '/curso/$slug'
@@ -331,6 +342,7 @@ export interface FileRouteTypes {
     | '/admin/categorias'
     | '/admin/cursos'
     | '/admin/eja'
+    | '/admin/matriculas'
     | '/blog/$slug'
     | '/categoria/$slug'
     | '/curso/$slug'
@@ -546,6 +558,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBlogRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/matriculas': {
+      id: '/admin/matriculas'
+      path: '/matriculas'
+      fullPath: '/admin/matriculas'
+      preLoaderRoute: typeof AdminMatriculasRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
@@ -555,6 +574,7 @@ interface AdminRouteChildren {
   AdminCursosRoute: typeof AdminCursosRoute
   AdminEjaRoute: typeof AdminEjaRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminMatriculasRoute: typeof AdminMatriculasRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -563,6 +583,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCursosRoute: AdminCursosRoute,
   AdminEjaRoute: AdminEjaRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminMatriculasRoute: AdminMatriculasRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
