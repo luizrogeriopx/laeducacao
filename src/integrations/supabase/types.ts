@@ -113,7 +113,6 @@ export type Database = {
           title: string
           updated_at: string
           url: string
-          modules: Json | null
         }
         Insert: {
           category?: string
@@ -132,7 +131,6 @@ export type Database = {
           title: string
           updated_at?: string
           url: string
-          modules?: Json | null
         }
         Update: {
           category?: string
@@ -151,7 +149,6 @@ export type Database = {
           title?: string
           updated_at?: string
           url?: string
-          modules?: Json | null
         }
         Relationships: []
       }

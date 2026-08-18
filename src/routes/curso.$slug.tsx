@@ -7,7 +7,6 @@ import { categorySlug } from "@/lib/category";
 import { whatsappCourseLink } from "@/lib/whatsapp";
 import { SiteFooter } from "@/components/SiteFooter";
 import { formatPrice } from "@/lib/utils";
-import { BookOpen, Clock, CheckCircle2, Layers } from "lucide-react";
 
 const courseQuery = (slug: string) =>
   queryOptions({
@@ -227,78 +226,8 @@ function CoursePage() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 border-t mt-12 text-neutral-600 space-y-10">
-        {/* Grade Curricular / Módulos do Curso */}
-        {course.modules && Array.isArray(course.modules) && course.modules.length > 0 && (
-          <div className="space-y-4">
-            <div className="text-center sm:text-left">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1a237e]/10 px-3 py-1 text-xs font-semibold text-[#1a237e] mb-2">
-                <BookOpen className="h-3.5 w-3.5" />
-                Conteúdo Programático Oficial
-              </span>
-              <h2 className="text-2xl font-bold text-[#1a237e]">
-                Grade Curricular do Curso ({course.modules.length} Módulos)
-              </h2>
-              <p className="text-sm text-neutral-600 mt-1">
-                Confira todas as disciplinas e competências desenvolvidas ao longo da sua formação:
-              </p>
-            </div>
-
-            <div className="space-y-3 mt-4">
-              {course.modules.map((mod, idx) => (
-                <details
-                  key={mod.id || idx}
-                  className="group rounded-xl border bg-white shadow-sm overflow-hidden transition-all duration-200 open:ring-1 open:ring-primary/20"
-                >
-                  <summary className="flex items-center justify-between p-4 cursor-pointer select-none font-medium hover:bg-neutral-50/80">
-                    <div className="flex items-center gap-3 pr-2">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#1a237e]/10 text-xs font-bold text-[#1a237e]">
-                        {idx + 1}
-                      </span>
-                      <span className="text-base font-semibold text-neutral-800">
-                        {mod.title}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      {mod.workload && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs text-neutral-600 font-medium">
-                          <Clock className="h-3 w-3" />
-                          {mod.workload}
-                        </span>
-                      )}
-                      <span className="text-neutral-400 group-open:rotate-180 transition-transform text-xs">
-                        ▼
-                      </span>
-                    </div>
-                  </summary>
-
-                  <div className="px-5 pb-5 pt-3 border-t text-sm text-neutral-600 bg-neutral-50/40 space-y-3">
-                    {mod.description && (
-                      <p className="leading-relaxed text-neutral-700">{mod.description}</p>
-                    )}
-                    {mod.topics && mod.topics.length > 0 && (
-                      <div>
-                        <h4 className="font-semibold text-xs text-neutral-800 uppercase tracking-wider mb-2">
-                          Tópicos e Aulas Abordadas:
-                        </h4>
-                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                          {mod.topics.map((t, tIdx) => (
-                            <li key={tIdx} className="flex items-start gap-2">
-                              <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                              <span className="text-neutral-700 text-xs">{t}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                </details>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <h2 className="text-2xl font-bold text-[#1a237e] text-center pt-4">
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 border-t mt-12 text-neutral-600 space-y-8">
+        <h2 className="text-2xl font-bold text-[#1a237e] text-center">
           Por que fazer o curso de {course.title} na LA Educação?
         </h2>
         <p>
