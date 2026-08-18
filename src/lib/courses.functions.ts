@@ -3,6 +3,14 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { classifyCategory } from "./category";
 
+export interface CourseModule {
+  id: string;
+  title: string;
+  workload?: string;
+  description?: string;
+  topics?: string[];
+}
+
 export interface Course {
   id: string;
   slug: string;
@@ -17,6 +25,7 @@ export interface Course {
   display_installments: boolean;
   custom_pricing: boolean;
   hide_price: boolean;
+  modules?: CourseModule[];
 }
 
 const SITEMAP_URL = "https://trinity.sistemaead.com/sitemap.xml";
@@ -50,7 +59,7 @@ function parsePriceBR(s: string): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
-interface ScrapedCourse extends Omit<Course, "category"> {
+interface ScrapedCourse extends Omit<Course, "category" | "modules"> {
   category: string;
 }
 
@@ -108,7 +117,7 @@ export const listCourses = createServerFn({ method: "GET" }).handler(async () =>
     .order("title", { ascending: true })
     .limit(1000);
   if (error) throw new Error(error.message);
-  return { courses: (data ?? []) as Course[] };
+  return { courses: (data ?? []) as unknown as Course[] };
 });
 
 export const getCourseBySlug = createServerFn({ method: "GET" })
@@ -121,7 +130,7 @@ export const getCourseBySlug = createServerFn({ method: "GET" })
       .eq("enabled", true)
       .maybeSingle();
     if (error) throw new Error(error.message);
-    return { course: row as Course | null };
+    return { course: (row ?? null) as unknown as Course | null };
   });
 
 // Admin-only sync
@@ -187,6 +196,7 @@ export const syncCourses = createServerFn({ method: "POST" })
       if (results.length > 0) {
         const rows = results.map((c) => ({
           ...c,
+          modules: [] as any,
           enabled: true,
           updated_at: new Date().toISOString(),
         }));
@@ -270,7 +280,7 @@ export const listAllCoursesAdmin = createServerFn({ method: "GET" })
       .order("title", { ascending: true })
       .limit(2000);
     if (error) throw new Error(error.message);
-    return { courses: (data ?? []) as (Course & { enabled: boolean })[] };
+    return { courses: (data ?? []) as unknown as (Course & { enabled: boolean })[] };
   });
 
 interface CourseInput {
@@ -285,6 +295,7 @@ interface CourseInput {
   display_installments?: boolean;
   custom_pricing?: boolean;
   enabled?: boolean;
+  modules?: CourseModule[];
 }
 
 export const createCourse = createServerFn({ method: "POST" })
@@ -309,6 +320,7 @@ export const createCourse = createServerFn({ method: "POST" })
       display_installments: data.display_installments ?? false,
       custom_pricing: data.custom_pricing ?? false,
       enabled: data.enabled ?? true,
+      modules: (data.modules ?? []) as any,
       updated_at: new Date().toISOString(),
     };
     const { error } = await supabaseAdmin.from("courses").insert(row);
@@ -334,6 +346,7 @@ export const updateCourse = createServerFn({ method: "POST" })
       ...(rest.display_installments !== undefined && { display_installments: rest.display_installments }),
       ...(rest.custom_pricing !== undefined && { custom_pricing: rest.custom_pricing }),
       ...(rest.enabled !== undefined && { enabled: rest.enabled }),
+      ...(rest.modules !== undefined && { modules: rest.modules as any }),
       updated_at: new Date().toISOString(),
     };
     const { error } = await supabaseAdmin.from("courses").update(patch).eq("id", id);
