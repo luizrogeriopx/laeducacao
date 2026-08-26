@@ -34,6 +34,8 @@ const perguntas = [
   "Órgão emissor do RG?",
   "Data de emissão do RG?",
   "Cidade e Estado de Nascimento:",
+  "Qual o seu estado civil?",
+  "Qual a sua cor/raça?",
   "Nome do pai se consta no seu RG? (Se não constar, digite 'Não consta')",
   "Nome da mãe se consta no seu RG? (Se não constar, digite 'Não consta')",
   "CEP da sua rua?",
@@ -48,6 +50,12 @@ const perguntas = [
   "Nome da escola ou instituição?",
   "Em Qual curso deseja matricular?"
 ];
+
+const OPCOES: Record<number, string[]> = {
+  7: ["Solteiro(a)", "Casado(a)", "União estável", "Divorciado(a)", "Separado(a)", "Viúvo(a)"],
+  8: ["Branca", "Preta", "Parda", "Amarela", "Indígena"],
+};
+
 
 function validarCPF(cpf: string) {
   const cleanCpf = cpf.replace(/[^\d]+/g, "");
