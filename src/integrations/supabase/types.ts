@@ -154,88 +154,94 @@ export type Database = {
       }
       matriculas: {
         Row: {
-          id: string
-          created_at: string
-          updated_at: string
-          status: string
-          nome_completo: string
-          cpf: string
-          data_nascimento: string | null
-          rg_numero: string | null
-          rg_orgao_emissor: string | null
-          rg_data_emissao: string | null
-          naturalidade: string | null
-          nome_pai: string | null
-          nome_mae: string | null
+          ano_conclusao: string | null
           cep: string | null
-          endereco_rua: string | null
+          cor_raca: string | null
+          cpf: string
+          created_at: string
+          curso_desejado: string | null
+          data_nascimento: string | null
+          email: string | null
           endereco_bairro: string | null
           endereco_cidade: string | null
           endereco_estado: string | null
-          telefone: string | null
-          email: string | null
-          escolaridade: string | null
-          ano_conclusao: string | null
+          endereco_rua: string | null
           escola_anterior: string | null
-          curso_desejado: string | null
+          escolaridade: string | null
+          estado_civil: string | null
+          id: string
+          naturalidade: string | null
+          nome_completo: string
+          nome_mae: string | null
+          nome_pai: string | null
           observacoes: string | null
           respostas_completas: Json | null
+          rg_data_emissao: string | null
+          rg_numero: string | null
+          rg_orgao_emissor: string | null
+          status: string
+          telefone: string | null
+          updated_at: string
         }
         Insert: {
-          id?: string
-          created_at?: string
-          updated_at?: string
-          status?: string
-          nome_completo: string
-          cpf: string
-          data_nascimento?: string | null
-          rg_numero?: string | null
-          rg_orgao_emissor?: string | null
-          rg_data_emissao?: string | null
-          naturalidade?: string | null
-          nome_pai?: string | null
-          nome_mae?: string | null
+          ano_conclusao?: string | null
           cep?: string | null
-          endereco_rua?: string | null
+          cor_raca?: string | null
+          cpf: string
+          created_at?: string
+          curso_desejado?: string | null
+          data_nascimento?: string | null
+          email?: string | null
           endereco_bairro?: string | null
           endereco_cidade?: string | null
           endereco_estado?: string | null
-          telefone?: string | null
-          email?: string | null
-          escolaridade?: string | null
-          ano_conclusao?: string | null
+          endereco_rua?: string | null
           escola_anterior?: string | null
-          curso_desejado?: string | null
+          escolaridade?: string | null
+          estado_civil?: string | null
+          id?: string
+          naturalidade?: string | null
+          nome_completo: string
+          nome_mae?: string | null
+          nome_pai?: string | null
           observacoes?: string | null
           respostas_completas?: Json | null
+          rg_data_emissao?: string | null
+          rg_numero?: string | null
+          rg_orgao_emissor?: string | null
+          status?: string
+          telefone?: string | null
+          updated_at?: string
         }
         Update: {
-          id?: string
-          created_at?: string
-          updated_at?: string
-          status?: string
-          nome_completo?: string
-          cpf?: string
-          data_nascimento?: string | null
-          rg_numero?: string | null
-          rg_orgao_emissor?: string | null
-          rg_data_emissao?: string | null
-          naturalidade?: string | null
-          nome_pai?: string | null
-          nome_mae?: string | null
+          ano_conclusao?: string | null
           cep?: string | null
-          endereco_rua?: string | null
+          cor_raca?: string | null
+          cpf?: string
+          created_at?: string
+          curso_desejado?: string | null
+          data_nascimento?: string | null
+          email?: string | null
           endereco_bairro?: string | null
           endereco_cidade?: string | null
           endereco_estado?: string | null
-          telefone?: string | null
-          email?: string | null
-          escolaridade?: string | null
-          ano_conclusao?: string | null
+          endereco_rua?: string | null
           escola_anterior?: string | null
-          curso_desejado?: string | null
+          escolaridade?: string | null
+          estado_civil?: string | null
+          id?: string
+          naturalidade?: string | null
+          nome_completo?: string
+          nome_mae?: string | null
+          nome_pai?: string | null
           observacoes?: string | null
           respostas_completas?: Json | null
+          rg_data_emissao?: string | null
+          rg_numero?: string | null
+          rg_orgao_emissor?: string | null
+          status?: string
+          telefone?: string | null
+          updated_at?: string
         }
         Relationships: []
       }

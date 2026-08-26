@@ -31,11 +31,11 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as CursoSlugRouteImport } from './routes/curso.$slug'
 import { Route as CategoriaSlugRouteImport } from './routes/categoria.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AdminMatriculasRouteImport } from './routes/admin.matriculas'
 import { Route as AdminEjaRouteImport } from './routes/admin.eja'
 import { Route as AdminCursosRouteImport } from './routes/admin.cursos'
 import { Route as AdminCategoriasRouteImport } from './routes/admin.categorias'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
-import { Route as AdminMatriculasRouteImport } from './routes/admin.matriculas'
 
 const TermosUsoRoute = TermosUsoRouteImport.update({
   id: '/termos-uso',
@@ -148,6 +148,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminMatriculasRoute = AdminMatriculasRouteImport.update({
+  id: '/matriculas',
+  path: '/matriculas',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminEjaRoute = AdminEjaRouteImport.update({
   id: '/eja',
   path: '/eja',
@@ -166,11 +171,6 @@ const AdminCategoriasRoute = AdminCategoriasRouteImport.update({
 const AdminBlogRoute = AdminBlogRouteImport.update({
   id: '/blog',
   path: '/blog',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminMatriculasRoute = AdminMatriculasRouteImport.update({
-  id: '/matriculas',
-  path: '/matriculas',
   getParentRoute: () => AdminRoute,
 } as any)
 
@@ -530,6 +530,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/matriculas': {
+      id: '/admin/matriculas'
+      path: '/matriculas'
+      fullPath: '/admin/matriculas'
+      preLoaderRoute: typeof AdminMatriculasRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/eja': {
       id: '/admin/eja'
       path: '/eja'
@@ -558,13 +565,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBlogRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/matriculas': {
-      id: '/admin/matriculas'
-      path: '/matriculas'
-      fullPath: '/admin/matriculas'
-      preLoaderRoute: typeof AdminMatriculasRouteImport
-      parentRoute: typeof AdminRoute
-    }
   }
 }
 
@@ -573,8 +573,8 @@ interface AdminRouteChildren {
   AdminCategoriasRoute: typeof AdminCategoriasRoute
   AdminCursosRoute: typeof AdminCursosRoute
   AdminEjaRoute: typeof AdminEjaRoute
-  AdminIndexRoute: typeof AdminIndexRoute
   AdminMatriculasRoute: typeof AdminMatriculasRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -582,8 +582,8 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCategoriasRoute: AdminCategoriasRoute,
   AdminCursosRoute: AdminCursosRoute,
   AdminEjaRoute: AdminEjaRoute,
-  AdminIndexRoute: AdminIndexRoute,
   AdminMatriculasRoute: AdminMatriculasRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
@@ -614,3 +614,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

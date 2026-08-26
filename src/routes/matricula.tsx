@@ -34,6 +34,8 @@ const perguntas = [
   "Órgão emissor do RG?",
   "Data de emissão do RG?",
   "Cidade e Estado de Nascimento:",
+  "Qual o seu estado civil?",
+  "Qual a sua cor/raça?",
   "Nome do pai se consta no seu RG? (Se não constar, digite 'Não consta')",
   "Nome da mãe se consta no seu RG? (Se não constar, digite 'Não consta')",
   "CEP da sua rua?",
@@ -48,6 +50,12 @@ const perguntas = [
   "Nome da escola ou instituição?",
   "Em Qual curso deseja matricular?"
 ];
+
+const OPCOES: Record<number, string[]> = {
+  7: ["Solteiro(a)", "Casado(a)", "União estável", "Divorciado(a)", "Separado(a)", "Viúvo(a)"],
+  8: ["Branca", "Preta", "Parda", "Amarela", "Indígena"],
+};
+
 
 function validarCPF(cpf: string) {
   const cleanCpf = cpf.replace(/[^\d]+/g, "");
@@ -82,11 +90,12 @@ function applyMask(value: string, step: number): string {
     v = v.replace(/\D/g, "")
       .replace(/(\d{2})(\d)/, "$1/$2")
       .replace(/(\d{2})(\d)/, "$1/$2");
-  } else if (step === 9) {
+  } else if (step === 11) {
     // CEP
     v = v.replace(/\D/g, "")
       .replace(/(\d{5})(\d)/, "$1-$2");
-  } else if (step === 14) {
+  } else if (step === 16) {
+
     // Telefone
     v = v.replace(/\D/g, "")
       .replace(/(\d{2})(\d)/, "($1) $2")
@@ -111,9 +120,10 @@ function MatriculaPage() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSend = () => {
-    const val = inputValue.trim();
+  const handleSend = (valueOverride?: string) => {
+    const val = (valueOverride ?? inputValue).trim();
     if (!val || isSending) return;
+
 
     // Validação de CPF
     if (step === 1 && !validarCPF(val)) {
@@ -169,19 +179,22 @@ function MatriculaPage() {
           rg_orgao_emissor: resps[4] || "",
           rg_data_emissao: resps[5] || "",
           naturalidade: resps[6] || "",
-          nome_pai: resps[7] || "",
-          nome_mae: resps[8] || "",
-          cep: resps[9] || "",
-          endereco_rua: resps[10] || "",
-          endereco_bairro: resps[11] || "",
-          endereco_cidade: resps[12] || "",
-          endereco_estado: resps[13] || "",
-          telefone: resps[14] || "",
-          email: resps[15] || "",
-          escolaridade: resps[16] || "",
-          ano_conclusao: resps[17] || "",
-          escola_anterior: resps[18] || "",
-          curso_desejado: resps[19] || "",
+          estado_civil: resps[7] || "",
+          cor_raca: resps[8] || "",
+          nome_pai: resps[9] || "",
+          nome_mae: resps[10] || "",
+          cep: resps[11] || "",
+          endereco_rua: resps[12] || "",
+          endereco_bairro: resps[13] || "",
+          endereco_cidade: resps[14] || "",
+          endereco_estado: resps[15] || "",
+          telefone: resps[16] || "",
+          email: resps[17] || "",
+          escolaridade: resps[18] || "",
+          ano_conclusao: resps[19] || "",
+          escola_anterior: resps[20] || "",
+          curso_desejado: resps[21] || "",
+
           respostas_completas: respostasCompletas,
         },
       });
@@ -275,8 +288,25 @@ function MatriculaPage() {
           <div ref={chatEndRef} />
         </div>
 
+        {/* Opções de escolha */}
+        {OPCOES[step] && !isSending && (
+          <div className="px-3 pt-3 bg-neutral-100 border-t flex flex-wrap gap-2">
+            {OPCOES[step].map((op) => (
+              <button
+                key={op}
+                type="button"
+                onClick={() => handleSend(op)}
+                className="rounded-full border border-[#075e54] bg-white px-3.5 py-1.5 text-sm font-medium text-[#075e54] hover:bg-[#075e54] hover:text-white transition-colors"
+              >
+                {op}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Área de Entrada */}
         <div className="p-3 bg-neutral-100 border-t flex items-center gap-2">
+
           <input
             type="text"
             className="flex-1 bg-white border border-neutral-300 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#075e54] text-neutral-800"
@@ -289,7 +319,7 @@ function MatriculaPage() {
             disabled={step >= perguntas.length || isSending}
           />
           <button
-            onClick={handleSend}
+            onClick={() => handleSend()}
             disabled={step >= perguntas.length || isSending || !inputValue.trim()}
             className="bg-[#075e54] hover:bg-[#0b8a7b] disabled:bg-neutral-300 text-white rounded-full p-2.5 flex items-center justify-center cursor-pointer transition-colors shadow focus:outline-none"
             aria-label="Enviar resposta"

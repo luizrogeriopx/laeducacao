@@ -57,6 +57,68 @@ export const Route = createFileRoute("/admin/matriculas")({
   head: () => ({ meta: [{ title: "Admin · Matrículas" }] }),
 });
 
+function DataField({
+  label,
+  value,
+  fallback = "Não informado",
+  mono,
+  className,
+  highlight,
+  copiedId,
+  onCopy,
+  fieldId,
+}: {
+  label: string;
+  value?: string | null;
+  fallback?: string;
+  mono?: boolean;
+  className?: string;
+  highlight?: boolean;
+  copiedId: string | null;
+  onCopy: (text: string, id: string) => void;
+  fieldId: string;
+}) {
+  const shown = value && value.trim() !== "" ? value : fallback;
+  const canCopy = Boolean(value && value.trim() !== "");
+  const isCopied = copiedId === fieldId;
+  return (
+    <div
+      className={`group relative rounded-lg border p-2.5 ${
+        highlight ? "bg-primary/5 border-primary/20" : "bg-muted/20"
+      } ${className || ""}`}
+    >
+      <span
+        className={`block text-xs ${highlight ? "font-semibold text-primary" : "text-muted-foreground"}`}
+      >
+        {label}
+      </span>
+      <span
+        className={`pr-7 block ${highlight ? "text-base font-bold text-foreground" : "font-medium"} ${
+          mono ? "font-mono" : ""
+        }`}
+      >
+        {shown}
+      </span>
+      {canCopy && (
+        <button
+          type="button"
+          title={`Copiar ${label}`}
+          aria-label={`Copiar ${label}`}
+          onClick={() => onCopy(value as string, fieldId)}
+          className="absolute right-1.5 top-1.5 rounded-md p-1.5 text-muted-foreground hover:bg-background hover:text-foreground transition-colors"
+        >
+          {isCopied ? (
+            <Check className="h-3.5 w-3.5 text-emerald-600" />
+          ) : (
+            <Copy className="h-3.5 w-3.5" />
+          )}
+        </button>
+      )}
+    </div>
+  );
+}
+
+
 const STATUS_CONFIG: Record<
   string,
   { label: string; badgeClass: string; icon: React.ComponentType<{ className?: string }> }
@@ -203,6 +265,9 @@ Status: ${STATUS_CONFIG[m.status]?.label || m.status}
 - Órgão Emissor: ${m.rg_orgao_emissor || "Não informado"}
 - Data de Emissão RG: ${m.rg_data_emissao || "Não informado"}
 - Naturalidade (Cidade/UF): ${m.naturalidade || "Não informado"}
+- Estado Civil: ${m.estado_civil || "Não informado"}
+- Cor / Raça: ${m.cor_raca || "Não informado"}
+
 - Nome do Pai: ${m.nome_pai || "Não consta"}
 - Nome da Mãe: ${m.nome_mae || "Não consta"}
 
@@ -683,42 +748,17 @@ ${m.observacoes || "Nenhuma observação registrada."}
                   1. Dados Pessoais e Documentação
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">Nome Completo:</span>
-                    <span className="font-medium">{activeMatricula.nome_completo}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">CPF:</span>
-                    <span className="font-medium font-mono">{activeMatricula.cpf}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">Data de Nascimento:</span>
-                    <span className="font-medium">{activeMatricula.data_nascimento || "Não informada"}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">Número do RG:</span>
-                    <span className="font-medium font-mono">{activeMatricula.rg_numero || "Não informado"}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">Órgão Emissor:</span>
-                    <span className="font-medium">{activeMatricula.rg_orgao_emissor || "Não informado"}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">Data de Emissão RG:</span>
-                    <span className="font-medium">{activeMatricula.rg_data_emissao || "Não informada"}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">Naturalidade:</span>
-                    <span className="font-medium">{activeMatricula.naturalidade || "Não informada"}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">Nome da Mãe:</span>
-                    <span className="font-medium">{activeMatricula.nome_mae || "Não consta"}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">Nome do Pai:</span>
-                    <span className="font-medium">{activeMatricula.nome_pai || "Não consta"}</span>
-                  </div>
+                  <DataField fieldId="nome" label="Nome Completo:" value={activeMatricula.nome_completo} copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="cpf" label="CPF:" value={activeMatricula.cpf} mono copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="nasc" label="Data de Nascimento:" value={activeMatricula.data_nascimento} fallback="Não informada" copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="rg" label="Número do RG:" value={activeMatricula.rg_numero} mono copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="rgorgao" label="Órgão Emissor:" value={activeMatricula.rg_orgao_emissor} copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="rgemissao" label="Data de Emissão RG:" value={activeMatricula.rg_data_emissao} fallback="Não informada" copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="naturalidade" label="Naturalidade:" value={activeMatricula.naturalidade} fallback="Não informada" copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="estadocivil" label="Estado Civil:" value={activeMatricula.estado_civil} fallback="Não informado" copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="corraca" label="Cor / Raça:" value={activeMatricula.cor_raca} fallback="Não informada" copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="mae" label="Nome da Mãe:" value={activeMatricula.nome_mae} fallback="Não consta" copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="pai" label="Nome do Pai:" value={activeMatricula.nome_pai} fallback="Não consta" copiedId={copiedId} onCopy={handleCopyText} />
                 </div>
               </div>
 
@@ -729,34 +769,13 @@ ${m.observacoes || "Nenhuma observação registrada."}
                   2. Contato e Endereço Residencial
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">Telefone / WhatsApp:</span>
-                    <span className="font-medium font-mono">{activeMatricula.telefone || "Não informado"}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">E-mail:</span>
-                    <span className="font-medium">{activeMatricula.email || "Não informado"}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">CEP:</span>
-                    <span className="font-medium font-mono">{activeMatricula.cep || "Não informado"}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border sm:col-span-2">
-                    <span className="text-xs text-muted-foreground block">Logradouro / Rua:</span>
-                    <span className="font-medium">{activeMatricula.endereco_rua || "Não informado"}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">Bairro:</span>
-                    <span className="font-medium">{activeMatricula.endereco_bairro || "Não informado"}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">Cidade:</span>
-                    <span className="font-medium">{activeMatricula.endereco_cidade || "Não informada"}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">Estado (UF):</span>
-                    <span className="font-medium">{activeMatricula.endereco_estado || "Não informado"}</span>
-                  </div>
+                  <DataField fieldId="tel" label="Telefone / WhatsApp:" value={activeMatricula.telefone} mono copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="email" label="E-mail:" value={activeMatricula.email} copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="cep" label="CEP:" value={activeMatricula.cep} mono copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="rua" label="Logradouro / Rua:" value={activeMatricula.endereco_rua} className="sm:col-span-2" copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="bairro" label="Bairro:" value={activeMatricula.endereco_bairro} copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="cidade" label="Cidade:" value={activeMatricula.endereco_cidade} fallback="Não informada" copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="uf" label="Estado (UF):" value={activeMatricula.endereco_estado} copiedId={copiedId} onCopy={handleCopyText} />
                 </div>
               </div>
 
@@ -767,25 +786,12 @@ ${m.observacoes || "Nenhuma observação registrada."}
                   3. Formação Escolar e Curso de Interesse
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                  <div className="bg-primary/5 p-3 rounded-lg border border-primary/20 sm:col-span-2">
-                    <span className="text-xs font-semibold text-primary block">Curso Pretendido:</span>
-                    <span className="text-base font-bold text-foreground">
-                      {activeMatricula.curso_desejado || "Não informado"}
-                    </span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">Grau de Escolaridade Atual:</span>
-                    <span className="font-medium">{activeMatricula.escolaridade || "Não informado"}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border">
-                    <span className="text-xs text-muted-foreground block">Ano de Formação / Parada:</span>
-                    <span className="font-medium">{activeMatricula.ano_conclusao || "Não informado"}</span>
-                  </div>
-                  <div className="bg-muted/20 p-2.5 rounded-lg border sm:col-span-2">
-                    <span className="text-xs text-muted-foreground block">Escola ou Instituição Anterior:</span>
-                    <span className="font-medium">{activeMatricula.escola_anterior || "Não informada"}</span>
-                  </div>
+                  <DataField fieldId="curso" label="Curso Pretendido:" value={activeMatricula.curso_desejado} highlight className="sm:col-span-2" copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="escolaridade" label="Grau de Escolaridade Atual:" value={activeMatricula.escolaridade} copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="ano" label="Ano de Formação / Parada:" value={activeMatricula.ano_conclusao} copiedId={copiedId} onCopy={handleCopyText} />
+                  <DataField fieldId="escola" label="Escola ou Instituição Anterior:" value={activeMatricula.escola_anterior} fallback="Não informada" className="sm:col-span-2" copiedId={copiedId} onCopy={handleCopyText} />
                 </div>
+
               </div>
 
               {/* Seção 4: Anotações da Secretaria */}

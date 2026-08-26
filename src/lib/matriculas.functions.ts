@@ -15,6 +15,9 @@ export interface Matricula {
   rg_orgao_emissor: string | null;
   rg_data_emissao: string | null;
   naturalidade: string | null;
+  estado_civil: string | null;
+  cor_raca: string | null;
+
   nome_pai: string | null;
   nome_mae: string | null;
   cep: string | null;
@@ -40,6 +43,9 @@ const MatriculaSubmissionSchema = z.object({
   rg_orgao_emissor: z.string().trim().optional().default(""),
   rg_data_emissao: z.string().trim().optional().default(""),
   naturalidade: z.string().trim().optional().default(""),
+  estado_civil: z.string().trim().optional().default(""),
+  cor_raca: z.string().trim().optional().default(""),
+
   nome_pai: z.string().trim().optional().default(""),
   nome_mae: z.string().trim().optional().default(""),
   cep: z.string().trim().optional().default(""),
@@ -88,6 +94,9 @@ export const submitMatricula = createServerFn({ method: "POST" })
       rg_orgao_emissor: data.rg_orgao_emissor || null,
       rg_data_emissao: data.rg_data_emissao || null,
       naturalidade: data.naturalidade || null,
+      estado_civil: data.estado_civil || null,
+      cor_raca: data.cor_raca || null,
+
       nome_pai: data.nome_pai || null,
       nome_mae: data.nome_mae || null,
       cep: data.cep || null,
