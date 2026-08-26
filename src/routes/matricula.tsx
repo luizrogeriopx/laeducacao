@@ -299,7 +299,7 @@ function MatriculaPage() {
             disabled={step >= perguntas.length || isSending}
           />
           <button
-            onClick={handleSend}
+            onClick={() => handleSend()}
             disabled={step >= perguntas.length || isSending || !inputValue.trim()}
             className="bg-[#075e54] hover:bg-[#0b8a7b] disabled:bg-neutral-300 text-white rounded-full p-2.5 flex items-center justify-center cursor-pointer transition-colors shadow focus:outline-none"
             aria-label="Enviar resposta"
