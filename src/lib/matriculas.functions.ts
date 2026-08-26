@@ -94,6 +94,9 @@ export const submitMatricula = createServerFn({ method: "POST" })
       rg_orgao_emissor: data.rg_orgao_emissor || null,
       rg_data_emissao: data.rg_data_emissao || null,
       naturalidade: data.naturalidade || null,
+      estado_civil: data.estado_civil || null,
+      cor_raca: data.cor_raca || null,
+
       nome_pai: data.nome_pai || null,
       nome_mae: data.nome_mae || null,
       cep: data.cep || null,
