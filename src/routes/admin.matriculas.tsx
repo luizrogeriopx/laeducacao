@@ -57,6 +57,68 @@ export const Route = createFileRoute("/admin/matriculas")({
   head: () => ({ meta: [{ title: "Admin · Matrículas" }] }),
 });
 
+function DataField({
+  label,
+  value,
+  fallback = "Não informado",
+  mono,
+  className,
+  highlight,
+  copiedId,
+  onCopy,
+  fieldId,
+}: {
+  label: string;
+  value?: string | null;
+  fallback?: string;
+  mono?: boolean;
+  className?: string;
+  highlight?: boolean;
+  copiedId: string | null;
+  onCopy: (text: string, id: string) => void;
+  fieldId: string;
+}) {
+  const shown = value && value.trim() !== "" ? value : fallback;
+  const canCopy = Boolean(value && value.trim() !== "");
+  const isCopied = copiedId === fieldId;
+  return (
+    <div
+      className={`group relative rounded-lg border p-2.5 ${
+        highlight ? "bg-primary/5 border-primary/20" : "bg-muted/20"
+      } ${className || ""}`}
+    >
+      <span
+        className={`block text-xs ${highlight ? "font-semibold text-primary" : "text-muted-foreground"}`}
+      >
+        {label}
+      </span>
+      <span
+        className={`pr-7 block ${highlight ? "text-base font-bold text-foreground" : "font-medium"} ${
+          mono ? "font-mono" : ""
+        }`}
+      >
+        {shown}
+      </span>
+      {canCopy && (
+        <button
+          type="button"
+          title={`Copiar ${label}`}
+          aria-label={`Copiar ${label}`}
+          onClick={() => onCopy(value as string, fieldId)}
+          className="absolute right-1.5 top-1.5 rounded-md p-1.5 text-muted-foreground hover:bg-background hover:text-foreground transition-colors"
+        >
+          {isCopied ? (
+            <Check className="h-3.5 w-3.5 text-emerald-600" />
+          ) : (
+            <Copy className="h-3.5 w-3.5" />
+          )}
+        </button>
+      )}
+    </div>
+  );
+}
+
+
 const STATUS_CONFIG: Record<
   string,
   { label: string; badgeClass: string; icon: React.ComponentType<{ className?: string }> }
