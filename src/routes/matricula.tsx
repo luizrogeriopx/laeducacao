@@ -90,11 +90,12 @@ function applyMask(value: string, step: number): string {
     v = v.replace(/\D/g, "")
       .replace(/(\d{2})(\d)/, "$1/$2")
       .replace(/(\d{2})(\d)/, "$1/$2");
-  } else if (step === 9) {
+  } else if (step === 11) {
     // CEP
     v = v.replace(/\D/g, "")
       .replace(/(\d{5})(\d)/, "$1-$2");
-  } else if (step === 14) {
+  } else if (step === 16) {
+
     // Telefone
     v = v.replace(/\D/g, "")
       .replace(/(\d{2})(\d)/, "($1) $2")
