@@ -40,6 +40,9 @@ const MatriculaSubmissionSchema = z.object({
   rg_orgao_emissor: z.string().trim().optional().default(""),
   rg_data_emissao: z.string().trim().optional().default(""),
   naturalidade: z.string().trim().optional().default(""),
+  estado_civil: z.string().trim().optional().default(""),
+  cor_raca: z.string().trim().optional().default(""),
+
   nome_pai: z.string().trim().optional().default(""),
   nome_mae: z.string().trim().optional().default(""),
   cep: z.string().trim().optional().default(""),
