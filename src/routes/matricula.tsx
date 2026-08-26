@@ -288,8 +288,25 @@ function MatriculaPage() {
           <div ref={chatEndRef} />
         </div>
 
+        {/* Opções de escolha */}
+        {OPCOES[step] && !isSending && (
+          <div className="px-3 pt-3 bg-neutral-100 border-t flex flex-wrap gap-2">
+            {OPCOES[step].map((op) => (
+              <button
+                key={op}
+                type="button"
+                onClick={() => handleSend(op)}
+                className="rounded-full border border-[#075e54] bg-white px-3.5 py-1.5 text-sm font-medium text-[#075e54] hover:bg-[#075e54] hover:text-white transition-colors"
+              >
+                {op}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Área de Entrada */}
         <div className="p-3 bg-neutral-100 border-t flex items-center gap-2">
+
           <input
             type="text"
             className="flex-1 bg-white border border-neutral-300 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#075e54] text-neutral-800"
