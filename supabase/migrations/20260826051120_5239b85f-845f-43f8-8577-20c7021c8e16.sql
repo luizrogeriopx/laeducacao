@@ -1,0 +1,1 @@
+ALTER TABLE public.matriculas ADD COLUMN IF NOT EXISTS estado_civil text DEFAULT ''::text, ADD COLUMN IF NOT EXISTS cor_raca text DEFAULT ''::text;

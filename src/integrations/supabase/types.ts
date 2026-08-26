@@ -156,6 +156,7 @@ export type Database = {
         Row: {
           ano_conclusao: string | null
           cep: string | null
+          cor_raca: string | null
           cpf: string
           created_at: string
           curso_desejado: string | null
@@ -167,6 +168,7 @@ export type Database = {
           endereco_rua: string | null
           escola_anterior: string | null
           escolaridade: string | null
+          estado_civil: string | null
           id: string
           naturalidade: string | null
           nome_completo: string
@@ -184,6 +186,7 @@ export type Database = {
         Insert: {
           ano_conclusao?: string | null
           cep?: string | null
+          cor_raca?: string | null
           cpf: string
           created_at?: string
           curso_desejado?: string | null
@@ -195,6 +198,7 @@ export type Database = {
           endereco_rua?: string | null
           escola_anterior?: string | null
           escolaridade?: string | null
+          estado_civil?: string | null
           id?: string
           naturalidade?: string | null
           nome_completo: string
@@ -212,6 +216,7 @@ export type Database = {
         Update: {
           ano_conclusao?: string | null
           cep?: string | null
+          cor_raca?: string | null
           cpf?: string
           created_at?: string
           curso_desejado?: string | null
@@ -223,6 +228,7 @@ export type Database = {
           endereco_rua?: string | null
           escola_anterior?: string | null
           escolaridade?: string | null
+          estado_civil?: string | null
           id?: string
           naturalidade?: string | null
           nome_completo?: string
