@@ -120,9 +120,10 @@ function MatriculaPage() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSend = () => {
-    const val = inputValue.trim();
+  const handleSend = (valueOverride?: string) => {
+    const val = (valueOverride ?? inputValue).trim();
     if (!val || isSending) return;
+
 
     // Validação de CPF
     if (step === 1 && !validarCPF(val)) {
