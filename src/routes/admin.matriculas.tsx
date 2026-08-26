@@ -265,6 +265,9 @@ Status: ${STATUS_CONFIG[m.status]?.label || m.status}
 - Órgão Emissor: ${m.rg_orgao_emissor || "Não informado"}
 - Data de Emissão RG: ${m.rg_data_emissao || "Não informado"}
 - Naturalidade (Cidade/UF): ${m.naturalidade || "Não informado"}
+- Estado Civil: ${m.estado_civil || "Não informado"}
+- Cor / Raça: ${m.cor_raca || "Não informado"}
+
 - Nome do Pai: ${m.nome_pai || "Não consta"}
 - Nome da Mãe: ${m.nome_mae || "Não consta"}
 
