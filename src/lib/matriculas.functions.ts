@@ -15,6 +15,9 @@ export interface Matricula {
   rg_orgao_emissor: string | null;
   rg_data_emissao: string | null;
   naturalidade: string | null;
+  estado_civil: string | null;
+  cor_raca: string | null;
+
   nome_pai: string | null;
   nome_mae: string | null;
   cep: string | null;
