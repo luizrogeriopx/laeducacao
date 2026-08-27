@@ -170,6 +170,9 @@ function AdminBody({ userEmail }: { userEmail: string | null }) {
             <Button asChild size="sm" variant="secondary">
               <Link to="/admin/eja">Landing EJA</Link>
             </Button>
+            <Button asChild size="sm" variant="secondary">
+              <Link to="/admin/credenciamentos">Credenciamentos</Link>
+            </Button>
 
             <Button asChild variant="outline" size="sm">
               <Link to="/">Ver site</Link>

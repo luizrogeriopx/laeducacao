@@ -35,6 +35,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AdminMatriculasRouteImport } from './routes/admin.matriculas'
 import { Route as AdminEjaRouteImport } from './routes/admin.eja'
 import { Route as AdminCursosRouteImport } from './routes/admin.cursos'
+import { Route as AdminCredenciamentosRouteImport } from './routes/admin.credenciamentos'
 import { Route as AdminCategoriasRouteImport } from './routes/admin.categorias'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 
@@ -169,6 +170,11 @@ const AdminCursosRoute = AdminCursosRouteImport.update({
   path: '/cursos',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCredenciamentosRoute = AdminCredenciamentosRouteImport.update({
+  id: '/credenciamentos',
+  path: '/credenciamentos',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCategoriasRoute = AdminCategoriasRouteImport.update({
   id: '/categorias',
   path: '/categorias',
@@ -201,6 +207,7 @@ export interface FileRoutesByFullPath {
   '/termos-uso': typeof TermosUsoRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/credenciamentos': typeof AdminCredenciamentosRoute
   '/admin/cursos': typeof AdminCursosRoute
   '/admin/eja': typeof AdminEjaRoute
   '/admin/matriculas': typeof AdminMatriculasRoute
@@ -230,6 +237,7 @@ export interface FileRoutesByTo {
   '/termos-uso': typeof TermosUsoRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/credenciamentos': typeof AdminCredenciamentosRoute
   '/admin/cursos': typeof AdminCursosRoute
   '/admin/eja': typeof AdminEjaRoute
   '/admin/matriculas': typeof AdminMatriculasRoute
@@ -261,6 +269,7 @@ export interface FileRoutesById {
   '/termos-uso': typeof TermosUsoRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/categorias': typeof AdminCategoriasRoute
+  '/admin/credenciamentos': typeof AdminCredenciamentosRoute
   '/admin/cursos': typeof AdminCursosRoute
   '/admin/eja': typeof AdminEjaRoute
   '/admin/matriculas': typeof AdminMatriculasRoute
@@ -293,6 +302,7 @@ export interface FileRouteTypes {
     | '/termos-uso'
     | '/admin/blog'
     | '/admin/categorias'
+    | '/admin/credenciamentos'
     | '/admin/cursos'
     | '/admin/eja'
     | '/admin/matriculas'
@@ -322,6 +332,7 @@ export interface FileRouteTypes {
     | '/termos-uso'
     | '/admin/blog'
     | '/admin/categorias'
+    | '/admin/credenciamentos'
     | '/admin/cursos'
     | '/admin/eja'
     | '/admin/matriculas'
@@ -352,6 +363,7 @@ export interface FileRouteTypes {
     | '/termos-uso'
     | '/admin/blog'
     | '/admin/categorias'
+    | '/admin/credenciamentos'
     | '/admin/cursos'
     | '/admin/eja'
     | '/admin/matriculas'
@@ -571,6 +583,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCursosRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/credenciamentos': {
+      id: '/admin/credenciamentos'
+      path: '/credenciamentos'
+      fullPath: '/admin/credenciamentos'
+      preLoaderRoute: typeof AdminCredenciamentosRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/categorias': {
       id: '/admin/categorias'
       path: '/categorias'
@@ -591,6 +610,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminBlogRoute: typeof AdminBlogRoute
   AdminCategoriasRoute: typeof AdminCategoriasRoute
+  AdminCredenciamentosRoute: typeof AdminCredenciamentosRoute
   AdminCursosRoute: typeof AdminCursosRoute
   AdminEjaRoute: typeof AdminEjaRoute
   AdminMatriculasRoute: typeof AdminMatriculasRoute
@@ -600,6 +620,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminBlogRoute: AdminBlogRoute,
   AdminCategoriasRoute: AdminCategoriasRoute,
+  AdminCredenciamentosRoute: AdminCredenciamentosRoute,
   AdminCursosRoute: AdminCursosRoute,
   AdminEjaRoute: AdminEjaRoute,
   AdminMatriculasRoute: AdminMatriculasRoute,
