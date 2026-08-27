@@ -22,6 +22,7 @@ import { Route as EjaOnlineRouteImport } from './routes/eja-online'
 import { Route as EjaGoianiaRouteImport } from './routes/eja-goiania'
 import { Route as EjaAparecidaDeGoianiaRouteImport } from './routes/eja-aparecida-de-goiania'
 import { Route as EjaRouteImport } from './routes/eja'
+import { Route as CredenciamentosRouteImport } from './routes/credenciamentos'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as CatalogoRouteImport } from './routes/catalogo'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -103,6 +104,11 @@ const EjaRoute = EjaRouteImport.update({
   path: '/eja',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CredenciamentosRoute = CredenciamentosRouteImport.update({
+  id: '/credenciamentos',
+  path: '/credenciamentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContatoRoute = ContatoRouteImport.update({
   id: '/contato',
   path: '/contato',
@@ -179,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/catalogo': typeof CatalogoRoute
   '/contato': typeof ContatoRoute
+  '/credenciamentos': typeof CredenciamentosRoute
   '/eja': typeof EjaRoute
   '/eja-aparecida-de-goiania': typeof EjaAparecidaDeGoianiaRoute
   '/eja-goiania': typeof EjaGoianiaRoute
@@ -207,6 +214,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/catalogo': typeof CatalogoRoute
   '/contato': typeof ContatoRoute
+  '/credenciamentos': typeof CredenciamentosRoute
   '/eja': typeof EjaRoute
   '/eja-aparecida-de-goiania': typeof EjaAparecidaDeGoianiaRoute
   '/eja-goiania': typeof EjaGoianiaRoute
@@ -237,6 +245,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/catalogo': typeof CatalogoRoute
   '/contato': typeof ContatoRoute
+  '/credenciamentos': typeof CredenciamentosRoute
   '/eja': typeof EjaRoute
   '/eja-aparecida-de-goiania': typeof EjaAparecidaDeGoianiaRoute
   '/eja-goiania': typeof EjaGoianiaRoute
@@ -268,6 +277,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/catalogo'
     | '/contato'
+    | '/credenciamentos'
     | '/eja'
     | '/eja-aparecida-de-goiania'
     | '/eja-goiania'
@@ -296,6 +306,7 @@ export interface FileRouteTypes {
     | '/'
     | '/catalogo'
     | '/contato'
+    | '/credenciamentos'
     | '/eja'
     | '/eja-aparecida-de-goiania'
     | '/eja-goiania'
@@ -325,6 +336,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/catalogo'
     | '/contato'
+    | '/credenciamentos'
     | '/eja'
     | '/eja-aparecida-de-goiania'
     | '/eja-goiania'
@@ -355,6 +367,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   CatalogoRoute: typeof CatalogoRoute
   ContatoRoute: typeof ContatoRoute
+  CredenciamentosRoute: typeof CredenciamentosRoute
   EjaRoute: typeof EjaRoute
   EjaAparecidaDeGoianiaRoute: typeof EjaAparecidaDeGoianiaRoute
   EjaGoianiaRoute: typeof EjaGoianiaRoute
@@ -465,6 +478,13 @@ declare module '@tanstack/react-router' {
       path: '/eja'
       fullPath: '/eja'
       preLoaderRoute: typeof EjaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/credenciamentos': {
+      id: '/credenciamentos'
+      path: '/credenciamentos'
+      fullPath: '/credenciamentos'
+      preLoaderRoute: typeof CredenciamentosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contato': {
@@ -593,6 +613,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   CatalogoRoute: CatalogoRoute,
   ContatoRoute: ContatoRoute,
+  CredenciamentosRoute: CredenciamentosRoute,
   EjaRoute: EjaRoute,
   EjaAparecidaDeGoianiaRoute: EjaAparecidaDeGoianiaRoute,
   EjaGoianiaRoute: EjaGoianiaRoute,

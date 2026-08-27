@@ -156,6 +156,16 @@ export function SiteHeader() {
             </div>
           </li>
 
+          <li>
+            <Link
+              to="/credenciamentos"
+              onClick={() => setMenuOpen(false)}
+              className="text-neutral-700 font-semibold hover:text-[#1a237e] transition-colors"
+            >
+              Credenciamentos
+            </Link>
+          </li>
+
           {/* Blog */}
           <li>
             <Link
