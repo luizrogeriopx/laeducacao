@@ -32,6 +32,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/eja-online", changefreq: "weekly", priority: "0.9" },
           { path: "/supletivo-online", changefreq: "weekly", priority: "0.9" },
           { path: "/quem-somos", changefreq: "monthly", priority: "0.7" },
+          { path: "/credenciamentos", changefreq: "monthly", priority: "0.8" },
           { path: "/politica-privacidade", changefreq: "monthly", priority: "0.5" },
           { path: "/termos-uso", changefreq: "monthly", priority: "0.5" },
           { path: "/contato", changefreq: "monthly", priority: "0.7" },
